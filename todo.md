@@ -1,0 +1,1 @@
+- When user goes to home, check if logged in, if not redirect to /login
