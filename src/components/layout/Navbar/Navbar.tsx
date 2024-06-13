@@ -1,4 +1,4 @@
-import NavButton from "./NavButton";
+import Button from "../../common/Button";
 import { LuPlus } from "react-icons/lu";
 import { BiHomeAlt2 } from "react-icons/bi";
 import { FiLogOut } from "react-icons/fi";
@@ -12,22 +12,22 @@ const Navbar = () => {
 		<nav className="relative flex justify-between items-center px-6 h-16">
 			<ul className="flex gap-4">
 				<li>
-					<NavButton link="/">
+					<Button link="/">
 						<BiHomeAlt2 />
 						Home
-					</NavButton>
+					</Button>
 				</li>
 				<li>
-					<NavButton link="/new" highlight>
+					<Button link="/new" highlight>
 						<LuPlus />
 						New File
-					</NavButton>
+					</Button>
 				</li>
 			</ul>
-			<NavButton onClick={handleLogOut}>
+			<Button onClick={handleLogOut}>
 				<FiLogOut className="text-lg mt-[1px]" />
 				Log out
-			</NavButton>
+			</Button>
 			{/* Bottom line */}
 			<div className="absolute bottom-0 w-full h-[1px] left-0 bg-gradient-radial from-primaryHighlight to-transparent" />
 		</nav>
