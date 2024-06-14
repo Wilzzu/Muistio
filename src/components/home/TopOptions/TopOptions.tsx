@@ -29,7 +29,7 @@ const TopOptions: FC<TopOptionsProps> = ({ files }) => {
 	}, [selectedSort]);
 
 	return (
-		<ul className="w-full flex justify-between">
+		<ul className="w-full flex justify-between z-10">
 			{/* New File button */}
 			<li>
 				<Button link="/new" highlight={files?.length === 0}>

@@ -62,11 +62,11 @@ const ButtonDropdown: FC<ButtonProps> = ({ options, onClick, dropdownSide, child
 				</button>
 			</div>
 			{open && (
-				// Dropdown border
+				// Dropdown container / border
 				<div
 					ref={dropdownRef}
 					className={cn(
-						"absolute top-11 p-[1px] min-w-full bg-gradient-to-br from-primaryHighlight via-primaryHighlight/50 to-primaryHighlight rounded-[9px] duration-200",
+						"absolute top-10 p-[1px] min-w-full bg-gradient-to-br from-primaryHighlight via-primaryHighlight/50 to-primaryHighlight rounded-[9px] duration-200",
 						dropdownSide === "left" ? "left-0" : "right-0"
 					)}>
 					{/* Dropdown buttons */}
