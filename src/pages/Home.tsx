@@ -6,11 +6,11 @@ import { File } from "../types/types";
 function Home() {
 	// TODO: Save files into store so we don't have to pass them as props
 	const files: File[] = [
-		{ id: 1, title: "Title 1", dateModified: new Date(), size: 123 },
-		{ id: 2, title: "Title 2", dateModified: new Date(), size: 345 },
-		{ id: 3, title: "Title 3", dateModified: new Date(), size: 678 },
-		{ id: 4, title: "Title 4", dateModified: new Date(), size: 91011 },
-		{ id: 5, title: "Title 5", dateModified: new Date(), size: 121314 },
+		{ id: 123, title: "Title 1", dateModified: new Date(), size: 123 },
+		{ id: 234, title: "Title 2", dateModified: new Date(), size: 345 },
+		{ id: 345, title: "Title 3", dateModified: new Date(), size: 678 },
+		{ id: 456, title: "Title 4", dateModified: new Date(), size: 91011 },
+		{ id: 567, title: "Title 5", dateModified: new Date(), size: 121314 },
 	];
 
 	return (

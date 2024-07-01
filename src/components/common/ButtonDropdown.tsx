@@ -78,7 +78,7 @@ const ButtonDropdown: FC<ButtonProps> = ({ options, onClick, dropdownSide, child
 							return (
 								<li key={i}>
 									<button
-										className="text-nowrap py-2 px-4 w-full text-left bg-gradient-to-br from-transparent to-transparent hover:from-primaryHighlight/90 hover:to-primaryHighlight/20 rounded-md"
+										className="text-nowrap py-2 pl-3 pr-6 w-full text-left bg-gradient-to-br from-transparent to-transparent hover:from-primaryHighlight/90 hover:to-primaryHighlight/20 rounded-md"
 										onClick={() => handleDropdownClick(e)}>
 										{e.title}
 									</button>

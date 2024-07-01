@@ -10,6 +10,7 @@ export default {
 				secondaryHighlight: "#282B36",
 				accent: "#EBB026",
 				background: "#11141A",
+				text: "#EBE9FB",
 			},
 			fontFamily: {
 				primary: ["Quicksand", "sans-serif"],
