@@ -1,6 +1,7 @@
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useRef, useState } from "react";
 import { cn } from "../../lib/utils";
 import { BsThreeDots } from "react-icons/bs";
+import useClickOutside from "../../hooks/useClickOutside";
 
 type DropdownOption = {
 	title: string;
@@ -17,30 +18,13 @@ const ButtonMoreOptions: FC<ButtonProps> = ({ options, dropdownSide }) => {
 	const [open, setOpen] = useState(false);
 	const buttonRef = useRef<HTMLButtonElement>(null);
 	const dropdownRef = useRef<HTMLDivElement>(null);
+	useClickOutside(buttonRef, () => setOpen(false), dropdownRef);
 
 	// Set selected ID and close the dropdown
 	const handleDropdownClick = (selected: DropdownOption) => {
 		setOpen(false);
 		selected.action();
 	};
-
-	// Close dropdown when clicked outside
-	const handleClickOutside = (e: MouseEvent | TouchEvent) => {
-		if (buttonRef.current && buttonRef.current.contains(e.target as Node)) return; // Ignore main button
-		if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-			setOpen(false);
-		}
-	};
-
-	useEffect(() => {
-		document.addEventListener("mouseup", handleClickOutside);
-		document.addEventListener("touchend", handleClickOutside);
-
-		return () => {
-			document.removeEventListener("mouseup", handleClickOutside);
-			document.removeEventListener("touchend", handleClickOutside);
-		};
-	}, []);
 
 	return (
 		<div className="relative">
@@ -71,7 +55,7 @@ const ButtonMoreOptions: FC<ButtonProps> = ({ options, dropdownSide }) => {
 										className={cn(
 											"text-nowrap py-2 px-2 pr-8 w-full text-left bg-gradient-to-br from-transparent to-transparent hover:from-primaryHighlight/70 hover:to-primaryHighlight/10 rounded-md",
 											e.warning &&
-												"text-red-400 hover:from-red-700/50 hover:to-red-900/50 hover:text-red-400"
+												"text-red-400 hover:from-red-600/80 hover:to-red-900/50 hover:text-red-100 duration-100"
 										)}
 										onClick={() => handleDropdownClick(e)}>
 										{e.title}

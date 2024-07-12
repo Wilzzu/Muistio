@@ -1,6 +1,7 @@
-import { FC, ReactNode, useEffect, useRef, useState } from "react";
+import { FC, ReactNode, useRef, useState } from "react";
 import { cn } from "../../lib/utils";
 import { IoIosArrowDown } from "react-icons/io";
+import useClickOutside from "../../hooks/useClickOutside";
 
 type DropdownOption = {
 	id: number;
@@ -18,30 +19,13 @@ const ButtonDropdown: FC<ButtonProps> = ({ options, onClick, dropdownSide, child
 	const [open, setOpen] = useState(false);
 	const buttonRef = useRef<HTMLDivElement>(null);
 	const dropdownRef = useRef<HTMLDivElement>(null);
+	useClickOutside(buttonRef, () => setOpen(false), dropdownRef);
 
 	// Set selected ID and close the dropdown
 	const handleDropdownClick = (selected: DropdownOption) => {
 		setOpen(false);
 		onClick(selected);
 	};
-
-	// Close dropdown when clicked outside
-	const handleClickOutside = (e: MouseEvent | TouchEvent) => {
-		if (buttonRef.current && buttonRef.current.contains(e.target as Node)) return; // Ignore main button
-		if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-			setOpen(false);
-		}
-	};
-
-	useEffect(() => {
-		document.addEventListener("mouseup", handleClickOutside);
-		document.addEventListener("touchend", handleClickOutside);
-
-		return () => {
-			document.removeEventListener("mouseup", handleClickOutside);
-			document.removeEventListener("touchend", handleClickOutside);
-		};
-	}, []);
 
 	return (
 		<div className="relative">

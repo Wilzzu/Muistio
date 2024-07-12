@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+import tailwindScrollbar from "tailwind-scrollbar";
+
 export default {
 	content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
 	theme: {
@@ -8,7 +10,7 @@ export default {
 				primaryHighlight: "#434E63",
 				secondary: "#181A20",
 				secondaryHighlight: "#282B36",
-				accent: "#EBB026",
+				accent: "#0793E3",
 				background: "#11141A",
 				text: "#EBE9FB",
 			},
@@ -22,7 +24,10 @@ export default {
 			dropShadow: {
 				highlight: "0 0 10px var(--tw-shadow-color)",
 			},
+			boxShadow: {
+				"centered-lg": "0 0 28px var(--tw-shadow-color)",
+			},
 		},
 	},
-	plugins: [],
+	plugins: [tailwindScrollbar({ nocompatible: true, preferredStrategy: "pseudoelements" })],
 };
