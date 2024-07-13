@@ -57,7 +57,7 @@ const FileButton: FC<FileButtonProps> = ({ file }) => {
 			{/* File information */}
 			<button
 				disabled={isRenaming}
-				className="h-full w-full flex flex-col p-4 bg-gradient-radial from-transparent to-primaryHighlight/30 bg-background/70 enabled:hover:bg-background/50 rounded-xl duration-200">
+				className="h-full w-full flex flex-col p-4 bg-gradient-radial from-transparent to-primaryHighlight/20 bg-background/80 enabled:hover:bg-background/50 rounded-xl duration-200">
 				{/* Title and Rename text input */}
 				{isRenaming ? (
 					<input
