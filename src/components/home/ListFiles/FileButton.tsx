@@ -87,13 +87,14 @@ const FileButton: FC<FileButtonProps> = ({ file }) => {
 				<ButtonMoreOptions dropdownSide="left" options={options} />
 			</div>
 
+			{/* Rename modal */}
 			{showWarning && (
 				<Modal closeModalFunction={() => setShowWarning(false)}>
 					<h1 className="font-bold">Delete file?</h1>
 					<p>
 						Are you sure you want to delete <b>{file.title}</b> file?
 					</p>
-					<div className="w-full flex justify-end font-semibold gap-2">
+					<div className="w-full mt-2 flex justify-end font-semibold gap-2">
 						<Button
 							onClick={() => setShowWarning(false)}
 							style={{

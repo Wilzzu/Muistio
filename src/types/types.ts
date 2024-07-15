@@ -1,6 +1,11 @@
 export type File = {
-	id: number;
+	id: string;
 	title: string;
 	dateModified: Date;
 	size: number;
+};
+
+export type FilteredList = {
+	files: File[];
+	isSearching: boolean;
 };

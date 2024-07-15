@@ -2,12 +2,8 @@ import Button from "../../common/Button";
 import { LuPlus } from "react-icons/lu";
 import { MdSort } from "react-icons/md";
 import ButtonDropdown from "../../common/ButtonDropdown";
-import { FC, useEffect, useState } from "react";
-import { File } from "../../../types/types";
-
-type TopOptionsProps = {
-	files: File[];
-};
+import { useContext, useEffect, useState } from "react";
+import FilesContext from "../../../context/FilesContext";
 
 type SortOption = {
 	id: number;
@@ -21,8 +17,9 @@ const sortOptions = [
 	{ id: 4, title: "Smallest Size" },
 ];
 
-const TopOptions: FC<TopOptionsProps> = ({ files }) => {
+const TopOptions = () => {
 	const [selectedSort, setSelectedSort] = useState<SortOption>(sortOptions[0]);
+	const { files } = useContext(FilesContext);
 
 	useEffect(() => {
 		console.log(selectedSort);

@@ -1,14 +1,29 @@
-import { useState } from "react";
+import { Dispatch, FC, SetStateAction, useContext } from "react";
 import { IoSearch } from "react-icons/io5";
+import FilesContext from "../../../context/FilesContext";
+import { File, FilteredList } from "../../../types/types";
 
-const Search = () => {
-	const [input, setInput] = useState("");
+type SearchProps = {
+	setFilteredList: Dispatch<SetStateAction<FilteredList>>;
+};
 
-	const onChange = (e: string) => {
-		setInput(e);
+const Search: FC<SearchProps> = ({ setFilteredList }) => {
+	const { files } = useContext(FilesContext);
+
+	const onChange = (input: string) => {
+		// If we aren't searching, set searching to false
+		if (input?.trim().length <= 0) return setFilteredList({ files: [], isSearching: false });
+
+		// Modify and split input
+		const splitInput = input.trim().toLowerCase().split(" ");
+
+		// Filter files, check if all input blocks are found in the file name
+		const foundFiles = files.filter((file: File) => {
+			return splitInput.every((block: string) => file.title.trim().toLowerCase().includes(block));
+		});
+
+		setFilteredList({ files: foundFiles, isSearching: true });
 	};
-
-	console.log(input);
 
 	return (
 		<div className="sticky top-0 z-20 p-[1px] bg-gradient-to-br from-primaryHighlight via-primaryHighlight/50 to-primaryHighlight rounded-[9px] duration-200 h-11">
@@ -16,6 +31,7 @@ const Search = () => {
 				<IoSearch />
 				<input
 					onChange={(e) => onChange(e.target.value)}
+					onFocus={(e) => e.target.select()}
 					type="text"
 					name="muistioSearch"
 					id="muistioSearch"

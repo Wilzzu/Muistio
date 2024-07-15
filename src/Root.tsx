@@ -1,9 +1,10 @@
 import { Outlet } from "react-router-dom";
 import Navbar from "./components/layout/Navbar/Navbar";
+import FilesProvider from "./context/FilesProvider";
 
 const Root = () => {
 	return (
-		<>
+		<FilesProvider>
 			<Navbar />
 			{/* Container for main height and padding */}
 			<div className="h-[calc(100dvh-4rem)] p-2">
@@ -12,7 +13,7 @@ const Root = () => {
 					<Outlet />
 				</main>
 			</div>
-		</>
+		</FilesProvider>
 	);
 };
 

@@ -7,3 +7,8 @@ body {
 	background-color: #11141a;
 	color: #ebe9fb;
 }
+
+/* Custom highlight color */
+*::selection {
+	background: #0793e3;
+}
