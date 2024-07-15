@@ -26,18 +26,20 @@ const Search: FC<SearchProps> = ({ setFilteredList }) => {
 	};
 
 	return (
-		<div className="sticky top-0 z-20 p-[1px] bg-gradient-to-br from-primaryHighlight via-primaryHighlight/50 to-primaryHighlight rounded-[9px] duration-200 h-11">
-			<div className="w-full h-full flex items-center gap-3 px-4 py-2 rounded-lg bg-gradient-radial from-transparent bg-secondary to-secondary/60 hover:bg-[#252A35] active:bg-[#252A35] duration-200 text-sm font-semibold outline-none">
-				<IoSearch />
-				<input
-					onChange={(e) => onChange(e.target.value)}
-					onFocus={(e) => e.target.select()}
-					type="text"
-					name="muistioSearch"
-					id="muistioSearch"
-					placeholder="Search file"
-					className="w-full h-full bg-transparent outline-none"
-				/>
+		<div className="sticky top-0 bg-gradient-to-b from-background from-80% to-transparent z-20 py-3">
+			<div className="p-[1px] bg-gradient-to-br from-primaryHighlight via-primaryHighlight/50 to-primaryHighlight rounded-[9px] duration-200 h-11">
+				<div className="w-full h-full flex items-center gap-3 px-4 py-2 rounded-lg bg-gradient-radial from-transparent bg-secondary to-secondary/60 hover:bg-[#252A35] active:bg-[#252A35] duration-200 text-sm font-semibold outline-none">
+					<IoSearch />
+					<input
+						onChange={(e) => onChange(e.target.value)}
+						onFocus={(e) => e.target.select()}
+						type="text"
+						name="muistioSearch"
+						id="muistioSearch"
+						placeholder="Search file"
+						className="w-full h-full bg-transparent outline-none"
+					/>
+				</div>
 			</div>
 		</div>
 	);

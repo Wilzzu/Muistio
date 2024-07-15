@@ -12,3 +12,8 @@ body {
 *::selection {
 	background: #0793e3;
 }
+
+/* Reduce margin on paragraph after Heading 1 on Markdown */
+.prose h1 + p {
+	margin-top: 0.8rem;
+}

@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 import tailwindScrollbar from "tailwind-scrollbar";
-
+import tailwindTypography from "@tailwindcss/typography";
 export default {
 	content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
 	theme: {
@@ -25,9 +25,15 @@ export default {
 				highlight: "0 0 10px var(--tw-shadow-color)",
 			},
 			boxShadow: {
+				"centered-sm": "0 0 14px var(--tw-shadow-color)",
+				centered: "0 0 20px var(--tw-shadow-color)",
 				"centered-lg": "0 0 28px var(--tw-shadow-color)",
 			},
 		},
 	},
-	plugins: [tailwindScrollbar({ nocompatible: true, preferredStrategy: "pseudoelements" })],
+
+	plugins: [
+		tailwindScrollbar({ nocompatible: true, preferredStrategy: "pseudoelements" }),
+		tailwindTypography,
+	],
 };
