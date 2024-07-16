@@ -15,5 +15,5 @@ body {
 
 /* Reduce margin on paragraph after Heading 1 on Markdown */
 .prose h1 + p {
-	margin-top: 0.8rem;
+	margin-top: 1rem;
 }

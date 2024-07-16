@@ -16,7 +16,6 @@ export default {
 			},
 			fontFamily: {
 				primary: ["Quicksand", "sans-serif"],
-				note: ["Noto Sans", "sans-serif"],
 			},
 			backgroundImage: {
 				"gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
