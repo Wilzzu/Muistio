@@ -66,7 +66,7 @@ const FileButton: FC<FileButtonProps> = ({ file }) => {
 						autoFocus
 						onBlur={(e) => onBlur(e)}
 						onKeyDown={(e) => onInputKeyDown(e)}
-						className="bg-transparent text-lg font-medium rounded-sm outline-none focus:outline-accent"
+						className="bg-transparent text-lg font-medium rounded-sm outline-none outline-1 outline-accent w-[93%]"
 					/>
 				) : (
 					<h1 className="w-full truncate text-left text-lg font-medium">{file.title}</h1>

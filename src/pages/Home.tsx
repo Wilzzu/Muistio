@@ -13,10 +13,6 @@ function Home() {
 
 	return (
 		<div className="flex justify-center gap-2 px-1">
-			{/* Sidebar */}
-			{/* <div></div> */}
-
-			{/* File selection */}
 			<section className="flex flex-col gap-5 w-1/2 px-3">
 				<Search setFilteredList={setFilteredList} />
 				<div className="flex flex-col gap-2">

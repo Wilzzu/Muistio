@@ -1,6 +1,7 @@
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeExternalLinks from "rehype-external-links";
+import PreviewOptions from "./PreviewOptions";
 
 const markdown = `
 # This is a heading!
@@ -39,16 +40,17 @@ const FilePreview = () => {
 	return (
 		<div className="w-1/2 p-3 pr-1">
 			{/* Sticky and border */}
-			<div className="sticky top-3 p-[1px] rounded-[17px] bg-gradient-to-r from-accent via-accent/20 to-accent shadow-accent/20 shadow-centered-sm">
+			<div className="sticky top-3 p-[1px] rounded-[17px] bg-gradient-to-r from-primaryHighlight via-primaryHighlight/20 to-primaryHighlight overflow-hidden">
 				{/* Main content wrapper */}
-				<div className="w-full py-4 pl-5 pr-3 rounded-2xl flex flex-col gap-8 bg-gradient-radial from-secondary from-40% to-secondary/90">
+				<div className="relative w-full py-4 pl-5 pr-[0.35rem] rounded-2xl flex flex-col bg-gradient-radial from-secondary from-40% to-secondary/90">
+					<PreviewOptions />
 					{/* Main content with scroll */}
 					<section className="h-[calc(100dvh-8.6rem)] overflow-y-scroll scrollbar scrollbar-w-[6px] scrollbar-thumb-primaryHighlight/50">
 						<Markdown
 							remarkPlugins={[remarkGfm]}
 							rehypePlugins={[[rehypeExternalLinks, { target: "_blank" }]]}
 							className={
-								"prose prose-invert font-note prose-headings:mb-2 prose-h1:text-2xl prose-h1:font-semibold prose-h1:border-b-[1px] prose-h1:border-accent prose-h1:pb-1 prose-h2:text-xl prose-h2:font-medium prose-h3:text-lg prose-h3:font-normal prose-p:text-white/90 prose-a:text-[#4dbaf8] prose-a:selection:text-black marker:text-accent prose-thead:border-accent prose-tr:border-accent"
+								"prose prose-invert font-note prose-headings:mb-2 prose-h1:text-2xl prose-h1:font-medium prose-h1:border-b-[1px] prose-h1:border-accent prose-h1:pb-1 prose-h2:text-xl prose-h2:font-medium prose-h3:text-lg prose-h3:font-medium prose-p:text-white/90 prose-a:text-[#4dbaf8] prose-a:selection:text-black marker:text-accent prose-thead:border-accent prose-tr:border-accent"
 							}>
 							{markdown}
 						</Markdown>

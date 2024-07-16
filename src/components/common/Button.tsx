@@ -12,6 +12,7 @@ type ButtonProps = {
 	link?: string;
 	onClick?: () => void;
 	highlight?: boolean;
+	warning?: boolean;
 	style?: CustomButtonStyles;
 	override?: boolean;
 	children: ReactNode;
@@ -23,7 +24,15 @@ const defaultButtonStyles = {
 	main: "flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-gradient-radial from-transparent bg-primary to-primary/60 hover:bg-primary/50 duration-200 text-sm font-semibold",
 };
 
-const Button: FC<ButtonProps> = ({ link, onClick, highlight, style, override, children }) => {
+const Button: FC<ButtonProps> = ({
+	link,
+	onClick,
+	highlight,
+	warning,
+	style,
+	override,
+	children,
+}) => {
 	return (
 		// Border for button
 		<div
@@ -34,6 +43,9 @@ const Button: FC<ButtonProps> = ({ link, onClick, highlight, style, override, ch
 							defaultButtonStyles.border,
 							{
 								"from-accent via-accent/20 to-accent": highlight,
+							},
+							{
+								"from-red-600 via-red-600/20 to-red-600": warning,
 							},
 							style?.border
 					  )
@@ -50,6 +62,9 @@ const Button: FC<ButtonProps> = ({ link, onClick, highlight, style, override, ch
 									{
 										"shadow-accent/30 hover:drop-shadow-highlight": highlight,
 									},
+									{
+										"shadow-red-800/60 hover:drop-shadow-highlight": warning,
+									},
 									style?.main
 							  )
 					}>
@@ -65,6 +80,9 @@ const Button: FC<ButtonProps> = ({ link, onClick, highlight, style, override, ch
 									defaultButtonStyles.main,
 									{
 										"shadow-accent/30 hover:drop-shadow-highlight": highlight,
+									},
+									{
+										"shadow-red-800/60 hover:drop-shadow-highlight": warning,
 									},
 									style?.main
 							  )
