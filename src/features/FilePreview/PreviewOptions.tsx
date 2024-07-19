@@ -4,6 +4,13 @@ import { MdEdit } from "react-icons/md";
 import { FiCheck, FiDownload, FiSearch, FiX } from "react-icons/fi";
 import { LuTrash2 } from "react-icons/lu";
 import Modal from "../../components/common/Modal";
+import GenerateDownloadLink from "../../components/common/GenerateDownloadLink";
+
+// Temporary file details
+const file = {
+	title: "Test File Name",
+	content: "Test content",
+};
 
 type PreviewOptionsProps = {
 	isEditing: boolean;
@@ -26,6 +33,7 @@ const PreviewOptions: FC<PreviewOptionsProps> = ({
 
 	const handleExitButtonClick = () => {
 		if (hasUnsavedChanges()) setShowWarning(true);
+		else discardAndExit();
 	};
 
 	const handleWarningExitClick = () => {
@@ -53,9 +61,11 @@ const PreviewOptions: FC<PreviewOptionsProps> = ({
 						<Button style={{ main: "p-2 text-base" }} onClick={startEditing}>
 							<MdEdit />
 						</Button>
-						<Button style={{ main: "p-2 text-base" }}>
-							<FiDownload className="text-white" />
-						</Button>
+						<GenerateDownloadLink title={file.title} content={file.content}>
+							<Button style={{ main: "p-2 text-base" }}>
+								<FiDownload className="text-white" />
+							</Button>
+						</GenerateDownloadLink>
 						<Button warning style={{ main: "p-2 text-base" }}>
 							<LuTrash2 />
 						</Button>

@@ -40,6 +40,22 @@ const FileButton: FC<FileButtonProps> = ({ file }) => {
 		console.log("Renaming file to:", value);
 	};
 
+	// TODO: Replace hard coded values with those fetched from the backend
+	const downloadFile = () => {
+		const file = new Blob(["Test File Content"], { type: "text/plain" });
+		const url = URL.createObjectURL(file);
+
+		const link = document.createElement("a");
+		link.href = url;
+		link.download = "Test File Name.txt";
+		document.body.appendChild(link);
+		link.click();
+		document.body.removeChild(link);
+
+		// Revoke the object URL after download has started
+		URL.revokeObjectURL(url);
+	};
+
 	const deleteFile = () => {
 		setShowWarning(false);
 		console.log("Deleting file:", file.title);
@@ -47,6 +63,7 @@ const FileButton: FC<FileButtonProps> = ({ file }) => {
 
 	const options = [
 		{ title: "Rename", action: () => setIsRenaming(true) },
+		{ title: "Download", action: downloadFile },
 		{ title: "Delete", action: () => setShowWarning(true), warning: true },
 	];
 
