@@ -2,10 +2,19 @@ import Button from "../../common/Button";
 import { LuPlus } from "react-icons/lu";
 import { BiHomeAlt2 } from "react-icons/bi";
 import { FiLogOut } from "react-icons/fi";
+import { signOut } from "firebase/auth";
+import { auth } from "../../../firebase/firebase";
+import { redirect } from "react-router-dom";
 
 const Navbar = () => {
 	const handleLogOut = () => {
-		console.log("logout");
+		signOut(auth)
+			.then(() => {
+				redirect("/login");
+			})
+			.catch((error) => {
+				console.error(error);
+			});
 	};
 
 	return (
