@@ -2,44 +2,47 @@ import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeExternalLinks from "rehype-external-links";
 import PreviewOptions from "./PreviewOptions";
-import { FC, useRef, useState } from "react";
+import { Dispatch, FC, SetStateAction, useRef, useState } from "react";
 import Modal from "../../components/common/Modal";
 import Button from "../../components/common/Button";
 import useUnsavedChangesWarning from "../../hooks/useUnsavedChangesWarning";
 import ReactTextareaAutosize from "react-textarea-autosize";
+import { cn } from "../../lib/utils";
 
-const markdown = `
-# This is a heading!
+// const markdown = `
+// # This is a heading!
 
-Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dicta sint provident veniam dolorum corrupti, voluptatibus voluptatem consectetur error animi quam quia, non tempora harum sunt cumque pariatur ex modi neque?
+// Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dicta sint provident veniam dolorum corrupti, voluptatibus voluptatem consectetur error animi quam quia, non tempora harum sunt cumque pariatur ex modi neque?
 
-## Heading 2
+// ## Heading 2
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae, odio. Cum est excepturi quam corrupti aperiam deserunt ad natus doloremque impedit laborum error, nobis tempora ex saepe voluptas praesentium cupiditate.
+// Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae, odio. Cum est excepturi quam corrupti aperiam deserunt ad natus doloremque impedit laborum error, nobis tempora ex saepe voluptas praesentium cupiditate.
 
-### Heading 3
+// ### Heading 3
 
-Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde odit obcaecati eum alias illum consequatur asperiores nemo, dolore suscipit tempore cum officia qui aspernatur ipsa deserunt accusantium, optio minima iste?
+// Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde odit obcaecati eum alias illum consequatur asperiores nemo, dolore suscipit tempore cum officia qui aspernatur ipsa deserunt accusantium, optio minima iste?
 
-# Heading again!
+// # Heading again!
 
-- Here
-- are some
-- list items
+// - Here
+// - are some
+// - list items
 
-[Link to google](https://www.google.com)
+// [Link to google](https://www.google.com)
 
-Another type of link: www.google.com.
+// Another type of link: www.google.com.
 
-![Avatar](https://avatars.githubusercontent.com/u/11214356?v=4)
-![Banner](https://i.imgur.com/q2uTmfW.png)
+// ![Avatar](https://avatars.githubusercontent.com/u/11214356?v=4)
+// ![Banner](https://i.imgur.com/q2uTmfW.png)
 
-| Column 1   | Column 2   |
-| ---------: | :--------- |
-| Row 1 	 | Row 1/2    |
-| Row 2      | Row 2/2 	  |
+// | Column 1   | Column 2   |
+// | ---------: | :--------- |
+// | Row 1 	 | Row 1/2    |
+// | Row 2      | Row 2/2 	  |
 
-`;
+// `;
+
+const markdown = "# Add new content here";
 
 const MarkdownPreview: FC<{ content: string }> = ({ content }) => (
 	<Markdown
@@ -52,10 +55,15 @@ const MarkdownPreview: FC<{ content: string }> = ({ content }) => (
 	</Markdown>
 );
 
-const FilePreview = () => {
-	const [isEditing, setIsEditing] = useState(false);
+type FilePreviewTypes = {
+	isCreatingNewFile?: boolean;
+	setContent?: Dispatch<SetStateAction<string>>;
+};
+
+const FilePreview: FC<FilePreviewTypes> = ({ isCreatingNewFile, setContent }) => {
+	const [isEditing, setIsEditing] = useState<boolean>(isCreatingNewFile || false);
 	const [isPreviewingEdit, setIsPreviewingEdit] = useState(false);
-	const editedFileCache = useRef<string>("");
+	const editedFileCache = useRef<string>("# Add new content here");
 	const editorRef = useRef<HTMLTextAreaElement>(null);
 
 	const checkForUnsavedChanges = () => {
@@ -102,9 +110,18 @@ const FilePreview = () => {
 
 	return (
 		<>
-			<div className="w-1/2 p-3 pr-1">
+			<div
+				className={cn("w-1/2 p-3 pr-1", {
+					"min-w-[800px] p-0": isCreatingNewFile,
+				})}>
 				{/* Sticky and border */}
-				<div className="sticky top-3 p-[1px] rounded-[17px] bg-gradient-to-r from-primaryHighlight via-primaryHighlight/20 to-primaryHighlight overflow-hidden">
+				<div
+					className={cn(
+						"sticky top-3 p-[1px] rounded-[17px] bg-gradient-to-r from-primaryHighlight via-primaryHighlight/20 to-primaryHighlight overflow-hidden",
+						{
+							relative: isCreatingNewFile,
+						}
+					)}>
 					{/* Main content wrapper */}
 					<div className="relative w-full py-4 pl-5 pr-[0.35rem] rounded-2xl flex flex-col bg-gradient-radial from-secondary from-40% to-secondary/90">
 						<PreviewOptions
@@ -114,11 +131,17 @@ const FilePreview = () => {
 							toggleEditPreview={toggleEditPreview}
 							hasUnsavedChanges={checkForUnsavedChanges}
 							discardAndExit={discardAndExit}
+							showOnlyEditButton={isCreatingNewFile}
 						/>
 						{/* Main content with scroll */}
 						<section
 							onDoubleClick={handleDoubleClick}
-							className="h-[calc(100dvh-8.6rem)] overflow-y-scroll scrollbar scrollbar-w-[6px] scrollbar-thumb-primaryHighlight/50">
+							className={cn(
+								"h-[calc(100dvh-8.6rem)] overflow-y-scroll scrollbar scrollbar-w-[6px] scrollbar-thumb-primaryHighlight/50",
+								{
+									"h-full min-h-48": isCreatingNewFile,
+								}
+							)}>
 							{isEditing ? (
 								isPreviewingEdit ? (
 									<MarkdownPreview content={editedFileCache.current} />
@@ -128,7 +151,10 @@ const FilePreview = () => {
 										name="muistioFileEditor"
 										id="muistioFileEditor"
 										defaultValue={editedFileCache.current}
-										className="w-full h-fit bg-transparent resize-none outline-none"
+										className={cn("w-full h-fit bg-transparent resize-none outline-none", {
+											"min-h-44": isCreatingNewFile,
+										})}
+										onChange={(e) => isCreatingNewFile && setContent && setContent(e.target.value)}
 									/>
 								)
 							) : (

@@ -3,6 +3,7 @@ export type File = {
 	title: string;
 	dateModified: Date;
 	size: number;
+	content: string;
 };
 
 export type FilteredList = {

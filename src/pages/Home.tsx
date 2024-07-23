@@ -13,13 +13,13 @@ function Home() {
 
 	return (
 		<div className="flex justify-center gap-2 px-1">
-			<section className="flex flex-col gap-5 w-1/2 px-3">
+			<main className="flex flex-col gap-5 w-1/2 px-3">
 				<Search setFilteredList={setFilteredList} />
 				<div className="flex flex-col gap-2">
 					<TopOptions />
 					<ListFiles filteredList={filteredList} />
 				</div>
-			</section>
+			</main>
 
 			<FilePreview />
 		</div>

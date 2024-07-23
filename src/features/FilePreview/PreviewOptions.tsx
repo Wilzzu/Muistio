@@ -19,6 +19,7 @@ type PreviewOptionsProps = {
 	toggleEditPreview: () => void;
 	hasUnsavedChanges: () => boolean;
 	discardAndExit: () => void;
+	showOnlyEditButton?: boolean;
 };
 
 const PreviewOptions: FC<PreviewOptionsProps> = ({
@@ -28,6 +29,7 @@ const PreviewOptions: FC<PreviewOptionsProps> = ({
 	toggleEditPreview,
 	hasUnsavedChanges,
 	discardAndExit,
+	showOnlyEditButton,
 }) => {
 	const [showWarning, setShowWarning] = useState(false);
 
@@ -49,26 +51,34 @@ const PreviewOptions: FC<PreviewOptionsProps> = ({
 						<Button style={{ main: "p-2 text-base" }} onClick={toggleEditPreview}>
 							{isPreviewingEdit ? <MdEdit /> : <FiSearch />}
 						</Button>
-						<Button highlight style={{ main: "p-2 text-base" }}>
-							<FiCheck />
-						</Button>
-						<Button warning style={{ main: "p-2 text-base" }} onClick={handleExitButtonClick}>
-							<FiX />
-						</Button>
+						{!showOnlyEditButton && (
+							<>
+								<Button highlight style={{ main: "p-2 text-base" }}>
+									<FiCheck />
+								</Button>
+								<Button warning style={{ main: "p-2 text-base" }} onClick={handleExitButtonClick}>
+									<FiX />
+								</Button>
+							</>
+						)}
 					</>
 				) : (
 					<>
 						<Button style={{ main: "p-2 text-base" }} onClick={startEditing}>
 							<MdEdit />
 						</Button>
-						<GenerateDownloadLink title={file.title} content={file.content}>
-							<Button style={{ main: "p-2 text-base" }}>
-								<FiDownload className="text-white" />
-							</Button>
-						</GenerateDownloadLink>
-						<Button warning style={{ main: "p-2 text-base" }}>
-							<LuTrash2 />
-						</Button>
+						{!showOnlyEditButton && (
+							<>
+								<GenerateDownloadLink title={file.title} content={file.content}>
+									<Button style={{ main: "p-2 text-base" }}>
+										<FiDownload className="text-white" />
+									</Button>
+								</GenerateDownloadLink>
+								<Button warning style={{ main: "p-2 text-base" }}>
+									<LuTrash2 />
+								</Button>
+							</>
+						)}
 					</>
 				)}
 			</div>
