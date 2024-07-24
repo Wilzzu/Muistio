@@ -39,7 +39,6 @@ const FilePreview: FC<FilePreviewTypes> = ({ isCreatingNewFile, setContent }) =>
 		if (!isEditing) return false;
 		if (editorRef?.current) editedFileCache.current = editorRef.current.value;
 		if (selectedFile?.content === editedFileCache.current) return false;
-		if (isCreatingNewFile && editedFileCache.current === defaultText) return false;
 		return true;
 	};
 	const blocker = useUnsavedChangesWarning(checkForUnsavedChanges); // For blocking navigation
@@ -82,7 +81,7 @@ const FilePreview: FC<FilePreviewTypes> = ({ isCreatingNewFile, setContent }) =>
 		<>
 			<div
 				className={cn("w-1/2 p-3 pr-1", {
-					"min-w-[800px] p-0": isCreatingNewFile,
+					"w-full p-0": isCreatingNewFile,
 				})}>
 				{/* Sticky and border */}
 				<div
@@ -107,9 +106,9 @@ const FilePreview: FC<FilePreviewTypes> = ({ isCreatingNewFile, setContent }) =>
 						<section
 							onDoubleClick={handleDoubleClick}
 							className={cn(
-								"h-[calc(100dvh-8.6rem)] overflow-y-scroll scrollbar scrollbar-w-[6px] scrollbar-thumb-primaryHighlight/50",
+								"h-[calc(100dvh-8.6rem)] overflow-y-scroll scrollbar scrollbar-w-[6px] scrollbar-thumb-primaryHighlight/50 scrollbar-thumb-rounded-full",
 								{
-									"h-full min-h-48": isCreatingNewFile,
+									"h-fit min-h-48 max-h-[calc(100dvh-20rem)]": isCreatingNewFile,
 								}
 							)}>
 							{isEditing ? (
