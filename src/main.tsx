@@ -7,6 +7,9 @@ import CreateNewFile from "./pages/CreateNewFile";
 import Login from "./pages/Login";
 import ErrorPage from "./pages/ErrorPage";
 import Home from "./pages/Home";
+import AuthProvider from "./context/AuthProvider";
+import FilesProvider from "./context/FilesProvider";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const router = createBrowserRouter([
 	{
@@ -21,8 +24,16 @@ const router = createBrowserRouter([
 	},
 ]);
 
+const queryClient = new QueryClient();
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
 	<React.StrictMode>
-		<RouterProvider router={router} />
+		<QueryClientProvider client={queryClient}>
+			<AuthProvider>
+				<FilesProvider>
+					<RouterProvider router={router} />
+				</FilesProvider>
+			</AuthProvider>
+		</QueryClientProvider>
 	</React.StrictMode>
 );

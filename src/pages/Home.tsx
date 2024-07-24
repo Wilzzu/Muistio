@@ -1,15 +1,17 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import ListFiles from "../components/home/ListFiles/ListFiles";
 import Search from "../components/home/TopOptions/Search";
 import TopOptions from "../components/home/TopOptions/TopOptions";
 import { FilteredList } from "../types/types";
 import FilePreview from "../features/FilePreview/FilePreview";
+import FilesContext from "../context/FilesContext";
 
 function Home() {
 	const [filteredList, setFilteredList] = useState<FilteredList>({
 		files: [],
 		isSearching: false,
 	});
+	const { selectedFile } = useContext(FilesContext);
 
 	return (
 		<div className="flex justify-center gap-2 px-1">
@@ -21,7 +23,7 @@ function Home() {
 				</div>
 			</main>
 
-			<FilePreview />
+			{selectedFile && <FilePreview />}
 		</div>
 	);
 }

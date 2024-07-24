@@ -2,47 +2,15 @@ import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeExternalLinks from "rehype-external-links";
 import PreviewOptions from "./PreviewOptions";
-import { Dispatch, FC, SetStateAction, useRef, useState } from "react";
+import { Dispatch, FC, SetStateAction, useContext, useRef, useState } from "react";
 import Modal from "../../components/common/Modal";
 import Button from "../../components/common/Button";
 import useUnsavedChangesWarning from "../../hooks/useUnsavedChangesWarning";
 import ReactTextareaAutosize from "react-textarea-autosize";
 import { cn } from "../../lib/utils";
+import FilesContext from "../../context/FilesContext";
 
-// const markdown = `
-// # This is a heading!
-
-// Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dicta sint provident veniam dolorum corrupti, voluptatibus voluptatem consectetur error animi quam quia, non tempora harum sunt cumque pariatur ex modi neque?
-
-// ## Heading 2
-
-// Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae, odio. Cum est excepturi quam corrupti aperiam deserunt ad natus doloremque impedit laborum error, nobis tempora ex saepe voluptas praesentium cupiditate.
-
-// ### Heading 3
-
-// Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde odit obcaecati eum alias illum consequatur asperiores nemo, dolore suscipit tempore cum officia qui aspernatur ipsa deserunt accusantium, optio minima iste?
-
-// # Heading again!
-
-// - Here
-// - are some
-// - list items
-
-// [Link to google](https://www.google.com)
-
-// Another type of link: www.google.com.
-
-// ![Avatar](https://avatars.githubusercontent.com/u/11214356?v=4)
-// ![Banner](https://i.imgur.com/q2uTmfW.png)
-
-// | Column 1   | Column 2   |
-// | ---------: | :--------- |
-// | Row 1 	 | Row 1/2    |
-// | Row 2      | Row 2/2 	  |
-
-// `;
-
-const markdown = "# Add new content here";
+const defaultText = "# Add your content here";
 
 const MarkdownPreview: FC<{ content: string }> = ({ content }) => (
 	<Markdown
@@ -61,22 +29,24 @@ type FilePreviewTypes = {
 };
 
 const FilePreview: FC<FilePreviewTypes> = ({ isCreatingNewFile, setContent }) => {
+	const { selectedFile } = useContext(FilesContext);
 	const [isEditing, setIsEditing] = useState<boolean>(isCreatingNewFile || false);
 	const [isPreviewingEdit, setIsPreviewingEdit] = useState(false);
-	const editedFileCache = useRef<string>("# Add new content here");
+	const editedFileCache = useRef<string>(defaultText);
 	const editorRef = useRef<HTMLTextAreaElement>(null);
 
 	const checkForUnsavedChanges = () => {
 		if (!isEditing) return false;
 		if (editorRef?.current) editedFileCache.current = editorRef.current.value;
-		if (markdown === editedFileCache.current) return false;
+		if (selectedFile?.content === editedFileCache.current) return false;
+		if (isCreatingNewFile && editedFileCache.current === defaultText) return false;
 		return true;
 	};
 	const blocker = useUnsavedChangesWarning(checkForUnsavedChanges); // For blocking navigation
 
 	const startEditing = () => {
-		if (isEditing) return;
-		editedFileCache.current = markdown;
+		if (isEditing || !selectedFile?.content) return;
+		editedFileCache.current = selectedFile.content;
 		setIsEditing(true);
 	};
 
@@ -158,7 +128,7 @@ const FilePreview: FC<FilePreviewTypes> = ({ isCreatingNewFile, setContent }) =>
 									/>
 								)
 							) : (
-								<MarkdownPreview content={markdown} />
+								<MarkdownPreview content={selectedFile?.content || "No content"} />
 							)}
 						</section>
 					</div>

@@ -1,16 +1,19 @@
-import { FC, FocusEvent, KeyboardEvent, useRef, useState } from "react";
+import { FC, FocusEvent, KeyboardEvent, useContext, useRef, useState } from "react";
 import { LuCalendar } from "react-icons/lu";
 import { PiFileText } from "react-icons/pi";
 import ButtonMoreOptions from "../../common/ButtonMoreOptions";
 import { File } from "../../../types/types";
 import Modal from "../../common/Modal";
 import Button from "../../common/Button";
+import moment from "moment";
+import FilesContext from "../../../context/FilesContext";
 
 type FileButtonProps = {
 	file: File;
 };
 
 const FileButton: FC<FileButtonProps> = ({ file }) => {
+	const { setSelectedFile } = useContext(FilesContext);
 	const [isRenaming, setIsRenaming] = useState(false);
 	const [showWarning, setShowWarning] = useState(false);
 	const escPressed = useRef<boolean>(false);
@@ -73,6 +76,7 @@ const FileButton: FC<FileButtonProps> = ({ file }) => {
 			className="relative h-20 p-[1px] bg-gradient-to-br from-[#61718f] via-primaryHighlight to-[#61718f] rounded-[13px] duration-200">
 			{/* File information */}
 			<button
+				onClick={() => setSelectedFile(file)}
 				disabled={isRenaming}
 				className="h-full w-full flex flex-col p-4 bg-gradient-radial from-transparent to-primaryHighlight/20 bg-background/80 enabled:hover:bg-background/50 rounded-xl duration-200">
 				{/* Title and Rename text input */}
@@ -91,7 +95,8 @@ const FileButton: FC<FileButtonProps> = ({ file }) => {
 				{/* Other information */}
 				<p className="flex gap-2 text-xs">
 					<span>
-						<LuCalendar className="inline-block mb-[0.1rem]" /> {file.dateModified.toDateString()}
+						<LuCalendar className="inline-block mb-[0.1rem]" />{" "}
+						{moment(file.dateModified.toDate()).format("DD.MM.YYYY, HH:mm")}
 					</span>
 					<span>
 						<PiFileText className="inline-block text-sm mb-[0.1rem]" /> {file.size + "KB"}

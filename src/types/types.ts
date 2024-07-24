@@ -1,7 +1,9 @@
+import { Timestamp } from "firebase/firestore";
+
 export type File = {
 	id: string;
 	title: string;
-	dateModified: Date;
+	dateModified: Timestamp;
 	size: number;
 	content: string;
 };
