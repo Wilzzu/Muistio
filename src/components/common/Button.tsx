@@ -15,13 +15,14 @@ type ButtonProps = {
 	warning?: boolean;
 	style?: CustomButtonStyles;
 	override?: boolean;
+	disabled?: boolean;
 	children: ReactNode;
 };
 
 const defaultButtonStyles = {
 	border:
 		"p-[1px] bg-gradient-to-br from-primaryHighlight via-primaryHighlight/50 to-primaryHighlight rounded-[9px] duration-200",
-	main: "h-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-gradient-radial from-transparent bg-primary to-primary/60 hover:bg-primary/50 duration-200 text-sm font-semibold",
+	main: "h-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-gradient-radial from-transparent bg-primary to-primary/60 hover:bg-primary/50 duration-200 text-sm font-semibold disabled:opacity-50 disabled:pointer-events-none",
 };
 
 const Button: FC<ButtonProps> = ({
@@ -31,6 +32,7 @@ const Button: FC<ButtonProps> = ({
 	warning,
 	style,
 	override,
+	disabled,
 	children,
 }) => {
 	return (
@@ -47,13 +49,16 @@ const Button: FC<ButtonProps> = ({
 							{
 								"from-red-600 via-red-600/20 to-red-600": warning,
 							},
+							{
+								"opacity-50 disabled:pointer-events-none": disabled,
+							},
 							style?.border
 					  )
 			}>
 			{/* Link or Normal button */}
 			{link ? (
 				<Link
-					to={link}
+					to={disabled ? "#" : link}
 					className={
 						override
 							? style?.main
@@ -65,6 +70,9 @@ const Button: FC<ButtonProps> = ({
 									{
 										"shadow-red-800/60 hover:drop-shadow-highlight": warning,
 									},
+									{
+										"opacity-50 pointer-events-none": disabled,
+									},
 									style?.main
 							  )
 					}>
@@ -73,6 +81,7 @@ const Button: FC<ButtonProps> = ({
 			) : (
 				<button
 					onClick={onClick}
+					disabled={disabled}
 					className={
 						override
 							? style?.main

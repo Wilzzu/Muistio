@@ -31,7 +31,9 @@ const ListFiles: FC<ListFilesProps> = ({ filteredList }) => {
 			? "loading files"
 			: isRefetching
 			? "refetching files"
-			: isError && `files error: ${error?.message}`
+			: isError
+			? `files error: ${error?.message}`
+			: ""
 	);
 
 	return (

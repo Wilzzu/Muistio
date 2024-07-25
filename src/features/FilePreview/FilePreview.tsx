@@ -26,9 +26,10 @@ const MarkdownPreview: FC<{ content: string }> = ({ content }) => (
 type FilePreviewTypes = {
 	isCreatingNewFile?: boolean;
 	setContent?: Dispatch<SetStateAction<string>>;
+	disabled?: boolean;
 };
 
-const FilePreview: FC<FilePreviewTypes> = ({ isCreatingNewFile, setContent }) => {
+const FilePreview: FC<FilePreviewTypes> = ({ isCreatingNewFile, setContent, disabled }) => {
 	const { selectedFile } = useContext(FilesContext);
 	const [isEditing, setIsEditing] = useState<boolean>(isCreatingNewFile || false);
 	const [isPreviewingEdit, setIsPreviewingEdit] = useState(false);
@@ -119,10 +120,14 @@ const FilePreview: FC<FilePreviewTypes> = ({ isCreatingNewFile, setContent }) =>
 										ref={editorRef}
 										name="muistioFileEditor"
 										id="muistioFileEditor"
+										disabled={disabled}
 										defaultValue={editedFileCache.current}
-										className={cn("w-full h-fit bg-transparent resize-none outline-none", {
-											"min-h-44": isCreatingNewFile,
-										})}
+										className={cn(
+											"w-full h-fit bg-transparent resize-none outline-none disabled:opacity-50",
+											{
+												"min-h-44": isCreatingNewFile,
+											}
+										)}
 										onChange={(e) => isCreatingNewFile && setContent && setContent(e.target.value)}
 									/>
 								)

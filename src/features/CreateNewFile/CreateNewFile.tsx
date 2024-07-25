@@ -15,18 +15,36 @@ const CreateNewFile: FC<CreateNewFileProps> = ({ closeModal }) => {
 	const [title, setTitle] = useState("");
 	const [content, setContent] = useState("");
 	const [showWarning, setShowWarning] = useState(false);
+	const [isDisabled, setIsDisabled] = useState(false);
 	const { user } = useContext(AuthContext);
 	const queryClient = useQueryClient();
+
+	const onNewFileCreated = (newFileId: string) => {
+		// TODO: Redirect to the new file ID
+		console.log(newFileId);
+		queryClient.invalidateQueries({ queryKey: ["files", user?.uid] });
+		closeModal();
+	};
+
+	const onError = () => {
+		setIsDisabled(false);
+	};
 
 	// Use React Query to keep track of mutation state
 	const addFileMutation = useMutation({
 		mutationFn: ({ userId, title, content }: { userId: string; title: string; content: string }) =>
 			addFile(userId, title, content),
-		onSuccess: () => queryClient.invalidateQueries({ queryKey: ["files", user?.uid] }),
+		onSuccess: (newFileId: string) => {
+			onNewFileCreated(newFileId);
+			queryClient.invalidateQueries({ queryKey: ["files", user?.uid] });
+			closeModal();
+		},
+		onError: () => onError(),
 	});
 
 	const uploadNewFile = () => {
 		if (title.trim() && content.trim() && user) {
+			setIsDisabled(true);
 			addFileMutation.mutate({ userId: user.uid, title, content });
 		}
 	};
@@ -39,7 +57,7 @@ const CreateNewFile: FC<CreateNewFileProps> = ({ closeModal }) => {
 	return (
 		<>
 			<Modal
-				closeModalFunction={checkForUnsavedChanges}
+				closeModalFunction={isDisabled ? () => false : checkForUnsavedChanges}
 				styleOverride="max-w-[800px] max-h-[calc(100dvh-10rem)]">
 				<div className="flex flex-col mb-2">
 					<p>
@@ -56,18 +74,25 @@ const CreateNewFile: FC<CreateNewFileProps> = ({ closeModal }) => {
 							type="text"
 							name="muistioTitle"
 							id="muistioTitle"
+							disabled={isDisabled}
 							placeholder="Set new title"
 							onChange={(e) => setTitle(e.target.value)}
 							className="bg-primary rounded-lg px-2 outline-none"
 						/>
 						<div className="flex gap-3">
-							<Button onClick={checkForUnsavedChanges}>Cancel</Button>
-							<Button highlight onClick={uploadNewFile} style={{ main: "bg-opacity-80" }}>
+							<Button onClick={checkForUnsavedChanges} disabled={isDisabled}>
+								Cancel
+							</Button>
+							<Button
+								highlight
+								onClick={uploadNewFile}
+								disabled={isDisabled}
+								style={{ main: "bg-opacity-80" }}>
 								<LuPlus /> Add file
 							</Button>
 						</div>
 					</div>
-					<FilePreview isCreatingNewFile setContent={setContent} />
+					<FilePreview isCreatingNewFile setContent={setContent} disabled={isDisabled} />
 				</div>
 			</Modal>
 			{showWarning && (

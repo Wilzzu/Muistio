@@ -31,12 +31,13 @@ const getFileSize = (content: string) => {
 };
 
 export const addFile = async (userId: string, title: string, content: string) => {
-	await addDoc(collection(db, "users", userId, "files"), {
+	const docRef = await addDoc(collection(db, "users", userId, "files"), {
 		title,
 		dateModified: serverTimestamp(),
 		size: getFileSize(content),
 		content,
 	});
+	return docRef.id;
 };
 
 export const getFiles = async (userId: string) => {
