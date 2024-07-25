@@ -37,9 +37,10 @@ const FilePreview: FC<FilePreviewTypes> = ({ isCreatingNewFile, setContent, disa
 	const editorRef = useRef<HTMLTextAreaElement>(null);
 
 	const checkForUnsavedChanges = () => {
-		if (!isEditing) return false;
+		if (!isEditing || disabled) return false;
 		if (editorRef?.current) editedFileCache.current = editorRef.current.value;
 		if (selectedFile?.content === editedFileCache.current) return false;
+		if (isCreatingNewFile && editedFileCache.current === defaultText) return false;
 		return true;
 	};
 	const blocker = useUnsavedChangesWarning(checkForUnsavedChanges); // For blocking navigation

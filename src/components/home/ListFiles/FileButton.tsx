@@ -1,4 +1,4 @@
-import { FC, FocusEvent, KeyboardEvent, useContext, useRef, useState } from "react";
+import { FC, FocusEvent, KeyboardEvent, useRef, useState } from "react";
 import { LuCalendar } from "react-icons/lu";
 import { PiFileText } from "react-icons/pi";
 import ButtonMoreOptions from "../../common/ButtonMoreOptions";
@@ -6,17 +6,17 @@ import { File } from "../../../types/types";
 import Modal from "../../common/Modal";
 import Button from "../../common/Button";
 import moment from "moment";
-import FilesContext from "../../../context/FilesContext";
+import { useNavigate } from "react-router-dom";
 
 type FileButtonProps = {
 	file: File;
 };
 
 const FileButton: FC<FileButtonProps> = ({ file }) => {
-	const { setSelectedFile } = useContext(FilesContext);
 	const [isRenaming, setIsRenaming] = useState(false);
 	const [showWarning, setShowWarning] = useState(false);
 	const escPressed = useRef<boolean>(false);
+	const navigate = useNavigate();
 
 	const onInputKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
 		if (event.code === "Enter") renameFile(event.currentTarget.value);
@@ -76,7 +76,7 @@ const FileButton: FC<FileButtonProps> = ({ file }) => {
 			className="relative h-20 p-[1px] bg-gradient-to-br from-[#61718f] via-primaryHighlight to-[#61718f] rounded-[13px] duration-200">
 			{/* File information */}
 			<button
-				onClick={() => setSelectedFile(file)}
+				onClick={() => navigate(`/file/${file.id}`)}
 				disabled={isRenaming}
 				className="h-full w-full flex flex-col p-4 bg-gradient-radial from-transparent to-primaryHighlight/20 bg-background/80 enabled:hover:bg-background/50 rounded-xl duration-200">
 				{/* Title and Rename text input */}

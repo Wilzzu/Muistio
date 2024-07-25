@@ -6,6 +6,7 @@ import { addFile } from "../../firebase/firebase";
 import Button from "../../components/common/Button";
 import FilePreview from "../FilePreview/FilePreview";
 import Modal from "../../components/common/Modal";
+import { useNavigate } from "react-router-dom";
 
 type CreateNewFileProps = {
 	closeModal: () => void;
@@ -18,11 +19,11 @@ const CreateNewFile: FC<CreateNewFileProps> = ({ closeModal }) => {
 	const [isDisabled, setIsDisabled] = useState(false);
 	const { user } = useContext(AuthContext);
 	const queryClient = useQueryClient();
+	const navigate = useNavigate();
 
-	const onNewFileCreated = (newFileId: string) => {
-		// TODO: Redirect to the new file ID
-		console.log(newFileId);
+	const onSuccess = (newFileId: string) => {
 		queryClient.invalidateQueries({ queryKey: ["files", user?.uid] });
+		navigate(`/file/${newFileId}`);
 		closeModal();
 	};
 
@@ -34,11 +35,7 @@ const CreateNewFile: FC<CreateNewFileProps> = ({ closeModal }) => {
 	const addFileMutation = useMutation({
 		mutationFn: ({ userId, title, content }: { userId: string; title: string; content: string }) =>
 			addFile(userId, title, content),
-		onSuccess: (newFileId: string) => {
-			onNewFileCreated(newFileId);
-			queryClient.invalidateQueries({ queryKey: ["files", user?.uid] });
-			closeModal();
-		},
+		onSuccess: (newFileId: string) => onSuccess(newFileId),
 		onError: () => onError(),
 	});
 
