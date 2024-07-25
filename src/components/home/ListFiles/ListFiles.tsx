@@ -25,16 +25,14 @@ const ListFiles: FC<ListFilesProps> = ({ filteredList }) => {
 			</ul>
 		);
 	}
-
-	console.log(
-		isLoading
-			? "loading files"
-			: isRefetching
-			? "refetching files"
-			: isError
-			? `files error: ${error?.message}`
-			: ""
-	);
+	if (isLoading || isRefetching || isError)
+		console.log(
+			isLoading
+				? "loading files"
+				: isRefetching
+				? "refetching files"
+				: isError && `files error: ${error?.message}`
+		);
 
 	return (
 		<ul className="grid grid-cols-2 gap-2">

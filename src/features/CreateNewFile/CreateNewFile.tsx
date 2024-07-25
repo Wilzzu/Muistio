@@ -7,22 +7,26 @@ import Button from "../../components/common/Button";
 import FilePreview from "../FilePreview/FilePreview";
 import Modal from "../../components/common/Modal";
 import { useNavigate } from "react-router-dom";
+import FilesContext from "../../context/FilesContext";
+import { Timestamp } from "firebase/firestore";
 
 type CreateNewFileProps = {
 	closeModal: () => void;
 };
 
 const CreateNewFile: FC<CreateNewFileProps> = ({ closeModal }) => {
+	const { user } = useContext(AuthContext);
+	const { setSelectedFile } = useContext(FilesContext);
+	const queryClient = useQueryClient();
+	const navigate = useNavigate();
 	const [title, setTitle] = useState("");
 	const [content, setContent] = useState("");
 	const [showWarning, setShowWarning] = useState(false);
 	const [isDisabled, setIsDisabled] = useState(false);
-	const { user } = useContext(AuthContext);
-	const queryClient = useQueryClient();
-	const navigate = useNavigate();
 
 	const onSuccess = (newFileId: string) => {
 		queryClient.invalidateQueries({ queryKey: ["files", user?.uid] });
+		setSelectedFile({ id: newFileId, content, dateModified: Timestamp.now(), size: 1, title });
 		navigate(`/file/${newFileId}`);
 		closeModal();
 	};

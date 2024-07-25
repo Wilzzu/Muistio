@@ -19,11 +19,9 @@ function Home() {
 	// Select a file if URL contains a file ID
 	useEffect(() => {
 		if (fileId && files) {
-			console.log(fileId === selectedFile?.id);
-			// if (fileId === selectedFile?.id) return;
+			if (fileId === selectedFile?.id) return;
 			const foundFile = files.find((file) => fileId === file.id);
 			if (!foundFile) return setSelectedFile(null);
-			console.log("found file", foundFile.title);
 			setSelectedFile(foundFile);
 		}
 	}, [fileId, files]);
