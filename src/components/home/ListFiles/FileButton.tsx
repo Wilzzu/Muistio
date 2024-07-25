@@ -7,6 +7,7 @@ import Modal from "../../common/Modal";
 import Button from "../../common/Button";
 import moment from "moment";
 import { useNavigate, useParams } from "react-router-dom";
+import { cn } from "../../../lib/utils";
 
 type FileButtonProps = {
 	file: File;
@@ -35,11 +36,6 @@ const FileButton: FC<FileButtonProps> = ({ file }) => {
 			return;
 		}
 		renameFile(event.target.value);
-	};
-
-	const selectFile = (id: string) => {
-		if (id === fileId) return;
-		navigate(`/file/${id}`);
 	};
 
 	const renameFile = (value: string) => {
@@ -79,12 +75,22 @@ const FileButton: FC<FileButtonProps> = ({ file }) => {
 	return (
 		<li
 			key={file.id}
-			className="relative h-20 p-[1px] bg-gradient-to-br from-[#61718f] via-primaryHighlight to-[#61718f] rounded-[13px] duration-200">
+			className={cn(
+				"relative h-20 p-[1px] bg-gradient-radial from-[#465268] to-primaryHighlight rounded-[13px] duration-500",
+				{
+					"from-accent/60 to-accent shadow-accent shadow-[0_0_24px_-14px]": file.id === fileId,
+				}
+			)}>
 			{/* File information */}
 			<button
-				onClick={() => selectFile(file.id)}
+				onClick={() => navigate(file.id === fileId ? `/` : `/file/${file.id}`)}
 				disabled={isRenaming}
-				className="h-full w-full flex flex-col p-4 bg-gradient-radial from-transparent to-primaryHighlight/20 bg-background/80 enabled:hover:bg-background/50 rounded-xl duration-200">
+				className={cn(
+					"h-full w-full flex flex-col p-4 bg-gradient-radial from-[#151A22] to-[#1B1D26]/95 rounded-xl",
+					{
+						"enabled:hover:bg-primary/60": file.id !== fileId,
+					}
+				)}>
 				{/* Title and Rename text input */}
 				{isRenaming ? (
 					<input

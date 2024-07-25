@@ -23,7 +23,7 @@ function Home() {
 			const foundFile = files.find((file) => fileId === file.id);
 			if (!foundFile) return setSelectedFile(null);
 			setSelectedFile(foundFile);
-		}
+		} else if (!fileId && files) return setSelectedFile(null);
 	}, [fileId, files]);
 
 	return (
