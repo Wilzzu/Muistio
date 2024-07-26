@@ -5,14 +5,10 @@ import { FiCheck, FiDownload, FiSearch, FiX } from "react-icons/fi";
 import { LuTrash2 } from "react-icons/lu";
 import Modal from "../../components/common/Modal";
 import GenerateDownloadLink from "../../components/common/GenerateDownloadLink";
-
-// Temporary file details
-const file = {
-	title: "Test File Name",
-	content: "Test content",
-};
+import { File } from "../../types/types";
 
 type PreviewOptionsProps = {
+	selectedFile: File | null;
 	isEditing: boolean;
 	startEditing: () => void;
 	isPreviewingEdit: boolean;
@@ -23,6 +19,7 @@ type PreviewOptionsProps = {
 };
 
 const PreviewOptions: FC<PreviewOptionsProps> = ({
+	selectedFile,
 	isEditing,
 	startEditing,
 	isPreviewingEdit,
@@ -67,9 +64,9 @@ const PreviewOptions: FC<PreviewOptionsProps> = ({
 						<Button style={{ main: "p-2 text-base" }} onClick={startEditing}>
 							<MdEdit />
 						</Button>
-						{!showOnlyEditButton && (
+						{!showOnlyEditButton && selectedFile && (
 							<>
-								<GenerateDownloadLink title={file.title} content={file.content}>
+								<GenerateDownloadLink title={selectedFile.title} content={selectedFile.content}>
 									<Button style={{ main: "p-2 text-base" }}>
 										<FiDownload className="text-white" />
 									</Button>

@@ -45,14 +45,20 @@ const FileButton: FC<FileButtonProps> = ({ file }) => {
 		console.log("Renaming file to:", value);
 	};
 
-	// TODO: Replace hard coded values with those fetched from the backend
+	const formatFileSize = (bytes: number) => {
+		if (bytes === 0) return "0 Bytes";
+		const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
+		const i = Math.floor(Math.log(bytes) / Math.log(1024));
+		return parseFloat((bytes / Math.pow(1024, i)).toFixed(2)) + " " + sizes[i];
+	};
+
 	const downloadFile = () => {
-		const file = new Blob(["Test File Content"], { type: "text/plain" });
-		const url = URL.createObjectURL(file);
+		const blob = new Blob([file.content], { type: "text/plain" });
+		const url = URL.createObjectURL(blob);
 
 		const link = document.createElement("a");
 		link.href = url;
-		link.download = "Test File Name.txt";
+		link.download = file.title;
 		document.body.appendChild(link);
 		link.click();
 		document.body.removeChild(link);
@@ -111,7 +117,7 @@ const FileButton: FC<FileButtonProps> = ({ file }) => {
 						{moment(file.dateModified.toDate()).format("DD.MM.YYYY, HH:mm")}
 					</span>
 					<span>
-						<PiFileText className="inline-block text-sm mb-[0.1rem]" /> {file.size + "KB"}
+						<PiFileText className="inline-block text-sm mb-[0.1rem]" /> {formatFileSize(file.size)}
 					</span>
 				</p>
 			</button>

@@ -96,6 +96,7 @@ const FilePreview: FC<FilePreviewTypes> = ({ isCreatingNewFile, setContent, disa
 					{/* Main content wrapper */}
 					<div className="relative w-full py-4 pl-5 pr-[0.35rem] rounded-2xl flex flex-col bg-gradient-radial from-secondary from-40% to-secondary/90">
 						<PreviewOptions
+							selectedFile={selectedFile}
 							isEditing={isEditing}
 							startEditing={startEditing}
 							isPreviewingEdit={isPreviewingEdit}
