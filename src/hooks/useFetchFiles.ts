@@ -10,7 +10,7 @@ const useFetchFiles = () => {
 	const { user } = useContext(AuthContext);
 
 	const fetchFiles = async () => {
-		if (!user?.uid) throw new Error("No user found");
+		if (!user?.uid) throw new Error("User not found");
 		const querySnapshot = await getFiles(user.uid);
 		const allFiles: File[] = [];
 		querySnapshot.forEach((doc) => {
@@ -32,7 +32,6 @@ const useFetchFiles = () => {
 		queryFn: fetchFiles,
 		enabled: !!user?.uid,
 		retry: 2,
-		refetchOnWindowFocus: false,
 	});
 
 	return { isLoading, isRefetching, isError, error };

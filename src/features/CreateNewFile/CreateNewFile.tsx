@@ -31,7 +31,8 @@ const CreateNewFile: FC<CreateNewFileProps> = ({ closeModal }) => {
 		closeModal();
 	};
 
-	const onError = () => {
+	const onError = (error: Error) => {
+		console.error(error.message);
 		setIsDisabled(false);
 	};
 
@@ -40,7 +41,7 @@ const CreateNewFile: FC<CreateNewFileProps> = ({ closeModal }) => {
 		mutationFn: ({ userId, title, content }: { userId: string; title: string; content: string }) =>
 			addFile(userId, title, content),
 		onSuccess: (newFileId: string) => onSuccess(newFileId),
-		onError: () => onError(),
+		onError: (error) => onError(error),
 	});
 
 	const uploadNewFile = () => {

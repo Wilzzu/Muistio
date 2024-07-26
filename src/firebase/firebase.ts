@@ -8,6 +8,7 @@ import {
 	getDocs,
 	getFirestore,
 	serverTimestamp,
+	Timestamp,
 	updateDoc,
 } from "firebase/firestore";
 
@@ -30,6 +31,7 @@ const getFileSize = (content: string) => {
 	return blob.size;
 };
 
+// Add file
 export const addFile = async (userId: string, title: string, content: string) => {
 	const docRef = await addDoc(collection(db, "users", userId, "files"), {
 		title,
@@ -44,20 +46,39 @@ export const getFiles = async (userId: string) => {
 	return await getDocs(collection(db, "users", userId, "files"));
 };
 
+// Update file
+export type UpdateObjectType = {
+	dateModified: Timestamp;
+	title?: string;
+	content?: string;
+	size?: number;
+	id?: string;
+};
+
+const createUpdateObject = (title?: string, content?: string) => {
+	const updateObject = <UpdateObjectType>{
+		dateModified: serverTimestamp(),
+	};
+	if (title) updateObject.title = title;
+	if (content) {
+		updateObject.content = content;
+		updateObject.size = getFileSize(content);
+	}
+	return updateObject;
+};
+
 export const updateFile = async (
 	userId: string,
 	fileId: string,
-	title: string,
-	content: string
+	title?: string,
+	content?: string
 ) => {
-	await updateDoc(doc(db, "users", userId, "files", fileId), {
-		title,
-		dateModified: serverTimestamp(),
-		size: getFileSize(content),
-		content,
-	});
+	const updateObject = createUpdateObject(title, content);
+	await updateDoc(doc(db, "users", userId, "files", fileId), updateObject);
+	return { ...updateObject, dateModified: Timestamp.now(), id: fileId }; // We have to use client's time for this, unless we would need to make a fetch request to get the server time
 };
 
+// Delete file
 export const deleteFile = async (userId: string, fileId: string) => {
 	return await deleteDoc(doc(db, "users", userId, "files", fileId));
 };

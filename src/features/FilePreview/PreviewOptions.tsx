@@ -31,7 +31,7 @@ const PreviewOptions: FC<PreviewOptionsProps> = ({
 }) => {
 	const [showUnsavedWarning, setShowUnsavedWarning] = useState(false);
 	const [showDeleteWarning, setShowDeleteWarning] = useState(false);
-	const { deleteFileMutation, isDeleting } = useDeleteFile(selectedFile!.id);
+	const { deleteFileMutation, isDeleting } = useDeleteFile(selectedFile?.id);
 
 	const handleExitButtonClick = () => {
 		if (hasUnsavedChanges()) setShowUnsavedWarning(true);

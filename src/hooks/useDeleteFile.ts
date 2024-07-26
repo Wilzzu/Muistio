@@ -5,28 +5,31 @@ import { deleteFile } from "../firebase/firebase";
 import FilesContext from "../context/FilesContext";
 import { useNavigate } from "react-router-dom";
 
-const useDeleteFile = (fileId: string) => {
+const useDeleteFile = (fileId: string | undefined) => {
 	const { user } = useContext(AuthContext);
 	const { selectedFile, setSelectedFile, setFiles } = useContext(FilesContext);
 	const navigate = useNavigate();
 
-	const deleteFileById = async () => {
-		if (!user?.uid) throw new Error("No user found");
+	const executeDeleteFile = async () => {
+		if (!user?.uid) throw new Error("User not found");
+		if (!fileId) throw new Error("File not found");
 		await deleteFile(user.uid, fileId);
 	};
 
+	const onSuccess = () => {
+		setFiles((prevFiles) => prevFiles.filter((file) => file.id !== fileId));
+		if (selectedFile?.id === fileId) {
+			setSelectedFile(null);
+			navigate("/");
+		}
+		// TODO: Show success notification
+	};
+
 	const { mutate: deleteFileMutation, isPending } = useMutation({
-		mutationFn: deleteFileById,
-		onSuccess: () => {
-			setFiles((prevFiles) => prevFiles.filter((file) => file.id !== fileId));
-			if (selectedFile?.id === fileId) {
-				setSelectedFile(null);
-				navigate("/");
-			}
-			// TODO: Show success notification
-		},
-		onError: () => {
-			console.log("Error while deleting file");
+		mutationFn: executeDeleteFile,
+		onSuccess: () => onSuccess(),
+		onError: (error) => {
+			console.error("Error while deleting file", error.message);
 		},
 		retry: 2,
 	});

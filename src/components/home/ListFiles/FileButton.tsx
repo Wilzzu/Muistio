@@ -1,4 +1,4 @@
-import { FC, FocusEvent, KeyboardEvent, useContext, useRef, useState } from "react";
+import { FC, KeyboardEvent, useContext, useRef, useState } from "react";
 import { LuCalendar } from "react-icons/lu";
 import { PiFileText } from "react-icons/pi";
 import ButtonMoreOptions from "../../common/ButtonMoreOptions";
@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { cn } from "../../../lib/utils";
 import FilesContext from "../../../context/FilesContext";
 import useDeleteFile from "../../../hooks/useDeleteFile";
+import useUpdateFile from "../../../hooks/useUpdateFile";
 
 type FileButtonProps = {
 	file: File;
@@ -18,34 +19,36 @@ type FileButtonProps = {
 const FileButton: FC<FileButtonProps> = ({ file }) => {
 	const [isRenaming, setIsRenaming] = useState(false);
 	const [showWarning, setShowWarning] = useState(false);
+	const [renameValue, setRenameValue] = useState(file.title);
 	const escPressed = useRef<boolean>(false);
 	const navigate = useNavigate();
 	const { selectedFile } = useContext(FilesContext);
 	const { deleteFileMutation, isDeleting } = useDeleteFile(file.id);
+	const { updateFileMutation, isUpdating } = useUpdateFile(() => setRenameValue(""));
+
+	const renameFile = () => {
+		setIsRenaming(false);
+
+		if (renameValue.trim() === file.title.trim()) return;
+		updateFileMutation({ fileId: file.id, title: renameValue });
+	};
 
 	const onInputKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-		if (event.code === "Enter") renameFile(event.currentTarget.value);
+		if (event.code === "Enter") renameFile();
 		if (event.code === "Escape") {
 			escPressed.current = true;
 			event.currentTarget.blur();
 		}
 	};
 
-	const onBlur = (event: FocusEvent<HTMLInputElement, Element>) => {
+	const onBlur = () => {
 		// Ignore renaming if ESC is pressed
 		if (escPressed.current) {
 			escPressed.current = false;
 			setIsRenaming(false);
 			return;
 		}
-		renameFile(event.target.value);
-	};
-
-	const renameFile = (value: string) => {
-		setIsRenaming(false);
-
-		if (value === file.title) return;
-		console.log("Renaming file to:", value);
+		renameFile();
 	};
 
 	const formatFileSize = (bytes: number) => {
@@ -108,12 +111,19 @@ const FileButton: FC<FileButtonProps> = ({ file }) => {
 						type="text"
 						defaultValue={file.title}
 						autoFocus
-						onBlur={(e) => onBlur(e)}
+						disabled={isUpdating}
+						onBlur={onBlur}
 						onKeyDown={(e) => onInputKeyDown(e)}
-						className="bg-transparent text-lg font-medium rounded-sm outline-none outline-1 outline-accent w-[93%]"
+						onChange={(e) => setRenameValue(e.target.value)}
+						className="bg-transparent text-lg font-medium rounded-sm outline-none outline-1 outline-accent w-[93%] disabled:animate-pulse"
 					/>
 				) : (
-					<h1 className="w-full truncate text-left text-lg font-medium">{file.title}</h1>
+					<h1
+						className={cn("w-full truncate text-left text-lg font-medium", {
+							"animate-pulse": isUpdating,
+						})}>
+						{isUpdating ? renameValue : file.title}
+					</h1>
 				)}
 				{/* Other information */}
 				<p className="flex gap-2 text-xs">
