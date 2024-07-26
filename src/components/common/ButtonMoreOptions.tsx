@@ -12,9 +12,10 @@ type DropdownOption = {
 type ButtonProps = {
 	options: DropdownOption[];
 	dropdownSide: "left" | "right";
+	disabled?: boolean;
 };
 
-const ButtonMoreOptions: FC<ButtonProps> = ({ options, dropdownSide }) => {
+const ButtonMoreOptions: FC<ButtonProps> = ({ options, dropdownSide, disabled }) => {
 	const [open, setOpen] = useState(false);
 	const buttonRef = useRef<HTMLButtonElement>(null);
 	const dropdownRef = useRef<HTMLDivElement>(null);
@@ -32,6 +33,7 @@ const ButtonMoreOptions: FC<ButtonProps> = ({ options, dropdownSide }) => {
 			<button
 				ref={buttonRef}
 				onClick={() => setOpen((prev) => !prev)}
+				disabled={disabled}
 				className="px-2 py-1 rounded-xl hover:bg-primary/60 duration-200 text-lg">
 				<BsThreeDots />
 			</button>

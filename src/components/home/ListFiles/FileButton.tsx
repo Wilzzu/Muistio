@@ -1,4 +1,4 @@
-import { FC, FocusEvent, KeyboardEvent, useRef, useState } from "react";
+import { FC, FocusEvent, KeyboardEvent, useContext, useRef, useState } from "react";
 import { LuCalendar } from "react-icons/lu";
 import { PiFileText } from "react-icons/pi";
 import ButtonMoreOptions from "../../common/ButtonMoreOptions";
@@ -6,8 +6,10 @@ import { File } from "../../../types/types";
 import Modal from "../../common/Modal";
 import Button from "../../common/Button";
 import moment from "moment";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { cn } from "../../../lib/utils";
+import FilesContext from "../../../context/FilesContext";
+import useDeleteFile from "../../../hooks/useDeleteFile";
 
 type FileButtonProps = {
 	file: File;
@@ -18,7 +20,8 @@ const FileButton: FC<FileButtonProps> = ({ file }) => {
 	const [showWarning, setShowWarning] = useState(false);
 	const escPressed = useRef<boolean>(false);
 	const navigate = useNavigate();
-	const { fileId } = useParams();
+	const { selectedFile } = useContext(FilesContext);
+	const { deleteFileMutation, isDeleting } = useDeleteFile(file.id);
 
 	const onInputKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
 		if (event.code === "Enter") renameFile(event.currentTarget.value);
@@ -68,6 +71,7 @@ const FileButton: FC<FileButtonProps> = ({ file }) => {
 	};
 
 	const deleteFile = () => {
+		deleteFileMutation();
 		setShowWarning(false);
 		console.log("Deleting file:", file.title);
 	};
@@ -84,17 +88,18 @@ const FileButton: FC<FileButtonProps> = ({ file }) => {
 			className={cn(
 				"relative h-20 p-[1px] bg-gradient-radial from-[#465268] to-primaryHighlight rounded-[13px] duration-500",
 				{
-					"from-accent/60 to-accent shadow-accent shadow-[0_0_24px_-14px]": file.id === fileId,
+					"from-accent/60 to-accent shadow-accent shadow-[0_0_24px_-14px]":
+						file.id === selectedFile?.id,
 				}
 			)}>
 			{/* File information */}
 			<button
-				onClick={() => navigate(file.id === fileId ? `/` : `/file/${file.id}`)}
-				disabled={isRenaming}
+				onClick={() => navigate(file.id === selectedFile?.id ? `/` : `/file/${file.id}`)}
+				disabled={isRenaming || isDeleting}
 				className={cn(
 					"h-full w-full flex flex-col p-4 bg-gradient-radial from-[#151A22] to-[#1B1D26]/95 rounded-xl",
 					{
-						"enabled:hover:bg-primary/60": file.id !== fileId,
+						"enabled:hover:bg-primary/60": file.id !== selectedFile?.id,
 					}
 				)}>
 				{/* Title and Rename text input */}
@@ -124,10 +129,10 @@ const FileButton: FC<FileButtonProps> = ({ file }) => {
 
 			{/* More options button */}
 			<div className="absolute top-1 right-1">
-				<ButtonMoreOptions dropdownSide="left" options={options} />
+				<ButtonMoreOptions dropdownSide="left" options={options} disabled={isDeleting} />
 			</div>
 
-			{/* Rename modal */}
+			{/* Delete modal */}
 			{showWarning && (
 				<Modal closeModalFunction={() => setShowWarning(false)}>
 					<h1 className="font-bold">Delete file?</h1>

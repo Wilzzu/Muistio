@@ -59,5 +59,5 @@ export const updateFile = async (
 };
 
 export const deleteFile = async (userId: string, fileId: string) => {
-	await deleteDoc(doc(db, "users", userId, "files", fileId));
+	return await deleteDoc(doc(db, "users", userId, "files", fileId));
 };

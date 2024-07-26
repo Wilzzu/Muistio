@@ -3,10 +3,16 @@ import { FC, ReactNode, useEffect, useState } from "react";
 type GenerateDownloadLinkProps = {
 	title: string;
 	content: string;
+	disabled?: boolean;
 	children: ReactNode;
 };
 
-const GenerateDownloadLink: FC<GenerateDownloadLinkProps> = ({ title, content, children }) => {
+const GenerateDownloadLink: FC<GenerateDownloadLinkProps> = ({
+	title,
+	content,
+	disabled,
+	children,
+}) => {
 	const [downloadUrl, setDownloadUrl] = useState("");
 
 	// Revoke the object URL after download has started
@@ -24,7 +30,11 @@ const GenerateDownloadLink: FC<GenerateDownloadLinkProps> = ({ title, content, c
 	};
 
 	return (
-		<a href={downloadUrl} download={`${title}.txt`} onClick={handleDownload}>
+		<a
+			href={disabled ? "#" : downloadUrl}
+			download={disabled ? null : `${title}.txt`}
+			onClick={disabled ? () => {} : handleDownload}
+			className={disabled ? "pointer-events-none" : ""}>
 			{children}
 		</a>
 	);

@@ -10,8 +10,7 @@ const useFetchFiles = () => {
 	const { user } = useContext(AuthContext);
 
 	const fetchFiles = async () => {
-		console.log("fetching all files");
-		if (!user?.uid) return [];
+		if (!user?.uid) throw new Error("No user found");
 		const querySnapshot = await getFiles(user.uid);
 		const allFiles: File[] = [];
 		querySnapshot.forEach((doc) => {
