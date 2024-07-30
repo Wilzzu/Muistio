@@ -9,6 +9,7 @@ import useUnsavedChangesWarning from "../../hooks/useUnsavedChangesWarning";
 import ReactTextareaAutosize from "react-textarea-autosize";
 import { cn } from "../../lib/utils";
 import FilesContext from "../../context/FilesContext";
+import useUpdateFile from "../../hooks/useUpdateFile";
 
 const defaultText = "# Add your content here";
 
@@ -23,14 +24,15 @@ const MarkdownPreview: FC<{ content: string }> = ({ content }) => (
 	</Markdown>
 );
 
-type FilePreviewTypes = {
+type FilePreviewProps = {
 	isCreatingNewFile?: boolean;
 	setContent?: Dispatch<SetStateAction<string>>;
 	disabled?: boolean;
 };
 
-const FilePreview: FC<FilePreviewTypes> = ({ isCreatingNewFile, setContent, disabled }) => {
+const FilePreview: FC<FilePreviewProps> = ({ isCreatingNewFile, setContent, disabled }) => {
 	const { selectedFile } = useContext(FilesContext);
+	const { updateFileMutation, isUpdating } = useUpdateFile(onFileUpdated);
 	const [isEditing, setIsEditing] = useState<boolean>(isCreatingNewFile || false);
 	const [isPreviewingEdit, setIsPreviewingEdit] = useState(false);
 	const editedFileCache = useRef<string>(defaultText);
@@ -73,11 +75,23 @@ const FilePreview: FC<FilePreviewTypes> = ({ isCreatingNewFile, setContent, disa
 		startEditing();
 	};
 
+	const saveEdits = () => {
+		if (editorRef?.current) editedFileCache.current = editorRef.current.value;
+		if (!selectedFile || selectedFile?.content === editedFileCache.current) return;
+
+		updateFileMutation({ fileId: selectedFile.id, content: editedFileCache.current });
+	};
+
 	const discardAndExit = () => {
 		editedFileCache.current = "";
 		setIsPreviewingEdit(false);
 		setIsEditing(false);
 	};
+
+	function onFileUpdated() {
+		console.log("File updated");
+		discardAndExit();
+	}
 
 	return (
 		<>
@@ -99,11 +113,13 @@ const FilePreview: FC<FilePreviewTypes> = ({ isCreatingNewFile, setContent, disa
 							selectedFile={selectedFile}
 							isEditing={isEditing}
 							startEditing={startEditing}
+							saveEdits={saveEdits}
 							isPreviewingEdit={isPreviewingEdit}
 							toggleEditPreview={toggleEditPreview}
 							hasUnsavedChanges={checkForUnsavedChanges}
 							discardAndExit={discardAndExit}
 							showOnlyEditButton={isCreatingNewFile}
+							disabled={isUpdating}
 						/>
 						{/* Main content with scroll */}
 						<section

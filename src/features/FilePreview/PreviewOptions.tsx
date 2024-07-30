@@ -12,22 +12,26 @@ type PreviewOptionsProps = {
 	selectedFile: File | null;
 	isEditing: boolean;
 	startEditing: () => void;
+	saveEdits: () => void;
 	isPreviewingEdit: boolean;
 	toggleEditPreview: () => void;
 	hasUnsavedChanges: () => boolean;
 	discardAndExit: () => void;
 	showOnlyEditButton?: boolean;
+	disabled?: boolean;
 };
 
 const PreviewOptions: FC<PreviewOptionsProps> = ({
 	selectedFile,
 	isEditing,
 	startEditing,
+	saveEdits,
 	isPreviewingEdit,
 	toggleEditPreview,
 	hasUnsavedChanges,
 	discardAndExit,
 	showOnlyEditButton,
+	disabled,
 }) => {
 	const [showUnsavedWarning, setShowUnsavedWarning] = useState(false);
 	const [showDeleteWarning, setShowDeleteWarning] = useState(false);
@@ -53,15 +57,26 @@ const PreviewOptions: FC<PreviewOptionsProps> = ({
 			<div className="absolute -right-4 -top-4 p-8 flex gap-2 opacity-70 hover:opacity-100 duration-150">
 				{isEditing ? (
 					<>
-						<Button style={{ main: "p-2 text-base" }} onClick={toggleEditPreview}>
+						<Button
+							style={{ main: "p-2 text-base" }}
+							onClick={toggleEditPreview}
+							disabled={disabled}>
 							{isPreviewingEdit ? <MdEdit /> : <FiSearch />}
 						</Button>
 						{!showOnlyEditButton && (
 							<>
-								<Button highlight style={{ main: "p-2 text-base" }}>
+								<Button
+									highlight
+									style={{ main: "p-2 text-base" }}
+									onClick={saveEdits}
+									disabled={disabled}>
 									<FiCheck />
 								</Button>
-								<Button warning style={{ main: "p-2 text-base" }} onClick={handleExitButtonClick}>
+								<Button
+									warning
+									style={{ main: "p-2 text-base" }}
+									onClick={handleExitButtonClick}
+									disabled={disabled}>
 									<FiX />
 								</Button>
 							</>
@@ -69,7 +84,10 @@ const PreviewOptions: FC<PreviewOptionsProps> = ({
 					</>
 				) : (
 					<>
-						<Button style={{ main: "p-2 text-base" }} onClick={startEditing} disabled={isDeleting}>
+						<Button
+							style={{ main: "p-2 text-base" }}
+							onClick={startEditing}
+							disabled={disabled || isDeleting}>
 							<MdEdit />
 						</Button>
 						{!showOnlyEditButton && selectedFile && (
@@ -77,15 +95,15 @@ const PreviewOptions: FC<PreviewOptionsProps> = ({
 								<GenerateDownloadLink
 									title={selectedFile.title}
 									content={selectedFile.content}
-									disabled={isDeleting}>
-									<Button style={{ main: "p-2 text-base" }} disabled={isDeleting}>
+									disabled={disabled || isDeleting}>
+									<Button style={{ main: "p-2 text-base" }} disabled={disabled || isDeleting}>
 										<FiDownload className="text-white" />
 									</Button>
 								</GenerateDownloadLink>
 								<Button
 									warning
 									style={{ main: "p-2 text-base" }}
-									disabled={isDeleting}
+									disabled={disabled || isDeleting}
 									onClick={() => setShowDeleteWarning(true)}>
 									<LuTrash2 />
 								</Button>
