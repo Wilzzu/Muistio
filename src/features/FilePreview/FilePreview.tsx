@@ -10,7 +10,8 @@ import ReactTextareaAutosize from "react-textarea-autosize";
 import { cn } from "../../lib/utils";
 import FilesContext from "../../context/FilesContext";
 import useUpdateFile from "../../hooks/useUpdateFile";
-import NotificationContext from "../../context/NotificationContext";
+import InnerStatus from "../../components/common/InnerStatus";
+import { AnimatePresence, motion } from "framer-motion";
 
 const defaultText = "# Add your content here";
 
@@ -38,7 +39,6 @@ const FilePreview: FC<FilePreviewProps> = ({ isCreatingNewFile, setContent, disa
 	const [isPreviewingEdit, setIsPreviewingEdit] = useState(false);
 	const editedFileCache = useRef<string>(defaultText);
 	const editorRef = useRef<HTMLTextAreaElement>(null);
-	const { showNotification } = useContext(NotificationContext);
 
 	const checkForUnsavedChanges = () => {
 		if (!isEditing || disabled) return false;
@@ -51,7 +51,6 @@ const FilePreview: FC<FilePreviewProps> = ({ isCreatingNewFile, setContent, disa
 
 	const startEditing = () => {
 		if (isEditing || !selectedFile?.content) return;
-		showNotification({ content: "Started editing" });
 		editedFileCache.current = selectedFile.content;
 		setIsEditing(true);
 	};
@@ -78,17 +77,17 @@ const FilePreview: FC<FilePreviewProps> = ({ isCreatingNewFile, setContent, disa
 		startEditing();
 	};
 
-	const saveEdits = () => {
-		if (editorRef?.current) editedFileCache.current = editorRef.current.value;
-		if (!selectedFile || selectedFile?.content === editedFileCache.current) return;
-
-		updateFileMutation({ fileId: selectedFile.id, content: editedFileCache.current });
-	};
-
 	const discardAndExit = () => {
 		editedFileCache.current = "";
 		setIsPreviewingEdit(false);
 		setIsEditing(false);
+	};
+
+	const saveEdits = () => {
+		if (editorRef?.current) editedFileCache.current = editorRef.current.value;
+		if (!selectedFile || selectedFile?.content === editedFileCache.current) return discardAndExit(); // No changes made
+
+		updateFileMutation({ fileId: selectedFile.id, content: editedFileCache.current });
 	};
 
 	function onFileUpdated() {
@@ -133,25 +132,45 @@ const FilePreview: FC<FilePreviewProps> = ({ isCreatingNewFile, setContent, disa
 									"h-fit min-h-48 max-h-[calc(100dvh-20rem)]": isCreatingNewFile,
 								}
 							)}>
+							{/* Status */}
+							<AnimatePresence>
+								{!isCreatingNewFile && isEditing && (
+									<motion.div className="absolute left-0 top-0 w-full flex justify-center pointer-events-none overflow-hidden">
+										<InnerStatus content={"Editing file"} />
+										<motion.div
+											initial={{ opacity: 0 }}
+											animate={{ opacity: 1 }}
+											exit={{ opacity: 0 }}
+											transition={{ duration: 0.4, ease: "easeOut" }}
+											className="absolute top-0 left-0 w-full h-[1px] bg-gradient-radial from-accent to-90% to-transparent"
+										/>
+									</motion.div>
+								)}
+							</AnimatePresence>
+							{/* Editor and Preview */}
 							{isEditing ? (
-								isPreviewingEdit ? (
-									<MarkdownPreview content={editedFileCache.current} />
-								) : (
-									<ReactTextareaAutosize
-										ref={editorRef}
-										name="muistioFileEditor"
-										id="muistioFileEditor"
-										disabled={disabled}
-										defaultValue={editedFileCache.current}
-										className={cn(
-											"w-full h-fit bg-transparent resize-none outline-none disabled:opacity-50",
-											{
-												"min-h-44": isCreatingNewFile,
+								<>
+									{isPreviewingEdit ? (
+										<MarkdownPreview content={editedFileCache.current} />
+									) : (
+										<ReactTextareaAutosize
+											ref={editorRef}
+											name="muistioFileEditor"
+											id="muistioFileEditor"
+											disabled={disabled}
+											defaultValue={editedFileCache.current}
+											className={cn(
+												"w-full h-fit bg-transparent resize-none outline-none disabled:opacity-50",
+												{
+													"min-h-44": isCreatingNewFile,
+												}
+											)}
+											onChange={(e) =>
+												isCreatingNewFile && setContent && setContent(e.target.value)
 											}
-										)}
-										onChange={(e) => isCreatingNewFile && setContent && setContent(e.target.value)}
-									/>
-								)
+										/>
+									)}
+								</>
 							) : (
 								<MarkdownPreview content={selectedFile?.content || "No content"} />
 							)}
