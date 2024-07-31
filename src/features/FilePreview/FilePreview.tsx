@@ -10,6 +10,7 @@ import ReactTextareaAutosize from "react-textarea-autosize";
 import { cn } from "../../lib/utils";
 import FilesContext from "../../context/FilesContext";
 import useUpdateFile from "../../hooks/useUpdateFile";
+import NotificationContext from "../../context/NotificationContext";
 
 const defaultText = "# Add your content here";
 
@@ -37,6 +38,7 @@ const FilePreview: FC<FilePreviewProps> = ({ isCreatingNewFile, setContent, disa
 	const [isPreviewingEdit, setIsPreviewingEdit] = useState(false);
 	const editedFileCache = useRef<string>(defaultText);
 	const editorRef = useRef<HTMLTextAreaElement>(null);
+	const { showNotification } = useContext(NotificationContext);
 
 	const checkForUnsavedChanges = () => {
 		if (!isEditing || disabled) return false;
@@ -49,6 +51,7 @@ const FilePreview: FC<FilePreviewProps> = ({ isCreatingNewFile, setContent, disa
 
 	const startEditing = () => {
 		if (isEditing || !selectedFile?.content) return;
+		showNotification({ content: "Started editing" });
 		editedFileCache.current = selectedFile.content;
 		setIsEditing(true);
 	};

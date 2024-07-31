@@ -12,3 +12,9 @@ export type FilteredList = {
 	files: File[];
 	isSearching: boolean;
 };
+
+export type ShowNotificationProps = {
+	content: string;
+	warning?: boolean;
+	disableAutoHide?: boolean;
+};

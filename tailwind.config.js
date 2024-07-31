@@ -22,6 +22,7 @@ export default {
 			},
 			dropShadow: {
 				highlight: "0 0 10px var(--tw-shadow-color)",
+				"text-sm": "0 1px 1px var(--tw-shadow-color)",
 			},
 			boxShadow: {
 				"centered-sm": "0 0 14px var(--tw-shadow-color)",

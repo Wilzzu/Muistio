@@ -3,13 +3,16 @@ import { useContext } from "react";
 import AuthContext from "../context/AuthContext";
 import { updateFile, UpdateObjectType } from "../firebase/firebase";
 import FilesContext from "../context/FilesContext";
+import NotificationContext from "../context/NotificationContext";
 
 const useUpdateFile = (callback: () => void) => {
 	const { user } = useContext(AuthContext);
 	const { setFiles } = useContext(FilesContext);
+	const { showNotification } = useContext(NotificationContext);
 
 	const executeUpdateFile = async (fileId: string, title?: string, content?: string) => {
 		if (!user?.uid) throw new Error("User not found");
+		showNotification({ content: "Updating file..." });
 		return await updateFile(user?.uid, fileId, title, content);
 	};
 
@@ -25,7 +28,7 @@ const useUpdateFile = (callback: () => void) => {
 		// Used for example clearing renameValue in FileButton.tsx
 		callback();
 
-		// TODO: Show success notification
+		showNotification({ content: "File updated!" });
 	};
 
 	const { mutate: updateFileMutation, isPending } = useMutation({
@@ -39,9 +42,8 @@ const useUpdateFile = (callback: () => void) => {
 			content?: string;
 		}) => executeUpdateFile(fileId, title, content),
 		onSuccess: (updatedObject) => onSuccess(updatedObject),
-		onError: (error) => {
-			console.error("Error while updating file", error.message);
-		},
+		onError: (error) =>
+			showNotification({ content: `Error updating file: ${error?.message}`, warning: true }),
 		retry: 2,
 	});
 

@@ -11,7 +11,7 @@ type ModalProps = {
 };
 
 const Modal: FC<ModalProps> = ({ closeModalFunction, styleOverride, children }) => {
-	const portalRoot = document.getElementById("root");
+	const portalRoot = document.getElementById("modal-root");
 	const mainRef = useRef<HTMLDivElement>(null);
 	const focusRef = useRef<HTMLButtonElement>(null);
 	useClickOutside(mainRef, closeModalFunction);

@@ -4,12 +4,14 @@ import Login from "./pages/Login";
 import LoadingModal from "./components/common/LoadingModal";
 import { useContext } from "react";
 import AuthContext from "./context/AuthContext";
+import NotificationGlobal from "./components/common/NotificationGlobal";
 
 const Root = () => {
 	const { user, isLoading } = useContext(AuthContext);
 
 	return (
 		<>
+			<NotificationGlobal />
 			<Navbar />
 			{/* Container for main height and padding */}
 			<div className="h-[calc(100dvh-4rem)] p-2">

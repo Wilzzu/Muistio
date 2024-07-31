@@ -9,6 +9,7 @@ import Home from "./pages/Home";
 import AuthProvider from "./context/AuthProvider";
 import FilesProvider from "./context/FilesProvider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import NotificationProvider from "./context/NotificationProvider";
 
 const router = createBrowserRouter([
 	{
@@ -30,7 +31,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 		<QueryClientProvider client={queryClient}>
 			<AuthProvider>
 				<FilesProvider>
-					<RouterProvider router={router} />
+					<NotificationProvider>
+						<RouterProvider router={router} />
+					</NotificationProvider>
 				</FilesProvider>
 			</AuthProvider>
 		</QueryClientProvider>

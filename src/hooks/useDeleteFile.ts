@@ -4,15 +4,18 @@ import AuthContext from "../context/AuthContext";
 import { deleteFile } from "../firebase/firebase";
 import FilesContext from "../context/FilesContext";
 import { useNavigate } from "react-router-dom";
+import NotificationContext from "../context/NotificationContext";
 
 const useDeleteFile = (fileId: string | undefined) => {
 	const { user } = useContext(AuthContext);
 	const { selectedFile, setSelectedFile, setFiles } = useContext(FilesContext);
+	const { showNotification } = useContext(NotificationContext);
 	const navigate = useNavigate();
 
 	const executeDeleteFile = async () => {
 		if (!user?.uid) throw new Error("User not found");
 		if (!fileId) throw new Error("File not found");
+		showNotification({ content: "Deleting file...", disableAutoHide: true });
 		await deleteFile(user.uid, fileId);
 	};
 
@@ -22,14 +25,14 @@ const useDeleteFile = (fileId: string | undefined) => {
 			setSelectedFile(null);
 			navigate("/");
 		}
-		// TODO: Show success notification
+		showNotification({ content: "File deleted!" });
 	};
 
 	const { mutate: deleteFileMutation, isPending } = useMutation({
 		mutationFn: executeDeleteFile,
 		onSuccess: () => onSuccess(),
 		onError: (error) => {
-			console.error("Error while deleting file", error.message);
+			showNotification({ content: `Error deleting file: ${error?.message}`, warning: true });
 		},
 		retry: 2,
 	});
