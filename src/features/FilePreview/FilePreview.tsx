@@ -30,9 +30,17 @@ type FilePreviewProps = {
 	isCreatingNewFile?: boolean;
 	setContent?: Dispatch<SetStateAction<string>>;
 	disabled?: boolean;
+	warning?: boolean;
+	onClick?: () => void;
 };
 
-const FilePreview: FC<FilePreviewProps> = ({ isCreatingNewFile, setContent, disabled }) => {
+const FilePreview: FC<FilePreviewProps> = ({
+	isCreatingNewFile,
+	setContent,
+	disabled,
+	warning,
+	onClick,
+}) => {
 	const { selectedFile } = useContext(FilesContext);
 	const { updateFileMutation, isUpdating } = useUpdateFile(onFileUpdated);
 	const [isEditing, setIsEditing] = useState<boolean>(isCreatingNewFile || false);
@@ -107,7 +115,8 @@ const FilePreview: FC<FilePreviewProps> = ({ isCreatingNewFile, setContent, disa
 						"sticky top-3 p-[1px] rounded-[17px] bg-gradient-to-r from-primaryHighlight via-primaryHighlight/20 to-primaryHighlight overflow-hidden",
 						{
 							relative: isCreatingNewFile,
-						}
+						},
+						{ "from-red-600 via-red-600/20 to-red-600": warning }
 					)}>
 					{/* Main content wrapper */}
 					<div className="relative w-full py-4 pl-5 pr-[0.35rem] rounded-2xl flex flex-col bg-gradient-radial from-secondary from-40% to-secondary/90">
@@ -131,7 +140,8 @@ const FilePreview: FC<FilePreviewProps> = ({ isCreatingNewFile, setContent, disa
 								{
 									"h-fit min-h-48 max-h-[calc(100dvh-20rem)]": isCreatingNewFile,
 								}
-							)}>
+							)}
+							onClick={onClick}>
 							{/* Status */}
 							<AnimatePresence>
 								{!isCreatingNewFile && isEditing && (

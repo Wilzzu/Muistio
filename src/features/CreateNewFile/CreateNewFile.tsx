@@ -9,9 +9,20 @@ import Modal from "../../components/common/Modal";
 import { useNavigate } from "react-router-dom";
 import FilesContext from "../../context/FilesContext";
 import { Timestamp } from "firebase/firestore";
+import TextInput from "../../components/common/TextInput";
 
 type CreateNewFileProps = {
 	closeModal: () => void;
+};
+
+type InvalidFieldType = {
+	title: boolean;
+	content: boolean;
+};
+
+const defaultInvalidFields = {
+	title: false,
+	content: false,
 };
 
 const CreateNewFile: FC<CreateNewFileProps> = ({ closeModal }) => {
@@ -23,6 +34,7 @@ const CreateNewFile: FC<CreateNewFileProps> = ({ closeModal }) => {
 	const [content, setContent] = useState("");
 	const [showWarning, setShowWarning] = useState(false);
 	const [isDisabled, setIsDisabled] = useState(false);
+	const [invalidFields, setInvalidFields] = useState<InvalidFieldType>(defaultInvalidFields);
 
 	const onSuccess = (newFileId: string) => {
 		queryClient.invalidateQueries({ queryKey: ["files", user?.uid] });
@@ -44,11 +56,24 @@ const CreateNewFile: FC<CreateNewFileProps> = ({ closeModal }) => {
 		onError: (error) => onError(error),
 	});
 
-	const uploadNewFile = () => {
-		if (title.trim() && content.trim() && user) {
-			setIsDisabled(true);
-			addFileMutation.mutate({ userId: user.uid, title, content });
+	const validateFieldsAndUpload = () => {
+		// Check for invalid fields
+		const newInvalidFields = structuredClone(defaultInvalidFields);
+		if (!title.trim()) newInvalidFields.title = true;
+		if (!content.trim()) newInvalidFields.content = true;
+		if (newInvalidFields.title || newInvalidFields.content) {
+			return setInvalidFields(newInvalidFields);
 		}
+
+		// Upload file
+		if (!user) return;
+		setIsDisabled(true);
+		addFileMutation.mutate({ userId: user.uid, title, content });
+	};
+
+	const clearInvalidField = (field: string) => {
+		if (!invalidFields.title && !invalidFields.content) return;
+		setInvalidFields((prev) => ({ ...prev, [field]: false }));
 	};
 
 	const checkForUnsavedChanges = () => {
@@ -72,14 +97,14 @@ const CreateNewFile: FC<CreateNewFileProps> = ({ closeModal }) => {
 							: ""}
 					</p>
 					<div className="flex justify-between gap-3">
-						<input
+						<TextInput
 							type="text"
-							name="muistioTitle"
+							onChange={setTitle}
 							id="muistioTitle"
-							disabled={isDisabled}
-							placeholder="Set new title"
-							onChange={(e) => setTitle(e.target.value)}
-							className="bg-primary rounded-lg px-2 outline-none"
+							placeholder="Set file name..."
+							style={{ main: "bg-secondary/85 to-secondary/90" }}
+							warning={invalidFields.title}
+							onClick={() => clearInvalidField("title")}
 						/>
 						<div className="flex gap-3">
 							<Button onClick={checkForUnsavedChanges} disabled={isDisabled}>
@@ -87,14 +112,20 @@ const CreateNewFile: FC<CreateNewFileProps> = ({ closeModal }) => {
 							</Button>
 							<Button
 								highlight
-								onClick={uploadNewFile}
+								onClick={validateFieldsAndUpload}
 								disabled={isDisabled}
 								style={{ main: "bg-opacity-80" }}>
 								<LuPlus /> Add file
 							</Button>
 						</div>
 					</div>
-					<FilePreview isCreatingNewFile setContent={setContent} disabled={isDisabled} />
+					<FilePreview
+						isCreatingNewFile
+						setContent={setContent}
+						disabled={isDisabled}
+						warning={invalidFields.content}
+						onClick={() => clearInvalidField("content")}
+					/>
 				</div>
 			</Modal>
 			{showWarning && (
