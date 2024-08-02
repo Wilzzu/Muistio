@@ -2,24 +2,13 @@ import Button from "../../common/Button";
 import { LuPlus } from "react-icons/lu";
 import { BiHomeAlt2 } from "react-icons/bi";
 import { FiLogOut } from "react-icons/fi";
-import { signOut } from "firebase/auth";
-import { auth } from "../../../firebase/firebase";
-import { redirect } from "react-router-dom";
 import { useState } from "react";
 import CreateNewFile from "../../../features/CreateNewFile/CreateNewFile";
+import useLogOut from "../../../hooks/useLogOut";
 
 const Navbar = () => {
 	const [showCreateNewFileModal, setShowCreateNewFileModal] = useState(false);
-
-	const handleLogOut = () => {
-		signOut(auth)
-			.then(() => {
-				redirect("/");
-			})
-			.catch((error) => {
-				console.error(error);
-			});
-	};
+	const { handleLogOut } = useLogOut();
 
 	return (
 		<>

@@ -1,13 +1,14 @@
 import { Outlet } from "react-router-dom";
 import Navbar from "./components/layout/Navbar/Navbar";
-import Login from "./pages/Login";
+import Login from "./components/authentication/Login";
 import LoadingModal from "./components/common/LoadingModal";
 import { useContext } from "react";
 import AuthContext from "./context/AuthContext";
 import NotificationGlobal from "./components/common/NotificationGlobal";
+import CreateEncryptionKey from "./components/authentication/CreateEncryptionKey";
 
 const Root = () => {
-	const { user, isLoading } = useContext(AuthContext);
+	const { user, encryptionKeyChallenge, isLoading } = useContext(AuthContext);
 
 	return (
 		<>
@@ -17,11 +18,15 @@ const Root = () => {
 			<div className="h-[calc(100dvh-4rem)] p-2">
 				{/* Page content container with custom scrollbar */}
 				<div className="h-full overflow-y-scroll scrollbar scrollbar-w-[6px] scrollbar-thumb-primaryHighlight scrollbar-thumb-rounded-full">
-					{/* Show content depending on loading and login state */}
+					{/* Show content depending on loading, login and metadata state */}
 					{isLoading ? (
 						<LoadingModal content={"Loading user data"} />
 					) : user ? (
-						<Outlet />
+						!encryptionKeyChallenge ? (
+							<CreateEncryptionKey />
+						) : (
+							<Outlet />
+						)
 					) : (
 						<Login />
 					)}

@@ -5,12 +5,14 @@ import {
 	collection,
 	deleteDoc,
 	doc,
+	getDoc,
 	getDocs,
 	getFirestore,
 	serverTimestamp,
 	Timestamp,
 	updateDoc,
 } from "firebase/firestore";
+import { Metadata } from "../types/types";
 
 const firebaseConfig = {
 	apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -25,7 +27,23 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 
-// Firestore functions
+/* --- Metadata --- */
+export const addMetadata = async (userId: string) => {
+	return await addDoc(collection(db, "users", userId, "metadata"), {
+		encryptionKey: "",
+		totalFileSize: 0,
+	});
+};
+
+export const getMetadata = async (userId: string) => {
+	return await getDoc(doc(db, "users", userId));
+};
+
+export const updateMetadata = async (userId: string, updateObject: Metadata) => {
+	return await updateDoc(doc(db, "users", userId, "metadata"), updateObject);
+};
+
+/* --- Files --- */
 const getFileSize = (content: string) => {
 	const blob = new Blob([content]);
 	return blob.size;

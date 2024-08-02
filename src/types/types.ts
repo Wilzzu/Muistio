@@ -13,6 +13,11 @@ export type FilteredList = {
 	isSearching: boolean;
 };
 
+export type Metadata = {
+	encryptionKey?: string;
+	totalFileSize?: number;
+};
+
 export type ShowNotificationProps = {
 	content: string;
 	warning?: boolean;
