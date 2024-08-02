@@ -14,13 +14,13 @@ const InnerStatus: FC<InnerStatusProps> = ({ content, warning }) => {
 			animate={{ y: 0 }}
 			exit={{ y: -50 }}
 			transition={{ type: "tween", duration: 0.3, ease: "easeInOut" }}
-			className={cn("bg-gradient-to-b from-accent to-[#5AB7FF] p-[2px] rounded-b-[14px]", {
+			className={cn("bg-gradient-to-b from-accent to-[#5AB7FF] p-[2px] rounded-b-[10px]", {
 				"from-red-400 via-red-500 to-red-400": warning,
 			})}>
 			{/* Content */}
 			<div
 				className={cn(
-					"p-1 px-6 bg-gradient-radial from-[#077bff] from-40% to-accent text-sm font-semibold drop-shadow-md rounded-b-xl",
+					"p-[0.1rem] px-6 bg-gradient-radial from-[#077bff] from-40% to-accent text-sm font-semibold drop-shadow-md rounded-b-lg",
 					{
 						"from-red-700/50 to-red-500/50": warning,
 					}

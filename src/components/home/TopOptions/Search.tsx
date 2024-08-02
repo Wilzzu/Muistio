@@ -1,4 +1,5 @@
-import { Dispatch, FC, SetStateAction, useContext } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { Dispatch, FC, SetStateAction, useContext, useEffect, useState } from "react";
 import { IoSearch } from "react-icons/io5";
 import FilesContext from "../../../context/FilesContext";
 import { File, FilteredList } from "../../../types/types";
@@ -9,8 +10,11 @@ type SearchProps = {
 
 const Search: FC<SearchProps> = ({ setFilteredList }) => {
 	const { files } = useContext(FilesContext);
+	const [searchInput, setSearchInput] = useState("");
 
 	const onChange = (input: string) => {
+		setSearchInput(input);
+
 		// If we aren't searching, set searching to false
 		if (input?.trim().length <= 0) return setFilteredList({ files: [], isSearching: false });
 
@@ -24,6 +28,10 @@ const Search: FC<SearchProps> = ({ setFilteredList }) => {
 
 		setFilteredList({ files: foundFiles, isSearching: true });
 	};
+
+	useEffect(() => {
+		if (searchInput) onChange(searchInput);
+	}, [files]);
 
 	return (
 		<div className="sticky top-0 bg-gradient-to-b from-background from-80% to-transparent z-20 py-3">

@@ -1,8 +1,8 @@
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { auth } from "../firebase/firebase";
-import Button from "../components/common/Button";
+import { auth } from "../../firebase/firebase";
+import Button from "../common/Button";
 import { FaGoogle } from "react-icons/fa";
-import Modal from "../components/common/Modal";
+import Modal from "../common/Modal";
 
 const Login = () => {
 	const provider = new GoogleAuthProvider();

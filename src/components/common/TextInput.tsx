@@ -1,5 +1,5 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import { Dispatch, FC, HTMLInputTypeAttribute, SetStateAction } from "react";
+import { Dispatch, FC, HTMLInputTypeAttribute, ReactNode, SetStateAction } from "react";
 import { cn } from "../../lib/utils";
 
 type CustomTextInputStyles = {
@@ -17,13 +17,15 @@ type TextInputProps = {
 	style?: CustomTextInputStyles;
 	override?: boolean;
 	disabled?: boolean;
-	onClick: () => void;
+	disableAutoComplete?: boolean;
+	onClick?: () => void;
+	children?: ReactNode;
 };
 
 const defaultTextInputStyles = {
 	border:
-		"p-[1px] bg-gradient-to-br from-primaryHighlight via-primaryHighlight/50 to-primaryHighlight rounded-[9px] duration-200",
-	main: "outline-none h-full px-4 rounded-lg bg-gradient-radial from-transparent bg-primary to-primary/80 hover:bg-primary/80 duration-200 text-sm font-semibold disabled:opacity-50 disabled:pointer-events-none",
+		"relative flex items-center p-[1px] bg-gradient-to-br from-primaryHighlight via-primaryHighlight/50 to-primaryHighlight rounded-[9px] duration-200",
+	main: "w-full h-full outline-none py-2 px-4 rounded-lg bg-gradient-radial from-transparent bg-primary to-primary/80 hover:bg-primary/80 duration-200 text-sm font-semibold disabled:opacity-50 disabled:pointer-events-none",
 };
 
 const TextInput: FC<TextInputProps> = ({
@@ -36,7 +38,9 @@ const TextInput: FC<TextInputProps> = ({
 	style,
 	override,
 	disabled,
+	disableAutoComplete,
 	onClick,
+	children,
 }) => {
 	return (
 		// Border container
@@ -66,9 +70,11 @@ const TextInput: FC<TextInputProps> = ({
 				disabled={disabled}
 				className={override ? style?.main : cn(defaultTextInputStyles.main, style?.main)}
 				placeholder={placeholder}
+				autoComplete={disableAutoComplete ? "off" : "on"}
 				onChange={(e) => onChange(e.target.value)}
 				onClick={onClick}
 			/>
+			{children}
 		</div>
 	);
 };

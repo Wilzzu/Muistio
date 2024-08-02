@@ -14,7 +14,7 @@ const Navbar = () => {
 	const handleLogOut = () => {
 		signOut(auth)
 			.then(() => {
-				redirect("/login");
+				redirect("/");
 			})
 			.catch((error) => {
 				console.error(error);
