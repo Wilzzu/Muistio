@@ -1,8 +1,9 @@
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { connectAuthEmulator, getAuth } from "firebase/auth";
 import {
 	addDoc,
 	collection,
+	connectFirestoreEmulator,
 	deleteDoc,
 	doc,
 	getDoc,
@@ -27,6 +28,10 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 
+if (import.meta.env.DEV === true) {
+	connectAuthEmulator(auth, "http://localhost:9099");
+	connectFirestoreEmulator(db, "localhost", 8080);
+}
 /* --- Metadata --- */
 export const addMetadata = async (userId: string) => {
 	return await addDoc(collection(db, "users", userId, "metadata"), {
