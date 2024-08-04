@@ -10,6 +10,9 @@ import { useNavigate } from "react-router-dom";
 import FilesContext from "../../context/FilesContext";
 import { Timestamp } from "firebase/firestore";
 import TextInput from "../../components/common/TextInput";
+import InnerStatus from "../../components/common/InnerStatus";
+import { motion, AnimatePresence } from "framer-motion";
+import NotificationContext from "../../context/NotificationContext";
 
 type CreateNewFileProps = {
 	closeModal: () => void;
@@ -28,24 +31,31 @@ const defaultInvalidFields = {
 const CreateNewFile: FC<CreateNewFileProps> = ({ closeModal }) => {
 	const { user } = useContext(AuthContext);
 	const { setSelectedFile } = useContext(FilesContext);
+	const { showNotification } = useContext(NotificationContext);
 	const queryClient = useQueryClient();
 	const navigate = useNavigate();
 	const [title, setTitle] = useState("");
 	const [content, setContent] = useState("");
 	const [showWarning, setShowWarning] = useState(false);
 	const [isDisabled, setIsDisabled] = useState(false);
+	const [errorTimeout, setErrorTimeout] = useState<NodeJS.Timeout | null>(null);
 	const [invalidFields, setInvalidFields] = useState<InvalidFieldType>(defaultInvalidFields);
 
 	const onSuccess = (newFileId: string) => {
 		queryClient.invalidateQueries({ queryKey: ["files", user?.uid] });
 		setSelectedFile({ id: newFileId, content, dateModified: Timestamp.now(), size: 1, title });
 		navigate(`/file/${newFileId}`);
+		showNotification({ content: "File created successfully!" });
 		closeModal();
 	};
 
-	const onError = (error: Error) => {
-		console.error(error.message);
+	const onError = () => {
 		setIsDisabled(false);
+		if (errorTimeout) clearTimeout(errorTimeout);
+		const timeout = setTimeout(() => {
+			addFileMutation.reset();
+		}, 6000);
+		setErrorTimeout(timeout);
 	};
 
 	// Use React Query to keep track of mutation state
@@ -53,7 +63,7 @@ const CreateNewFile: FC<CreateNewFileProps> = ({ closeModal }) => {
 		mutationFn: ({ userId, title, content }: { userId: string; title: string; content: string }) =>
 			addFile(userId, title, content),
 		onSuccess: (newFileId: string) => onSuccess(newFileId),
-		onError: (error) => onError(error),
+		onError: onError,
 	});
 
 	const validateFieldsAndUpload = () => {
@@ -85,17 +95,9 @@ const CreateNewFile: FC<CreateNewFileProps> = ({ closeModal }) => {
 		<>
 			<Modal
 				closeModalFunction={isDisabled ? () => false : checkForUnsavedChanges}
-				styleOverride="max-w-[800px] max-h-[calc(100dvh-10rem)]">
+				styleOverride="relative max-w-[800px] max-h-[calc(100dvh-10rem)]">
+				{/* Main */}
 				<div className="flex flex-col mb-2">
-					<p>
-						{addFileMutation.isPending
-							? "Uploading..."
-							: addFileMutation.isSuccess
-							? "Upload successful!"
-							: addFileMutation.isError
-							? "Error!"
-							: ""}
-					</p>
 					<div className="flex justify-between gap-3">
 						<TextInput
 							type="text"
@@ -128,6 +130,22 @@ const CreateNewFile: FC<CreateNewFileProps> = ({ closeModal }) => {
 						onClick={() => clearInvalidField("content")}
 					/>
 				</div>
+				{/* Inner Notification */}
+				<AnimatePresence>
+					{(addFileMutation.isPending || addFileMutation.isError) && (
+						<motion.div className="absolute left-0 top-0 w-full flex justify-center pointer-events-none overflow-hidden">
+							<InnerStatus
+								content={
+									addFileMutation.isPending
+										? "Creating file..."
+										: addFileMutation.isError && `Error: ${addFileMutation.error.message}`
+								}
+								warning={addFileMutation.isError}
+								height="md"
+							/>
+						</motion.div>
+					)}
+				</AnimatePresence>
 			</Modal>
 			{showWarning && (
 				<Modal closeModalFunction={() => setShowWarning(false)}>

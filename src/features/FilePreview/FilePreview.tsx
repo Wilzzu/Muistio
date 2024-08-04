@@ -20,7 +20,7 @@ const MarkdownPreview: FC<{ content: string }> = ({ content }) => (
 		remarkPlugins={[remarkGfm]}
 		rehypePlugins={[[rehypeExternalLinks, { target: "_blank" }]]}
 		className={
-			"prose prose-invert font-light text-white prose-headings:mt-6 prose-headings:mb-[0.85rem] prose-h1:text-2xl prose-h1:font-medium prose-h1:border-b-[1px] prose-h1:border-accent prose-h1:pb-1 prose-h2:text-xl prose-h2:font-medium prose-h3:text-lg prose-h3:font-medium prose-p:leading-6 prose-a:text-[#4dbaf8] prose-a:selection:text-black marker:text-accent prose-thead:border-accent prose-tr:border-accent"
+			"prose prose-invert font-light text-white prose-headings:mt-6 prose-headings:mb-[0.85rem] prose-h1:text-2xl prose-h1:font-medium prose-h1:border-b-[1px] prose-h1:border-accent prose-h1:pb-1 prose-h2:text-xl prose-h2:font-medium prose-h3:text-lg prose-h3:font-medium prose-p:leading-6 prose-a:text-[#4dbaf8] prose-a:selection:text-black marker:text-accent prose-thead:border-accent prose-tr:border-accent break-words pr-2"
 		}>
 		{content}
 	</Markdown>
@@ -106,7 +106,7 @@ const FilePreview: FC<FilePreviewProps> = ({
 	return (
 		<>
 			<div
-				className={cn("w-1/2 p-3 pr-1", {
+				className={cn("w-1/2 p-3 pr-1 shrink-0", {
 					"w-full p-0": isCreatingNewFile,
 				})}>
 				{/* Sticky and border */}

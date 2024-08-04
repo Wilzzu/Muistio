@@ -28,7 +28,7 @@ function Home() {
 
 	return (
 		<div className="flex justify-center gap-2 px-1">
-			<main className="flex flex-col gap-5 w-1/2 px-3">
+			<main className="flex flex-col gap-5 w-1/2 px-3 shrink-0">
 				<Search setFilteredList={setFilteredList} />
 				<div className="flex flex-col gap-2">
 					<TopOptions />

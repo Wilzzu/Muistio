@@ -6,9 +6,10 @@ type InnerStatusProps = {
 	content: string;
 	warning?: boolean | null;
 	fadeOnHover?: boolean;
+	height?: "sm" | "md" | "lg";
 };
 
-const InnerStatus: FC<InnerStatusProps> = ({ content, warning, fadeOnHover }) => {
+const InnerStatus: FC<InnerStatusProps> = ({ content, warning, fadeOnHover, height = "sm" }) => {
 	return (
 		<motion.div
 			initial={{ y: -50 }}
@@ -27,9 +28,14 @@ const InnerStatus: FC<InnerStatusProps> = ({ content, warning, fadeOnHover }) =>
 			{/* Content */}
 			<div
 				className={cn(
-					"p-[0.1rem] px-6 bg-gradient-radial from-[#077bff] from-40% to-accent text-sm font-semibold drop-shadow-md rounded-b-lg",
+					"px-6 bg-gradient-radial from-[#077bff] from-40% to-accent text-sm font-semibold drop-shadow-md rounded-b-lg",
 					{
 						"from-red-700/50 to-red-500/50": warning,
+					},
+					{
+						"py-[0.1rem]": height === "sm",
+						"py-1": height === "md",
+						"py-2": height === "lg",
 					}
 				)}>
 				<p className="shadow-black/40 drop-shadow-text-sm">{content}</p>
