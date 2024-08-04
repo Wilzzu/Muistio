@@ -16,9 +16,9 @@ const NotificationProvider: FC<{ children: ReactNode }> = ({ children }) => {
 		setWarning(!!warning);
 		setIsVisible(true);
 
-		// Hide the notification after 3 or 5 seconds
+		// Hide the notification after 3.5 or 6 seconds if error
 		if (disableAutoHide) return;
-		const timeout = setTimeout(() => setIsVisible(false), warning ? 5000 : 3000);
+		const timeout = setTimeout(() => setIsVisible(false), warning ? 6000 : 3500);
 
 		setTimeoutId(timeout);
 	};

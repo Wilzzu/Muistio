@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { useContext } from "react";
 import AuthContext from "../context/AuthContext";
-import { updateFile, UpdateObjectType } from "../firebase/firebase";
+import { updateFile, UpdateFileObjectType } from "../firebase/firebase";
 import FilesContext from "../context/FilesContext";
 import NotificationContext from "../context/NotificationContext";
 
@@ -17,7 +17,7 @@ const useUpdateFile = (callback: () => void) => {
 	};
 
 	// Update the files list with the updated object's values
-	const onSuccess = (updatedObject: UpdateObjectType) => {
+	const onSuccess = (updatedObject: UpdateFileObjectType) => {
 		setFiles((prevFiles) => {
 			return prevFiles.map((file) => {
 				if (file.id === updatedObject.id) return { ...file, ...updatedObject };

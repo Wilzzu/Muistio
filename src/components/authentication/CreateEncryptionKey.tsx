@@ -8,7 +8,8 @@ import { PiWarningDuotone } from "react-icons/pi";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import PasswordStrengthBar from "./PasswordStrengthBar";
 import useLogOut from "../../hooks/useLogOut";
-// import { updateMetadata } from "../../firebase/firebase";
+import useUpdateMetadata from "../../hooks/useUpdateMetadata";
+import { Metadata } from "../../types/types";
 
 type InvalidFieldType = {
 	key: boolean;
@@ -28,14 +29,23 @@ const CreateEncryptionKey = () => {
 	const [showKey, setShowKey] = useState(false);
 	const [showKeyConfirm, setShowKeyConfirm] = useState(false);
 	const [invalidFields, setInvalidFields] = useState<InvalidFieldType>(defaultInvalidFields);
-	const { user } = useContext(AuthContext);
+	const { setEncryptionKeyChallenge } = useContext(AuthContext);
 	const { handleLogOut } = useLogOut();
 	const passwordStrength = usePasswordStrength(encryptionKey);
+	const { updateMetadataMutation, isUpdating } = useUpdateMetadata(
+		"Encryption Key",
+		onUpdateSuccess
+	);
+
+	function onUpdateSuccess(updatedObject: Metadata) {
+		setEncryptionKeyChallenge(updatedObject.encryptionKey || null);
+	}
 
 	const addEncryptionKey = () => {
-		if (!user) return;
-		// TODO: Encrypt key here
-		// updateMetadata(user.uid, { encryptionKey: encryptionKey });
+		// TODO: Encrypt the key here
+
+		// Update key and track state
+		updateMetadataMutation({ encryptionKey: encryptionKey });
 	};
 
 	const validateFieldsAndStrength = () => {
@@ -48,7 +58,7 @@ const CreateEncryptionKey = () => {
 			return setInvalidFields({ ...defaultClone, confirm: true, reason: "Confirm key" });
 
 		if (encryptionKey !== encryptionKeyConfirm)
-			return setInvalidFields({ key: false, confirm: true, reason: "Keys don't match" });
+			return setInvalidFields({ key: false, confirm: true, reason: "Keys do not match" });
 
 		// Create challenge and update key
 		addEncryptionKey();
@@ -69,7 +79,7 @@ const CreateEncryptionKey = () => {
 						To secure your files, you need to create an encryption key. This key is used to encrypt
 						and decrypt your files. The key is never sent to our servers, only you know it.
 					</p>
-					<p className="text-[#fc605d] font-medium">
+					<p className="text-warning font-medium">
 						<PiWarningDuotone className="inline-block text-xl" /> If you lose the key, you lose
 						access to <b>ALL</b> your files. We cannot recover them for you.
 					</p>
@@ -79,7 +89,7 @@ const CreateEncryptionKey = () => {
 				<div className="flex flex-col gap-1">
 					<label htmlFor="muistioEncryptionKey" className="font-medium">
 						New encryption key{" "}
-						<span className="text-[#fc605d] ml-2">{invalidFields.key && invalidFields.reason}</span>
+						<span className="text-warning ml-2">{invalidFields.key && invalidFields.reason}</span>
 					</label>
 					<TextInput
 						type={showKey ? "text" : "password"}
@@ -88,10 +98,12 @@ const CreateEncryptionKey = () => {
 						onChange={setEncryptionKey}
 						onClick={() => clearInvalidField("key")}
 						disableAutoComplete
+						disabled={isUpdating}
 						style={{ main: "bg-opacity-90" }}>
 						<button
 							onClick={() => setShowKey((prev) => !prev)}
-							className="absolute right-1 p-2 rounded-lg hover:bg-secondary/80 duration-100">
+							disabled={isUpdating}
+							className="absolute right-1 p-2 rounded-lg hover:bg-secondary/80 disabled:hover:bg-transparent duration-100">
 							{showKey ? <FaRegEyeSlash /> : <FaRegEye />}
 						</button>
 					</TextInput>
@@ -99,7 +111,7 @@ const CreateEncryptionKey = () => {
 
 					<label htmlFor="muistioEncryptionKeyConfirm" className="font-medium">
 						Confirm encryption key{" "}
-						<span className="text-[#fc605d] ml-2">
+						<span className="text-warning ml-2">
 							{invalidFields.confirm && invalidFields.reason}
 						</span>
 					</label>
@@ -110,10 +122,12 @@ const CreateEncryptionKey = () => {
 						onChange={setEncryptionKeyConfirm}
 						onClick={() => clearInvalidField("confirm")}
 						disableAutoComplete
+						disabled={isUpdating}
 						style={{ main: "bg-opacity-90" }}>
 						<button
 							onClick={() => setShowKeyConfirm((prev) => !prev)}
-							className="absolute right-1 p-2 rounded-lg hover:bg-secondary/80  duration-100">
+							disabled={isUpdating}
+							className="absolute right-1 p-2 rounded-lg hover:bg-secondary/80 disabled:hover:bg-transparent duration-100">
 							{showKeyConfirm ? <FaRegEyeSlash /> : <FaRegEye />}
 						</button>
 					</TextInput>
@@ -124,12 +138,14 @@ const CreateEncryptionKey = () => {
 					<Button
 						onClick={validateFieldsAndStrength}
 						highlight
+						disabled={isUpdating}
 						style={{ main: "bg-opacity-80 py-3 w-full", border: "w-full mt-3" }}>
 						Create encryption key
 					</Button>
 					<button
 						onClick={handleLogOut}
-						className="text-sm w-fit underline underline-offset-2 text-left opacity-80 hover:opacity-100 duration-100">
+						disabled={isUpdating}
+						className="text-sm w-fit underline underline-offset-2 opacity-80 hover:opacity-100 disabled:opacity-50 duration-100">
 						Log out
 					</button>
 				</div>

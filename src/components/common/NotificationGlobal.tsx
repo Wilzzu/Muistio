@@ -27,7 +27,7 @@ const NotificationGlobal = () => {
 								key={content}
 								initial={{ y: -10, opacity: 0 }}
 								animate={{ y: 0, opacity: 1 }}
-								exit={{ y: -5, opacity: 0, transition: { type: "tween", duration: 0.2 } }}
+								exit={{ y: -10, opacity: 0, transition: { type: "tween", duration: 0.2 } }}
 								transition={{
 									y: { type: "spring", damping: 22, stiffness: 500 },
 								}}

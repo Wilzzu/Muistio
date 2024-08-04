@@ -1,32 +1,31 @@
-import {
-	onDocumentCreatedWithAuthContext,
-	onDocumentWrittenWithAuthContext,
-} from "firebase-functions/v2/firestore";
+import { onDocumentWritten } from "firebase-functions/v2/firestore";
+import * as functions from "firebase-functions/v1";
+import * as admin from "firebase-admin";
 
-export const createfile = onDocumentCreatedWithAuthContext(
-	"users/{userId}/files/{fileId}",
-	(event) => {
-		const snapshot = event.data;
-		if (!snapshot) {
-			console.log("No data associated with the event");
-			return;
-		}
-		const data = snapshot.data();
-		console.log(data);
+admin.initializeApp();
+
+export const newuser = functions.auth.user().onCreate((user) => {
+	// Add metadata for the new user
+	admin.firestore().collection("users").doc(user.uid).set({
+		encryptionKey: "",
+		totalFileSize: 0,
+	});
+});
+
+export const modifyfile = onDocumentWritten("users/{userId}/files/{fileId}", (event) => {
+	if (!event?.data?.before.exists) {
+		console.log("Document was created");
+		return;
 	}
-);
 
-export const modifyfile = onDocumentWrittenWithAuthContext(
-	"users/{userId}/file/{fileId}",
-	(event) => {
-		if (!event?.data?.after.exists) {
-			console.log("Document was deleted");
-			return;
-		}
-		const document = event.data.after.data();
-		console.log(document);
-
-		const previousValues = event.data.before.data();
-		console.log(previousValues);
+	if (!event?.data?.after.exists) {
+		console.log("Document was deleted");
+		return;
 	}
-);
+
+	const document = event.data.after.data();
+	console.log(document);
+
+	const previousValues = event.data.before.data();
+	console.log(previousValues);
+});

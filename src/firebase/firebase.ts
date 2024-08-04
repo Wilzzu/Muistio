@@ -33,19 +33,13 @@ if (import.meta.env.DEV === true) {
 	connectFirestoreEmulator(db, "localhost", 8080);
 }
 /* --- Metadata --- */
-export const addMetadata = async (userId: string) => {
-	return await addDoc(collection(db, "users", userId, "metadata"), {
-		encryptionKey: "",
-		totalFileSize: 0,
-	});
-};
-
 export const getMetadata = async (userId: string) => {
 	return await getDoc(doc(db, "users", userId));
 };
 
-export const updateMetadata = async (userId: string, updateObject: Metadata) => {
-	return await updateDoc(doc(db, "users", userId, "metadata"), updateObject);
+export const updateMetadata = async (userId: string, fieldObject: Metadata) => {
+	await updateDoc(doc(db, "users", userId), fieldObject);
+	return fieldObject;
 };
 
 /* --- Files --- */
@@ -70,7 +64,7 @@ export const getFiles = async (userId: string) => {
 };
 
 // Update file
-export type UpdateObjectType = {
+export type UpdateFileObjectType = {
 	dateModified: Timestamp;
 	title?: string;
 	content?: string;
@@ -79,7 +73,7 @@ export type UpdateObjectType = {
 };
 
 const createUpdateObject = (title?: string, content?: string) => {
-	const updateObject = <UpdateObjectType>{
+	const updateObject = <UpdateFileObjectType>{
 		dateModified: serverTimestamp(),
 	};
 	if (title) updateObject.title = title;

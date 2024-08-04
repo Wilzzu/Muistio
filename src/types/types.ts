@@ -15,11 +15,15 @@ export type FilteredList = {
 
 export type Metadata = {
 	encryptionKey?: string;
-	totalFileSize?: number;
 };
 
 export type ShowNotificationProps = {
 	content: string;
 	warning?: boolean;
 	disableAutoHide?: boolean;
+};
+
+export type AuthError = {
+	isError: boolean;
+	message?: string;
 };

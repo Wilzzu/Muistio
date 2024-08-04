@@ -13,6 +13,7 @@ export default {
 				accent: "#0793E3",
 				background: "#11141A",
 				text: "#EBE9FB",
+				warning: "#FC605D",
 			},
 			fontFamily: {
 				primary: ["Quicksand", "sans-serif"],

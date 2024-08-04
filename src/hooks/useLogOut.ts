@@ -1,13 +1,23 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { getAuth, signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import FilesContext from "../context/FilesContext";
+import { useContext } from "react";
 
 const useLogOut = () => {
 	const navigate = useNavigate();
+	const queryClient = useQueryClient();
+	const { setFiles, setSelectedFile } = useContext(FilesContext);
 
 	const handleLogOut = async () => {
 		const auth = getAuth();
 		return signOut(auth)
-			.then(() => navigate("/"))
+			.then(() => {
+				queryClient.removeQueries();
+				setFiles([]);
+				setSelectedFile(null);
+				navigate("/");
+			})
 			.catch((error) => console.error(error));
 	};
 

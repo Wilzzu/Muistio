@@ -8,7 +8,7 @@ import NotificationGlobal from "./components/common/NotificationGlobal";
 import CreateEncryptionKey from "./components/authentication/CreateEncryptionKey";
 
 const Root = () => {
-	const { user, encryptionKeyChallenge, isLoading } = useContext(AuthContext);
+	const { user, encryptionKeyChallenge, isLoading, error } = useContext(AuthContext);
 
 	return (
 		<>
@@ -19,8 +19,8 @@ const Root = () => {
 				{/* Page content container with custom scrollbar */}
 				<div className="h-full overflow-y-scroll scrollbar scrollbar-w-[6px] scrollbar-thumb-primaryHighlight scrollbar-thumb-rounded-full">
 					{/* Show content depending on loading, login and metadata state */}
-					{isLoading ? (
-						<LoadingModal content={"Loading user data"} />
+					{isLoading || error.isError ? (
+						<LoadingModal content={"Loading user data"} error={error} />
 					) : user ? (
 						!encryptionKeyChallenge ? (
 							<CreateEncryptionKey />

@@ -29,5 +29,7 @@ module.exports = {
 		"import/no-unresolved": 0,
 		indent: "off",
 		"no-tabs": 0,
+		"max-len": "off",
+		"object-curly-spacing": "off",
 	},
 };
