@@ -4,11 +4,23 @@ service cloud.firestore {
   match /databases/{database}/documents {
     match /users/{userId} {
       allow read: if request.auth != null && request.auth.uid == userId;
+
+      // Allow metadata update if the user is authenticated and the only field being updated is the encryptionKey
       allow update: if request.auth != null && request.auth.uid == userId && (request.resource.data.diff(resource.data).affectedKeys()
         .hasOnly(['encryptionKey']));
       
       match /files/{fileId} {
-        allow read, write: if request.auth != null && request.auth.uid == userId;
+        allow read, delete: if request.auth != null && request.auth.uid == userId;
+
+        // Allow create if the user is authenticated and the total file size is less than 10MB
+        allow create: if request.auth != null &&
+                      request.auth.uid == userId && 
+                      (get(/databases/$(database)/documents/users/$(userId)).data.totalFileSize + request.resource.data.size + 128) <= 10 * 1024 * 1024;
+
+        // Allow update if the user is authenticated and the total file size is less than 10MB
+        allow update: if request.auth != null &&
+                      request.auth.uid == userId &&
+                      (get(/databases/$(database)/documents/users/$(userId)).data.totalFileSize + (request.resource.data.size - resource.data.size)) <= 10 * 1024 * 1024;
       }
     }
   }

@@ -54,7 +54,7 @@ const PreviewOptions: FC<PreviewOptionsProps> = ({
 
 	return (
 		<>
-			<div className="absolute -right-4 -top-4 p-8 flex gap-2 opacity-70 hover:opacity-100 duration-150">
+			<div className="absolute right-4 top-4 flex gap-2 opacity-50 hover:opacity-100 duration-150">
 				{isEditing ? (
 					<>
 						<Button

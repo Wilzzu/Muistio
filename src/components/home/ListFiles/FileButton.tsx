@@ -26,6 +26,11 @@ const FileButton: FC<FileButtonProps> = ({ file }) => {
 	const { deleteFileMutation, isDeleting } = useDeleteFile(file.id);
 	const { updateFileMutation, isUpdating } = useUpdateFile(() => setRenameValue(""));
 
+	const startRenaming = () => {
+		setRenameValue(file.title);
+		setIsRenaming(true);
+	};
+
 	const renameFile = () => {
 		setIsRenaming(false);
 
@@ -80,7 +85,7 @@ const FileButton: FC<FileButtonProps> = ({ file }) => {
 	};
 
 	const options = [
-		{ title: "Rename", action: () => setIsRenaming(true) },
+		{ title: "Rename", action: startRenaming },
 		{ title: "Download", action: downloadFile },
 		{ title: "Delete", action: () => setShowWarning(true), warning: true },
 	];

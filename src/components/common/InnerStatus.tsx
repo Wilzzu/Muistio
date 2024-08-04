@@ -5,18 +5,25 @@ import { motion } from "framer-motion";
 type InnerStatusProps = {
 	content: string;
 	warning?: boolean | null;
+	fadeOnHover?: boolean;
 };
 
-const InnerStatus: FC<InnerStatusProps> = ({ content, warning }) => {
+const InnerStatus: FC<InnerStatusProps> = ({ content, warning, fadeOnHover }) => {
 	return (
 		<motion.div
 			initial={{ y: -50 }}
 			animate={{ y: 0 }}
 			exit={{ y: -50 }}
 			transition={{ type: "tween", duration: 0.3, ease: "easeInOut" }}
-			className={cn("bg-gradient-to-b from-accent to-[#5AB7FF] p-[2px] rounded-b-[10px]", {
-				"from-red-400 via-red-500 to-red-400": warning,
-			})}>
+			className={cn(
+				"bg-gradient-to-b from-accent to-[#5AB7FF] p-[2px] rounded-b-[10px] duration-150 transition-opacity",
+				{
+					"from-red-400 via-red-500 to-red-400 pointer-events-auto": warning,
+				},
+				{
+					"hover:opacity-30 hover:blur-[2px] pointer-events-auto": fadeOnHover,
+				}
+			)}>
 			{/* Content */}
 			<div
 				className={cn(

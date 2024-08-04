@@ -119,7 +119,7 @@ const FilePreview: FC<FilePreviewProps> = ({
 						{ "from-red-600 via-red-600/20 to-red-600": warning }
 					)}>
 					{/* Main content wrapper */}
-					<div className="relative w-full py-4 pl-5 pr-[0.35rem] rounded-2xl flex flex-col bg-gradient-radial from-secondary from-40% to-secondary/90">
+					<div className="relative w-full py-2 pl-5 pr-[0.35rem] rounded-2xl flex flex-col bg-gradient-radial from-secondary from-40% to-secondary/90">
 						<PreviewOptions
 							selectedFile={selectedFile}
 							isEditing={isEditing}
@@ -136,7 +136,7 @@ const FilePreview: FC<FilePreviewProps> = ({
 						<section
 							onDoubleClick={handleDoubleClick}
 							className={cn(
-								"h-[calc(100dvh-8.6rem)] overflow-y-scroll scrollbar scrollbar-w-[6px] scrollbar-thumb-primaryHighlight/50 scrollbar-thumb-rounded-full",
+								"h-[calc(100dvh-7.6rem)] overflow-y-scroll scrollbar scrollbar-w-[6px] scrollbar-thumb-primaryHighlight/50 scrollbar-thumb-rounded-full",
 								{
 									"h-fit min-h-48 max-h-[calc(100dvh-20rem)]": isCreatingNewFile,
 								}
@@ -146,7 +146,7 @@ const FilePreview: FC<FilePreviewProps> = ({
 							<AnimatePresence>
 								{!isCreatingNewFile && isEditing && (
 									<motion.div className="absolute left-0 top-0 w-full flex justify-center pointer-events-none overflow-hidden">
-										<InnerStatus content={"Editing file"} />
+										<InnerStatus content={"Editing file"} fadeOnHover />
 										<motion.div
 											initial={{ opacity: 0 }}
 											animate={{ opacity: 1 }}

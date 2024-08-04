@@ -103,6 +103,7 @@ const CreateNewFile: FC<CreateNewFileProps> = ({ closeModal }) => {
 							id="muistioTitle"
 							placeholder="Set file name..."
 							style={{ main: "bg-secondary/85 to-secondary/90" }}
+							disabled={isDisabled}
 							warning={invalidFields.title}
 							onClick={() => clearInvalidField("title")}
 						/>
