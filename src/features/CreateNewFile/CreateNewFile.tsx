@@ -45,7 +45,7 @@ const CreateNewFile: FC<CreateNewFileProps> = ({ closeModal }) => {
 
 	const onSuccess = (newFileId: string) => {
 		queryClient.invalidateQueries({ queryKey: ["files", user?.uid] });
-		setSelectedFile({ id: newFileId, content, dateModified: Timestamp.now(), size: 1, title });
+		setSelectedFile({ id: newFileId, dateModified: Timestamp.now(), size: 1, title });
 		navigate(`/file/${newFileId}`);
 		showNotification({ content: "File created successfully!" });
 		closeModal();

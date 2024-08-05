@@ -58,18 +58,23 @@ export const decrypt = (
 	salt: string,
 	nonce: string
 ): string => {
-	// Derive key and initialize chacha
-	const key = deriveKey(passphrase, decodeBase64(salt));
-	const chacha = new ChaCha20Poly1305(key);
+	try {
+		// Derive key and initialize chacha
+		const key = deriveKey(passphrase, decodeBase64(salt));
+		const chacha = new ChaCha20Poly1305(key);
 
-	// Decode Base64 strings
-	const sealed = decodeBase64(ciphertext);
-	const nonceBytes = decodeBase64(nonce);
+		// Decode Base64 strings
+		const sealed = decodeBase64(ciphertext);
+		const nonceBytes = decodeBase64(nonce);
 
-	// Decrypt the data
-	const plaintext = chacha.open(nonceBytes, sealed);
-	if (!plaintext) throw new Error("Decryption failed");
+		// Decrypt the data
+		const plaintext = chacha.open(nonceBytes, sealed);
+		if (!plaintext) throw new Error("Decryption failed");
 
-	// Return the decrypted plaintext
-	return new TextDecoder().decode(plaintext);
+		// Return the decrypted plaintext
+		return new TextDecoder().decode(plaintext);
+	} catch (error) {
+		console.error("Failed to decrypt the data:", error);
+		return "invalid";
+	}
 };

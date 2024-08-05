@@ -11,6 +11,7 @@ import useLogOut from "../../hooks/useLogOut";
 import useUpdateMetadata from "../../hooks/useUpdateMetadata";
 import { Metadata } from "../../types/types";
 import useIndexedDB from "../../hooks/useIndexedDB";
+import { encodeBase64, encrypt, generateRandomBytes } from "../../lib/encryption";
 
 type InvalidFieldType = {
 	key: boolean;
@@ -30,7 +31,7 @@ const CreateEncryptionKey = () => {
 	const [showKey, setShowKey] = useState(false);
 	const [showKeyConfirm, setShowKeyConfirm] = useState(false);
 	const [invalidFields, setInvalidFields] = useState<InvalidFieldType>(defaultInvalidFields);
-	const { setEncryptionKeyChallenge } = useContext(AuthContext);
+	const { setEncryptionKeyChallenge, setEncryptionKeySet } = useContext(AuthContext);
 	const { handleLogOut } = useLogOut();
 	const passwordStrength = usePasswordStrength(encryptionKey);
 	const { updateMetadataMutation, isUpdating } = useUpdateMetadata(
@@ -39,18 +40,27 @@ const CreateEncryptionKey = () => {
 	);
 	const { storeEncryptionKey } = useIndexedDB();
 
-	function onUpdateSuccess(updatedObject: Metadata) {
-		setEncryptionKeyChallenge(updatedObject.encryptionKey || null);
+	async function onUpdateSuccess(updatedObject: Metadata) {
+		// Save the key to indexedDB
+		const key = await storeEncryptionKey(encryptionKey);
+		if (!key)
+			return setInvalidFields({
+				key: true,
+				confirm: false,
+				reason: "Failed to store the key in IndexedDB",
+			});
+		setEncryptionKeySet(true);
+
+		// Set the encryption key challenge
+		setEncryptionKeyChallenge(updatedObject);
 	}
 
 	const addEncryptionKey = () => {
-		// TODO: Encrypt the key here to create a challenge
+		// Create the encryption key challenge
+		const challenge = encrypt(encodeBase64(generateRandomBytes(16)), encryptionKey);
 
 		// Update encryption key challenge and track state
-		updateMetadataMutation({ encryptionKey: encryptionKey });
-
-		// Save the key to indexedDB
-		storeEncryptionKey(encryptionKey);
+		updateMetadataMutation(challenge);
 	};
 
 	const validateFieldsAndStrength = () => {
@@ -79,7 +89,7 @@ const CreateEncryptionKey = () => {
 			<section className="flex flex-col gap-5">
 				{/* Title and Description */}
 				<div>
-					<h1 className="font-bold text-2xl mb-4">Create an encryption key</h1>
+					<h1 className="font-bold text-2xl mb-4">Create Encryption Key</h1>
 					<p>
 						To secure your files, you need to create an encryption key. This key is used to encrypt
 						and decrypt your files. The key is never sent to our servers, only you know it.

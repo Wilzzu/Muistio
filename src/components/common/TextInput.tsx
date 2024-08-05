@@ -1,5 +1,12 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import { Dispatch, FC, HTMLInputTypeAttribute, ReactNode, SetStateAction } from "react";
+import {
+	Dispatch,
+	FC,
+	HTMLInputTypeAttribute,
+	KeyboardEvent,
+	ReactNode,
+	SetStateAction,
+} from "react";
 import { cn } from "../../lib/utils";
 
 type CustomTextInputStyles = {
@@ -19,6 +26,7 @@ type TextInputProps = {
 	disabled?: boolean;
 	disableAutoComplete?: boolean;
 	onClick?: () => void;
+	onKeyDown?: (event: KeyboardEvent<HTMLInputElement>) => void;
 	children?: ReactNode;
 };
 
@@ -40,6 +48,7 @@ const TextInput: FC<TextInputProps> = ({
 	disabled,
 	disableAutoComplete,
 	onClick,
+	onKeyDown,
 	children,
 }) => {
 	return (
@@ -73,6 +82,7 @@ const TextInput: FC<TextInputProps> = ({
 				autoComplete={disableAutoComplete ? "off" : "on"}
 				onChange={(e) => onChange(e.target.value)}
 				onClick={onClick}
+				onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => onKeyDown && onKeyDown(e)}
 			/>
 			{children}
 		</div>

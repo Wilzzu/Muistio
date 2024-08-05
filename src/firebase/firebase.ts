@@ -40,7 +40,7 @@ export const getMetadata = async (userId: string) => {
 };
 
 export const updateMetadata = async (userId: string, fieldObject: Metadata) => {
-	await updateDoc(doc(db, "users", userId), fieldObject);
+	await updateDoc(doc(db, "users", userId), { encryptionKey: fieldObject });
 	return fieldObject;
 };
 

@@ -121,7 +121,7 @@ const FileButton: FC<FileButtonProps> = ({ file }) => {
 			)}>
 			{/* File information */}
 			<button
-				onClick={() => navigate(file.id === selectedFile?.id ? `/` : `/file/${file.id}`)}
+				onClick={() => navigate(file.id === selectedFile?.id ? `/home` : `/file/${file.id}`)}
 				disabled={isRenaming || isDeleting}
 				className={cn(
 					"h-full w-full flex flex-col p-4 bg-gradient-radial from-[#151A22] to-[#1B1D26]/95 rounded-xl",

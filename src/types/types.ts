@@ -13,7 +13,9 @@ export type FilteredList = {
 };
 
 export type Metadata = {
-	encryptionKey?: string;
+	ciphertext: string;
+	salt: string;
+	nonce: string;
 };
 
 export type ShowNotificationProps = {

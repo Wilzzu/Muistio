@@ -31,7 +31,7 @@ const useIndexedDB = () => {
 		});
 	};
 
-	const storeEncryptionKey = async (encryptionKey: string): Promise<void> => {
+	const storeEncryptionKey = async (encryptionKey: string): Promise<boolean> => {
 		try {
 			const db = await openDB();
 			const tx = db.transaction("encryptionKeys", "readwrite");
@@ -52,8 +52,10 @@ const useIndexedDB = () => {
 			});
 
 			db.close();
+			return true;
 		} catch (error) {
 			console.error("Failed to store the key in IndexedDB:", error);
+			return false;
 		}
 	};
 

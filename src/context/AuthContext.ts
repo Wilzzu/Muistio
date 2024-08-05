@@ -1,13 +1,16 @@
 import { createContext, Dispatch, SetStateAction } from "react";
 import { User } from "firebase/auth";
-import { AuthError } from "../types/types";
+import { AuthError, Metadata } from "../types/types";
 
 type AuthContextType = {
 	user: User | null;
 	setUser: Dispatch<SetStateAction<User | null>>;
-	encryptionKeyChallenge: string | null;
-	setEncryptionKeyChallenge: Dispatch<SetStateAction<string | null>>;
-	isLoading: boolean;
+	encryptionKeyChallenge: Metadata | null;
+	setEncryptionKeyChallenge: Dispatch<SetStateAction<Metadata | null>>;
+	userDataLoading: boolean;
+	setUserDataLoading: Dispatch<SetStateAction<boolean>>;
+	encryptionKeySet: boolean;
+	setEncryptionKeySet: Dispatch<SetStateAction<boolean>>;
 	error: AuthError;
 };
 
@@ -16,7 +19,10 @@ const defaultAuthContext: AuthContextType = {
 	setUser: () => {},
 	encryptionKeyChallenge: null,
 	setEncryptionKeyChallenge: () => {},
-	isLoading: true,
+	userDataLoading: true,
+	setUserDataLoading: () => {},
+	encryptionKeySet: false,
+	setEncryptionKeySet: () => {},
 	error: { isError: false },
 };
 

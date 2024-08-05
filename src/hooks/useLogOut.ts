@@ -22,7 +22,7 @@ const useLogOut = () => {
 				setSelectedFile(null);
 				setEncryptionKeyChallenge(null);
 				clearEncryptionKey();
-				navigate("/");
+				navigate("/home");
 			})
 			.catch((error) => console.error(error));
 	};
