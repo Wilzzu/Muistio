@@ -10,10 +10,12 @@ import {
 	getDocs,
 	getFirestore,
 	serverTimestamp,
+	setDoc,
 	Timestamp,
 	updateDoc,
 } from "firebase/firestore";
 import { Metadata } from "../types/types";
+import { decrypt, encrypt } from "../lib/encryption";
 
 const firebaseConfig = {
 	apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -48,19 +50,49 @@ const getFileSize = (content: string) => {
 	return blob.size;
 };
 
-// Add file
-export const addFile = async (userId: string, title: string, content: string) => {
+// Add file metadata and encrypted content
+export const addFile = async (
+	userId: string,
+	title: string,
+	content: string,
+	encryptionKey: string | null
+) => {
+	if (!encryptionKey) throw new Error("Encryption key not found");
+	// Add file metadata
 	const docRef = await addDoc(collection(db, "users", userId, "files"), {
 		title,
 		dateModified: serverTimestamp(),
 		size: getFileSize(content),
-		content,
 	});
+
+	// Encrypt and add file content
+	const encrypted = encrypt(content, encryptionKey);
+	await setDoc(doc(db, "users", userId, "files", docRef.id, "encrypted", "file"), {
+		content: encrypted.ciphertext,
+		salt: encrypted.salt,
+		nonce: encrypted.nonce,
+	});
+
 	return docRef.id;
 };
 
 export const getFiles = async (userId: string) => {
 	return await getDocs(collection(db, "users", userId, "files"));
+};
+
+export const getFileContent = async (
+	userId: string,
+	fileId: string,
+	encryptionKey: string | null
+) => {
+	if (!encryptionKey) throw new Error("Encryption key not found");
+
+	const docRef = await getDoc(doc(db, "users", userId, "files", fileId, "encrypted", "file"));
+	if (!docRef.exists()) return null;
+
+	const data = docRef.data();
+	const decrypted = decrypt(data.content, encryptionKey, data.salt, data.nonce);
+	return decrypted;
 };
 
 // Update file

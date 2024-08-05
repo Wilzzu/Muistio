@@ -10,6 +10,7 @@ import PasswordStrengthBar from "./PasswordStrengthBar";
 import useLogOut from "../../hooks/useLogOut";
 import useUpdateMetadata from "../../hooks/useUpdateMetadata";
 import { Metadata } from "../../types/types";
+import useIndexedDB from "../../hooks/useIndexedDB";
 
 type InvalidFieldType = {
 	key: boolean;
@@ -36,16 +37,20 @@ const CreateEncryptionKey = () => {
 		"Encryption Key",
 		onUpdateSuccess
 	);
+	const { storeEncryptionKey } = useIndexedDB();
 
 	function onUpdateSuccess(updatedObject: Metadata) {
 		setEncryptionKeyChallenge(updatedObject.encryptionKey || null);
 	}
 
 	const addEncryptionKey = () => {
-		// TODO: Encrypt the key here
+		// TODO: Encrypt the key here to create a challenge
 
-		// Update key and track state
+		// Update encryption key challenge and track state
 		updateMetadataMutation({ encryptionKey: encryptionKey });
+
+		// Save the key to indexedDB
+		storeEncryptionKey(encryptionKey);
 	};
 
 	const validateFieldsAndStrength = () => {

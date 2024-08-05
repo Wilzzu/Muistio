@@ -13,6 +13,7 @@ import TextInput from "../../components/common/TextInput";
 import InnerStatus from "../../components/common/InnerStatus";
 import { motion, AnimatePresence } from "framer-motion";
 import NotificationContext from "../../context/NotificationContext";
+import useIndexedDB from "../../hooks/useIndexedDB";
 
 type CreateNewFileProps = {
 	closeModal: () => void;
@@ -32,6 +33,7 @@ const CreateNewFile: FC<CreateNewFileProps> = ({ closeModal }) => {
 	const { user } = useContext(AuthContext);
 	const { setSelectedFile } = useContext(FilesContext);
 	const { showNotification } = useContext(NotificationContext);
+	const { getEncryptionKey } = useIndexedDB();
 	const queryClient = useQueryClient();
 	const navigate = useNavigate();
 	const [title, setTitle] = useState("");
@@ -60,8 +62,15 @@ const CreateNewFile: FC<CreateNewFileProps> = ({ closeModal }) => {
 
 	// Use React Query to keep track of mutation state
 	const addFileMutation = useMutation({
-		mutationFn: ({ userId, title, content }: { userId: string; title: string; content: string }) =>
-			addFile(userId, title, content),
+		mutationFn: async ({
+			userId,
+			title,
+			content,
+		}: {
+			userId: string;
+			title: string;
+			content: string;
+		}) => addFile(userId, title, content, await getEncryptionKey()),
 		onSuccess: (newFileId: string) => onSuccess(newFileId),
 		onError: onError,
 	});

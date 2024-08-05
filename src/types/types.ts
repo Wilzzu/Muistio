@@ -5,7 +5,6 @@ export type File = {
 	title: string;
 	dateModified: Timestamp;
 	size: number;
-	content: string;
 };
 
 export type FilteredList = {

@@ -20,7 +20,6 @@ const useFetchFiles = () => {
 				title: data.title,
 				dateModified: data.dateModified,
 				size: data.size,
-				content: data.content,
 			});
 		});
 		setFiles(allFiles);

@@ -1,4 +1,5 @@
-import { FC, KeyboardEvent, useContext, useRef, useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { FC, KeyboardEvent, useContext, useEffect, useRef, useState } from "react";
 import { LuCalendar } from "react-icons/lu";
 import { PiFileText } from "react-icons/pi";
 import ButtonMoreOptions from "../../common/ButtonMoreOptions";
@@ -11,6 +12,7 @@ import { cn } from "../../../lib/utils";
 import FilesContext from "../../../context/FilesContext";
 import useDeleteFile from "../../../hooks/useDeleteFile";
 import useUpdateFile from "../../../hooks/useUpdateFile";
+import useFetchFileContent from "../../../hooks/useFetchFileContent";
 
 type FileButtonProps = {
 	file: File;
@@ -20,11 +22,13 @@ const FileButton: FC<FileButtonProps> = ({ file }) => {
 	const [isRenaming, setIsRenaming] = useState(false);
 	const [showWarning, setShowWarning] = useState(false);
 	const [renameValue, setRenameValue] = useState(file.title);
+	const [isDownloading, setIsDownloading] = useState(false);
 	const escPressed = useRef<boolean>(false);
 	const navigate = useNavigate();
 	const { selectedFile } = useContext(FilesContext);
 	const { deleteFileMutation, isDeleting } = useDeleteFile(file.id);
 	const { updateFileMutation, isUpdating } = useUpdateFile(() => setRenameValue(""));
+	const { data, isRefetching, isError, error, refetch } = useFetchFileContent(file.id, false);
 
 	const startRenaming = () => {
 		setRenameValue(file.title);
@@ -63,8 +67,14 @@ const FileButton: FC<FileButtonProps> = ({ file }) => {
 		return parseFloat((bytes / Math.pow(1024, i)).toFixed(2)) + " " + sizes[i];
 	};
 
-	const downloadFile = () => {
-		const blob = new Blob([file.content], { type: "text/plain" });
+	const downloadFile = async () => {
+		// If data is not available, refetch it and start download when ready
+		if (!data) {
+			setIsDownloading(true);
+			return refetch();
+		}
+
+		const blob = new Blob([data], { type: "text/plain" });
 		const url = URL.createObjectURL(blob);
 
 		const link = document.createElement("a");
@@ -76,6 +86,7 @@ const FileButton: FC<FileButtonProps> = ({ file }) => {
 
 		// Revoke the object URL after download has started
 		URL.revokeObjectURL(url);
+		setIsDownloading(false);
 	};
 
 	const deleteFile = () => {
@@ -83,6 +94,14 @@ const FileButton: FC<FileButtonProps> = ({ file }) => {
 		setShowWarning(false);
 		console.log("Deleting file:", file.title);
 	};
+
+	// Used to start a download when the data is ready after user clicks download
+	useEffect(() => {
+		if (isDownloading && data) {
+			downloadFile();
+			setIsDownloading(false);
+		}
+	}, [data, isDownloading, isRefetching]);
 
 	const options = [
 		{ title: "Rename", action: startRenaming },

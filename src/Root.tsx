@@ -1,14 +1,27 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Outlet } from "react-router-dom";
 import Navbar from "./components/layout/Navbar/Navbar";
 import Login from "./components/authentication/Login";
 import LoadingModal from "./components/common/LoadingModal";
-import { useContext } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import AuthContext from "./context/AuthContext";
 import NotificationGlobal from "./components/common/NotificationGlobal";
 import CreateEncryptionKey from "./components/authentication/CreateEncryptionKey";
+import useIndexedDB from "./hooks/useIndexedDB";
 
 const Root = () => {
 	const { user, encryptionKeyChallenge, isLoading, error } = useContext(AuthContext);
+	const { getEncryptionKey } = useIndexedDB();
+	const [encryptionKeySet, setEncryptionKeySet] = useState(false);
+
+	const checkEncryptionKey = useCallback(async () => {
+		const key = await getEncryptionKey();
+		setEncryptionKeySet(!!key);
+	}, [user]);
+
+	useEffect(() => {
+		checkEncryptionKey();
+	}, [checkEncryptionKey]);
 
 	return (
 		<>
@@ -24,6 +37,8 @@ const Root = () => {
 					) : user ? (
 						!encryptionKeyChallenge ? (
 							<CreateEncryptionKey />
+						) : !encryptionKeySet ? (
+							<div>Key is not set in IndexedDB</div>
 						) : (
 							<Outlet />
 						)
