@@ -1,12 +1,12 @@
 import { createContext, Dispatch, SetStateAction } from "react";
 import { User } from "firebase/auth";
-import { AuthError, Metadata } from "../types/types";
+import { AuthError, EncryptionData } from "../types/types";
 
 type AuthContextType = {
 	user: User | null;
 	setUser: Dispatch<SetStateAction<User | null>>;
-	encryptionKeyChallenge: Metadata | null;
-	setEncryptionKeyChallenge: Dispatch<SetStateAction<Metadata | null>>;
+	encryptionKeyChallenge: EncryptionData | null;
+	setEncryptionKeyChallenge: Dispatch<SetStateAction<EncryptionData | null>>;
 	userDataLoading: boolean;
 	setUserDataLoading: Dispatch<SetStateAction<boolean>>;
 	encryptionKeySet: boolean;

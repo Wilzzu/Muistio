@@ -12,7 +12,7 @@ export type FilteredList = {
 	isSearching: boolean;
 };
 
-export type Metadata = {
+export type EncryptionData = {
 	ciphertext: string;
 	salt: string;
 	nonce: string;

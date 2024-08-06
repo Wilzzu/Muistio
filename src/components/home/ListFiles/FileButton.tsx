@@ -13,6 +13,7 @@ import FilesContext from "../../../context/FilesContext";
 import useDeleteFile from "../../../hooks/useDeleteFile";
 import useUpdateFile from "../../../hooks/useUpdateFile";
 import useFetchFileContent from "../../../hooks/useFetchFileContent";
+import NotificationContext from "../../../context/NotificationContext";
 
 type FileButtonProps = {
 	file: File;
@@ -29,6 +30,7 @@ const FileButton: FC<FileButtonProps> = ({ file }) => {
 	const { deleteFileMutation, isDeleting } = useDeleteFile(file.id);
 	const { updateFileMutation, isUpdating } = useUpdateFile(() => setRenameValue(""));
 	const { data, isRefetching, isError, error, refetch } = useFetchFileContent(file.id, false);
+	const { showNotification } = useContext(NotificationContext);
 
 	const startRenaming = () => {
 		setRenameValue(file.title);
@@ -39,7 +41,7 @@ const FileButton: FC<FileButtonProps> = ({ file }) => {
 		setIsRenaming(false);
 
 		if (renameValue.trim() === file.title.trim()) return;
-		updateFileMutation({ fileId: file.id, title: renameValue });
+		updateFileMutation({ fileId: file.id, value: { title: renameValue } });
 	};
 
 	const onInputKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -68,15 +70,17 @@ const FileButton: FC<FileButtonProps> = ({ file }) => {
 	};
 
 	const downloadFile = async () => {
+		if (!isDownloading) showNotification({ content: "Downloading file...", disableAutoHide: true });
+
 		// If data is not available, refetch it and start download when ready
 		if (!data) {
 			setIsDownloading(true);
 			return refetch();
 		}
 
+		// Create blob and download the file
 		const blob = new Blob([data], { type: "text/plain" });
 		const url = URL.createObjectURL(blob);
-
 		const link = document.createElement("a");
 		link.href = url;
 		link.download = file.title;
@@ -86,6 +90,7 @@ const FileButton: FC<FileButtonProps> = ({ file }) => {
 
 		// Revoke the object URL after download has started
 		URL.revokeObjectURL(url);
+		showNotification({ content: "Downloading file..." }); // Hide the previous notification
 		setIsDownloading(false);
 	};
 
@@ -102,6 +107,14 @@ const FileButton: FC<FileButtonProps> = ({ file }) => {
 			setIsDownloading(false);
 		}
 	}, [data, isDownloading, isRefetching]);
+
+	// Show error notification if download fails
+	useEffect(() => {
+		if (isError) {
+			showNotification({ content: `Error downloading file: ${error?.message}`, warning: true });
+			setIsDownloading(false);
+		}
+	}, [isError, error]);
 
 	const options = [
 		{ title: "Rename", action: startRenaming },

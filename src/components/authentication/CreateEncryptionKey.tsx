@@ -9,7 +9,7 @@ import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import PasswordStrengthBar from "./PasswordStrengthBar";
 import useLogOut from "../../hooks/useLogOut";
 import useUpdateMetadata from "../../hooks/useUpdateMetadata";
-import { Metadata } from "../../types/types";
+import { EncryptionData } from "../../types/types";
 import useIndexedDB from "../../hooks/useIndexedDB";
 import { encodeBase64, encrypt, generateRandomBytes } from "../../lib/encryption";
 
@@ -40,7 +40,7 @@ const CreateEncryptionKey = () => {
 	);
 	const { storeEncryptionKey } = useIndexedDB();
 
-	async function onUpdateSuccess(updatedObject: Metadata) {
+	async function onUpdateSuccess(updatedObject: EncryptionData) {
 		// Save the key to indexedDB
 		const key = await storeEncryptionKey(encryptionKey);
 		if (!key)

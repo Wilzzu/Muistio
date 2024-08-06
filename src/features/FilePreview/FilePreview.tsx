@@ -99,7 +99,7 @@ const FilePreview: FC<FilePreviewProps> = ({
 		if (editorRef?.current) editedFileCache.current = editorRef.current.value;
 		if (!selectedFile || data === editedFileCache.current) return discardAndExit(); // No changes made
 
-		updateFileMutation({ fileId: selectedFile.id, content: editedFileCache.current });
+		updateFileMutation({ fileId: selectedFile.id, value: { content: editedFileCache.current } });
 	};
 
 	function onFileUpdated() {

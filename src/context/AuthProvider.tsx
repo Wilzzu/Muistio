@@ -3,12 +3,12 @@ import { FC, ReactNode, useEffect, useState } from "react";
 import AuthContext from "./AuthContext";
 import { User } from "firebase/auth";
 import { auth, getMetadata } from "../firebase/firebase";
-import { AuthError, Metadata } from "../types/types";
+import { AuthError, EncryptionData } from "../types/types";
 import useIndexedDB from "../hooks/useIndexedDB";
 
 const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
 	const [user, setUser] = useState<User | null>(null);
-	const [encryptionKeyChallenge, setEncryptionKeyChallenge] = useState<Metadata | null>(null);
+	const [encryptionKeyChallenge, setEncryptionKeyChallenge] = useState<EncryptionData | null>(null);
 	const [userDataLoading, setUserDataLoading] = useState(true);
 	const [encryptionKeySet, setEncryptionKeySet] = useState(false);
 	const [error, setError] = useState<AuthError>({ isError: false });

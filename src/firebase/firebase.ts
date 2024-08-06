@@ -14,8 +14,8 @@ import {
 	Timestamp,
 	updateDoc,
 } from "firebase/firestore";
-import { Metadata } from "../types/types";
 import { decrypt, encrypt } from "../lib/encryption";
+import { EncryptionData } from "../types/types";
 
 const firebaseConfig = {
 	apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -39,7 +39,7 @@ export const getMetadata = async (userId: string) => {
 	return await getDoc(doc(db, "users", userId));
 };
 
-export const updateMetadata = async (userId: string, fieldObject: Metadata) => {
+export const updateMetadata = async (userId: string, fieldObject: EncryptionData) => {
 	await updateDoc(doc(db, "users", userId), { encryptionKey: fieldObject });
 	return fieldObject;
 };
@@ -68,7 +68,7 @@ export const addFile = async (
 	// Encrypt and add file content
 	const encrypted = encrypt(content, encryptionKey);
 	await setDoc(doc(db, "users", userId, "files", docRef.id, "encrypted", "file"), {
-		content: encrypted.ciphertext,
+		ciphertext: encrypted.ciphertext,
 		salt: encrypted.salt,
 		nonce: encrypted.nonce,
 	});
@@ -88,43 +88,59 @@ export const getFileContent = async (
 	if (!encryptionKey) throw new Error("Encryption key not found");
 
 	const docRef = await getDoc(doc(db, "users", userId, "files", fileId, "encrypted", "file"));
-	if (!docRef.exists()) return null;
+	if (!docRef.exists()) throw new Error("File not found");
 
 	const data = docRef.data();
-	const decrypted = decrypt(data.content, encryptionKey, data.salt, data.nonce);
+	const decrypted = decrypt(data.ciphertext, encryptionKey, data.salt, data.nonce);
 	return decrypted;
 };
 
 // Update file
-export type UpdateFileObjectType = {
+export type MetadataObject = {
 	dateModified: Timestamp;
 	title?: string;
-	content?: string;
 	size?: number;
 	id?: string;
 };
 
-const createUpdateObject = (title?: string, content?: string) => {
-	const updateObject = <UpdateFileObjectType>{
-		dateModified: serverTimestamp(),
-	};
-	if (title) updateObject.title = title;
-	if (content) {
-		updateObject.content = content;
-		updateObject.size = getFileSize(content);
-	}
-	return updateObject;
+type Content = {
+	plaintext: string;
+	encrypted: EncryptionData;
 };
 
-export const updateFile = async (
-	userId: string,
-	fileId: string,
-	title?: string,
-	content?: string
-) => {
-	const updateObject = createUpdateObject(title, content);
-	await updateDoc(doc(db, "users", userId, "files", fileId), updateObject);
-	return { ...updateObject, dateModified: Timestamp.now(), id: fileId }; // We have to use client's time for this, unless we would need to make a fetch request to get the server time
+type UpdateValue = {
+	title?: string;
+	content?: Content;
+};
+
+const createMetadataObject = (updateValue: UpdateValue) => {
+	const metadataObject = <MetadataObject>{
+		dateModified: serverTimestamp(),
+	};
+	if (updateValue.title) metadataObject.title = updateValue.title;
+	if (updateValue.content) metadataObject.size = getFileSize(updateValue.content.plaintext);
+	return metadataObject;
+};
+
+export const updateFile = async (userId: string, fileId: string, updateValue: UpdateValue) => {
+	// Create metadata object, since it will always be updated
+	const metadataObject = createMetadataObject(updateValue);
+
+	// Update content if it exists
+	if (updateValue.content)
+		await updateDoc(
+			doc(db, "users", userId, "files", fileId, "encrypted", "file"),
+			updateValue.content.encrypted
+		);
+
+	// Update metadata
+	await updateDoc(doc(db, "users", userId, "files", fileId), metadataObject);
+
+	// Return updated file metadata and content
+	return {
+		metadata: { ...metadataObject, dateModified: Timestamp.now(), id: fileId }, // We have to use client's time for this, unless we would need to make a fetch request to get the server time
+		content: updateValue?.content?.plaintext,
+	};
 };
 
 // Delete file
