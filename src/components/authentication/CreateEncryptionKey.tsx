@@ -4,12 +4,15 @@ import Modal from "../common/Modal";
 import TextInput from "../common/TextInput";
 import AuthContext from "../../context/AuthContext";
 import usePasswordStrength from "../../hooks/usePasswordStrength";
-import { PiWarningDuotone } from "react-icons/pi";
-import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import PasswordStrengthBar from "./PasswordStrengthBar";
 import useLogOut from "../../hooks/useLogOut";
 import useUpdateMetadata from "../../hooks/useUpdateMetadata";
-import { Metadata } from "../../types/types";
+import { EncryptionData } from "../../types/types";
+import useIndexedDB from "../../hooks/useIndexedDB";
+import { encodeBase64, encrypt, generateRandomBytes } from "../../lib/encryption";
+import { PiWarningDuotone } from "react-icons/pi";
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
+import { HiOutlineKey } from "react-icons/hi";
 
 type InvalidFieldType = {
 	key: boolean;
@@ -29,23 +32,36 @@ const CreateEncryptionKey = () => {
 	const [showKey, setShowKey] = useState(false);
 	const [showKeyConfirm, setShowKeyConfirm] = useState(false);
 	const [invalidFields, setInvalidFields] = useState<InvalidFieldType>(defaultInvalidFields);
-	const { setEncryptionKeyChallenge } = useContext(AuthContext);
+	const { setEncryptionKeyChallenge, setEncryptionKeySet } = useContext(AuthContext);
 	const { handleLogOut } = useLogOut();
 	const passwordStrength = usePasswordStrength(encryptionKey);
 	const { updateMetadataMutation, isUpdating } = useUpdateMetadata(
 		"Encryption Key",
 		onUpdateSuccess
 	);
+	const { storeEncryptionKey } = useIndexedDB();
 
-	function onUpdateSuccess(updatedObject: Metadata) {
-		setEncryptionKeyChallenge(updatedObject.encryptionKey || null);
+	async function onUpdateSuccess(updatedObject: EncryptionData) {
+		// Save the key to indexedDB
+		const key = await storeEncryptionKey(encryptionKey);
+		if (!key)
+			return setInvalidFields({
+				key: true,
+				confirm: false,
+				reason: "Failed to store the key in IndexedDB",
+			});
+		setEncryptionKeySet(true);
+
+		// Set the encryption key challenge
+		setEncryptionKeyChallenge(updatedObject);
 	}
 
 	const addEncryptionKey = () => {
-		// TODO: Encrypt the key here
+		// Create the encryption key challenge
+		const challenge = encrypt(encodeBase64(generateRandomBytes(16)), encryptionKey);
 
-		// Update key and track state
-		updateMetadataMutation({ encryptionKey: encryptionKey });
+		// Update encryption key challenge and track state
+		updateMetadataMutation(challenge);
 	};
 
 	const validateFieldsAndStrength = () => {
@@ -74,7 +90,9 @@ const CreateEncryptionKey = () => {
 			<section className="flex flex-col gap-5">
 				{/* Title and Description */}
 				<div>
-					<h1 className="font-bold text-2xl mb-4">Create an encryption key</h1>
+					<h1 className="font-bold text-2xl mb-4">
+						<HiOutlineKey className="inline-block mb-1" /> Create an Encryption Key
+					</h1>
 					<p>
 						To secure your files, you need to create an encryption key. This key is used to encrypt
 						and decrypt your files. The key is never sent to our servers, only you know it.

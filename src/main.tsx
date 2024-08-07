@@ -9,6 +9,7 @@ import AuthProvider from "./context/AuthProvider";
 import FilesProvider from "./context/FilesProvider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import NotificationProvider from "./context/NotificationProvider";
+import LandingPage from "./pages/LandingPage";
 
 const router = createBrowserRouter([
 	{
@@ -16,7 +17,8 @@ const router = createBrowserRouter([
 		element: <Root />,
 		errorElement: <ErrorPage />,
 		children: [
-			{ path: "/", element: <Home /> },
+			{ path: "/", element: <LandingPage /> },
+			{ path: "/home", element: <Home /> },
 			{ path: "/file/:fileId", element: <Home /> },
 		],
 	},

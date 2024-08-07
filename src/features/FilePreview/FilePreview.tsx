@@ -12,6 +12,7 @@ import FilesContext from "../../context/FilesContext";
 import useUpdateFile from "../../hooks/useUpdateFile";
 import InnerStatus from "../../components/common/InnerStatus";
 import { AnimatePresence, motion } from "framer-motion";
+import useFetchFileContent from "../../hooks/useFetchFileContent";
 
 const defaultText = "# Add your content here";
 
@@ -42,6 +43,9 @@ const FilePreview: FC<FilePreviewProps> = ({
 	onClick,
 }) => {
 	const { selectedFile } = useContext(FilesContext);
+	const { data, isLoading, isRefetching, isError, error } = useFetchFileContent(
+		selectedFile?.id || null
+	);
 	const { updateFileMutation, isUpdating } = useUpdateFile(onFileUpdated);
 	const [isEditing, setIsEditing] = useState<boolean>(isCreatingNewFile || false);
 	const [isPreviewingEdit, setIsPreviewingEdit] = useState(false);
@@ -51,15 +55,15 @@ const FilePreview: FC<FilePreviewProps> = ({
 	const checkForUnsavedChanges = () => {
 		if (!isEditing || disabled) return false;
 		if (editorRef?.current) editedFileCache.current = editorRef.current.value;
-		if (selectedFile?.content === editedFileCache.current) return false;
+		if (data === editedFileCache.current) return false;
 		if (isCreatingNewFile && editedFileCache.current === defaultText) return false;
 		return true;
 	};
 	const blocker = useUnsavedChangesWarning(checkForUnsavedChanges); // For blocking navigation
 
 	const startEditing = () => {
-		if (isEditing || !selectedFile?.content) return;
-		editedFileCache.current = selectedFile.content;
+		if (isEditing || !data) return;
+		editedFileCache.current = data;
 		setIsEditing(true);
 	};
 
@@ -93,9 +97,9 @@ const FilePreview: FC<FilePreviewProps> = ({
 
 	const saveEdits = () => {
 		if (editorRef?.current) editedFileCache.current = editorRef.current.value;
-		if (!selectedFile || selectedFile?.content === editedFileCache.current) return discardAndExit(); // No changes made
+		if (!selectedFile || data === editedFileCache.current) return discardAndExit(); // No changes made
 
-		updateFileMutation({ fileId: selectedFile.id, content: editedFileCache.current });
+		updateFileMutation({ fileId: selectedFile.id, value: { content: editedFileCache.current } });
 	};
 
 	function onFileUpdated() {
@@ -130,7 +134,8 @@ const FilePreview: FC<FilePreviewProps> = ({
 							hasUnsavedChanges={checkForUnsavedChanges}
 							discardAndExit={discardAndExit}
 							showOnlyEditButton={isCreatingNewFile}
-							disabled={isUpdating}
+							disabled={isUpdating || isLoading || isRefetching}
+							content={data}
 						/>
 						{/* Main content with scroll */}
 						<section
@@ -182,7 +187,7 @@ const FilePreview: FC<FilePreviewProps> = ({
 									)}
 								</>
 							) : (
-								<MarkdownPreview content={selectedFile?.content || "No content"} />
+								<MarkdownPreview content={data || "No content"} />
 							)}
 						</section>
 					</div>

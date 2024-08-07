@@ -5,7 +5,6 @@ export type File = {
 	title: string;
 	dateModified: Timestamp;
 	size: number;
-	content: string;
 };
 
 export type FilteredList = {
@@ -13,8 +12,10 @@ export type FilteredList = {
 	isSearching: boolean;
 };
 
-export type Metadata = {
-	encryptionKey?: string;
+export type EncryptionData = {
+	ciphertext: string;
+	salt: string;
+	nonce: string;
 };
 
 export type ShowNotificationProps = {

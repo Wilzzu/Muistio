@@ -20,7 +20,6 @@ const useFetchFiles = () => {
 				title: data.title,
 				dateModified: data.dateModified,
 				size: data.size,
-				content: data.content,
 			});
 		});
 		setFiles(allFiles);
@@ -31,7 +30,9 @@ const useFetchFiles = () => {
 		queryKey: ["files", user?.uid],
 		queryFn: fetchFiles,
 		enabled: !!user?.uid,
+		staleTime: 1000 * 60 * 5,
 		retry: 2,
+		refetchOnWindowFocus: "always",
 	});
 
 	return { isLoading, isRefetching, isError, error };

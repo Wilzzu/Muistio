@@ -17,7 +17,7 @@ const getFileSize = (content: string) => {
 // Add metadata for new user
 export const newuser = functions.auth.user().onCreate((user) => {
 	userMetadata(user.uid).set({
-		encryptionKey: "",
+		encryptionKey: {},
 		totalFileSize: 0,
 	});
 });

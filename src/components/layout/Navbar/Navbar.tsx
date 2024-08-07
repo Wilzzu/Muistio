@@ -15,7 +15,7 @@ const Navbar = () => {
 			<nav className="relative flex justify-between items-center px-6 h-16">
 				<ul className="flex gap-4">
 					<li>
-						<Button link="/">
+						<Button link="/home">
 							<BiHomeAlt2 />
 							Home
 						</Button>

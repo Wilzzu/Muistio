@@ -1,4 +1,5 @@
-import { FC, KeyboardEvent, useContext, useRef, useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { FC, KeyboardEvent, useContext, useEffect, useRef, useState } from "react";
 import { LuCalendar } from "react-icons/lu";
 import { PiFileText } from "react-icons/pi";
 import ButtonMoreOptions from "../../common/ButtonMoreOptions";
@@ -11,6 +12,8 @@ import { cn } from "../../../lib/utils";
 import FilesContext from "../../../context/FilesContext";
 import useDeleteFile from "../../../hooks/useDeleteFile";
 import useUpdateFile from "../../../hooks/useUpdateFile";
+import useFetchFileContent from "../../../hooks/useFetchFileContent";
+import NotificationContext from "../../../context/NotificationContext";
 
 type FileButtonProps = {
 	file: File;
@@ -20,11 +23,14 @@ const FileButton: FC<FileButtonProps> = ({ file }) => {
 	const [isRenaming, setIsRenaming] = useState(false);
 	const [showWarning, setShowWarning] = useState(false);
 	const [renameValue, setRenameValue] = useState(file.title);
+	const [isDownloading, setIsDownloading] = useState(false);
 	const escPressed = useRef<boolean>(false);
 	const navigate = useNavigate();
 	const { selectedFile } = useContext(FilesContext);
 	const { deleteFileMutation, isDeleting } = useDeleteFile(file.id);
 	const { updateFileMutation, isUpdating } = useUpdateFile(() => setRenameValue(""));
+	const { data, isRefetching, isError, error, refetch } = useFetchFileContent(file.id, false);
+	const { showNotification } = useContext(NotificationContext);
 
 	const startRenaming = () => {
 		setRenameValue(file.title);
@@ -35,7 +41,7 @@ const FileButton: FC<FileButtonProps> = ({ file }) => {
 		setIsRenaming(false);
 
 		if (renameValue.trim() === file.title.trim()) return;
-		updateFileMutation({ fileId: file.id, title: renameValue });
+		updateFileMutation({ fileId: file.id, value: { title: renameValue } });
 	};
 
 	const onInputKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -63,10 +69,18 @@ const FileButton: FC<FileButtonProps> = ({ file }) => {
 		return parseFloat((bytes / Math.pow(1024, i)).toFixed(2)) + " " + sizes[i];
 	};
 
-	const downloadFile = () => {
-		const blob = new Blob([file.content], { type: "text/plain" });
-		const url = URL.createObjectURL(blob);
+	const downloadFile = async () => {
+		if (!isDownloading) showNotification({ content: "Downloading file...", disableAutoHide: true });
 
+		// If data is not available, refetch it and start download when ready
+		if (!data) {
+			setIsDownloading(true);
+			return refetch();
+		}
+
+		// Create blob and download the file
+		const blob = new Blob([data], { type: "text/plain" });
+		const url = URL.createObjectURL(blob);
 		const link = document.createElement("a");
 		link.href = url;
 		link.download = file.title;
@@ -76,6 +90,8 @@ const FileButton: FC<FileButtonProps> = ({ file }) => {
 
 		// Revoke the object URL after download has started
 		URL.revokeObjectURL(url);
+		showNotification({ content: "Downloading file..." }); // Hide the previous notification
+		setIsDownloading(false);
 	};
 
 	const deleteFile = () => {
@@ -83,6 +99,22 @@ const FileButton: FC<FileButtonProps> = ({ file }) => {
 		setShowWarning(false);
 		console.log("Deleting file:", file.title);
 	};
+
+	// Used to start a download when the data is ready after user clicks download
+	useEffect(() => {
+		if (isDownloading && data) {
+			downloadFile();
+			setIsDownloading(false);
+		}
+	}, [data, isDownloading, isRefetching]);
+
+	// Show error notification if download fails
+	useEffect(() => {
+		if (isError) {
+			showNotification({ content: `Error downloading file: ${error?.message}`, warning: true });
+			setIsDownloading(false);
+		}
+	}, [isError, error]);
 
 	const options = [
 		{ title: "Rename", action: startRenaming },
@@ -102,7 +134,7 @@ const FileButton: FC<FileButtonProps> = ({ file }) => {
 			)}>
 			{/* File information */}
 			<button
-				onClick={() => navigate(file.id === selectedFile?.id ? `/` : `/file/${file.id}`)}
+				onClick={() => navigate(file.id === selectedFile?.id ? `/home` : `/file/${file.id}`)}
 				disabled={isRenaming || isDeleting}
 				className={cn(
 					"h-full w-full flex flex-col p-4 bg-gradient-radial from-[#151A22] to-[#1B1D26]/95 rounded-xl",

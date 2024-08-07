@@ -40,7 +40,7 @@ const NotificationGlobal = () => {
 									className={cn(
 										"p-3 px-6 bg-gradient-radial from-[#077bff] from-40% to-accent text-sm font-semibold drop-shadow-md rounded-xl",
 										{
-											"from-red-700/50 to-red-500/50": warning,
+											"from-red-700/50 to-red-500/50 pointer-events-auto": warning,
 										}
 									)}>
 									<p className="shadow-black/40 drop-shadow-text-sm">{content}</p>

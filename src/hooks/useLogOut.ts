@@ -3,11 +3,15 @@ import { getAuth, signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import FilesContext from "../context/FilesContext";
 import { useContext } from "react";
+import useIndexedDB from "./useIndexedDB";
+import AuthContext from "../context/AuthContext";
 
 const useLogOut = () => {
 	const navigate = useNavigate();
 	const queryClient = useQueryClient();
 	const { setFiles, setSelectedFile } = useContext(FilesContext);
+	const { setEncryptionKeyChallenge } = useContext(AuthContext);
+	const { clearEncryptionKey } = useIndexedDB();
 
 	const handleLogOut = async () => {
 		const auth = getAuth();
@@ -16,7 +20,9 @@ const useLogOut = () => {
 				queryClient.removeQueries();
 				setFiles([]);
 				setSelectedFile(null);
-				navigate("/");
+				setEncryptionKeyChallenge(null);
+				clearEncryptionKey();
+				navigate("/home");
 			})
 			.catch((error) => console.error(error));
 	};

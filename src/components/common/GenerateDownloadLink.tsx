@@ -1,8 +1,9 @@
-import { FC, ReactNode, useEffect, useState } from "react";
+import { FC, ReactNode, useContext, useEffect, useState } from "react";
+import NotificationContext from "../../context/NotificationContext";
 
 type GenerateDownloadLinkProps = {
 	title: string;
-	content: string;
+	content: string | undefined;
 	disabled?: boolean;
 	children: ReactNode;
 };
@@ -14,6 +15,7 @@ const GenerateDownloadLink: FC<GenerateDownloadLinkProps> = ({
 	children,
 }) => {
 	const [downloadUrl, setDownloadUrl] = useState("");
+	const { showNotification } = useContext(NotificationContext);
 
 	// Revoke the object URL after download has started
 	useEffect(() => {
@@ -24,6 +26,10 @@ const GenerateDownloadLink: FC<GenerateDownloadLinkProps> = ({
 
 	// Create file and download link
 	const handleDownload = () => {
+		if (!content) {
+			setDownloadUrl("");
+			return showNotification({ content: "File content is empty", warning: true });
+		}
 		const file = new Blob([content], { type: "text/plain" });
 		const url = URL.createObjectURL(file);
 		setDownloadUrl(url);

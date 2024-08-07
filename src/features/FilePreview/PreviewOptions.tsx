@@ -7,6 +7,7 @@ import Modal from "../../components/common/Modal";
 import GenerateDownloadLink from "../../components/common/GenerateDownloadLink";
 import { File } from "../../types/types";
 import useDeleteFile from "../../hooks/useDeleteFile";
+import { cn } from "../../lib/utils";
 
 type PreviewOptionsProps = {
 	selectedFile: File | null;
@@ -19,6 +20,7 @@ type PreviewOptionsProps = {
 	discardAndExit: () => void;
 	showOnlyEditButton?: boolean;
 	disabled?: boolean;
+	content?: string | undefined;
 };
 
 const PreviewOptions: FC<PreviewOptionsProps> = ({
@@ -32,6 +34,7 @@ const PreviewOptions: FC<PreviewOptionsProps> = ({
 	discardAndExit,
 	showOnlyEditButton,
 	disabled,
+	content,
 }) => {
 	const [showUnsavedWarning, setShowUnsavedWarning] = useState(false);
 	const [showDeleteWarning, setShowDeleteWarning] = useState(false);
@@ -54,7 +57,11 @@ const PreviewOptions: FC<PreviewOptionsProps> = ({
 
 	return (
 		<>
-			<div className="absolute right-4 top-4 flex gap-2 opacity-50 hover:opacity-100 duration-150">
+			<div
+				className={cn(
+					"absolute right-4 top-4 flex gap-2 opacity-50 hover:opacity-100 duration-150",
+					{ "pointer-events-none": disabled }
+				)}>
 				{isEditing ? (
 					<>
 						<Button
@@ -94,8 +101,8 @@ const PreviewOptions: FC<PreviewOptionsProps> = ({
 							<>
 								<GenerateDownloadLink
 									title={selectedFile.title}
-									content={selectedFile.content}
-									disabled={disabled || isDeleting}>
+									content={content}
+									disabled={disabled || isDeleting || !content}>
 									<Button style={{ main: "p-2 text-base" }} disabled={disabled || isDeleting}>
 										<FiDownload className="text-white" />
 									</Button>
