@@ -8,7 +8,7 @@ const useFetchFileContent = (fileId: string | null, enabled: boolean = true) => 
 	const { user } = useContext(AuthContext);
 	const { getEncryptionKey } = useIndexedDB();
 
-	const fetchFiles = async () => {
+	const fetchFileContent = async () => {
 		if (!user?.uid) throw new Error("User not found");
 		if (!fileId) throw new Error("File not found");
 		console.log("Fetching");
@@ -18,7 +18,7 @@ const useFetchFileContent = (fileId: string | null, enabled: boolean = true) => 
 
 	const { data, isLoading, isRefetching, isError, error, refetch } = useQuery({
 		queryKey: ["fileContent", fileId],
-		queryFn: fetchFiles,
+		queryFn: fetchFileContent,
 		enabled: !!user?.uid && !!fileId && enabled,
 		retry: 2,
 		staleTime: 1000 * 60 * 5,

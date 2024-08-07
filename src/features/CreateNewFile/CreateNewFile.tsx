@@ -1,19 +1,13 @@
 import { FC, useContext, useState } from "react";
 import { LuPlus } from "react-icons/lu";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import AuthContext from "../../context/AuthContext";
-import { addFile } from "../../firebase/firebase";
 import Button from "../../components/common/Button";
 import FilePreview from "../FilePreview/FilePreview";
 import Modal from "../../components/common/Modal";
-import { useNavigate } from "react-router-dom";
-import FilesContext from "../../context/FilesContext";
-import { Timestamp } from "firebase/firestore";
 import TextInput from "../../components/common/TextInput";
 import InnerStatus from "../../components/common/InnerStatus";
 import { motion, AnimatePresence } from "framer-motion";
-import NotificationContext from "../../context/NotificationContext";
-import useIndexedDB from "../../hooks/useIndexedDB";
+import useCreateFile from "../../hooks/useCreateFile";
 
 type CreateNewFileProps = {
 	closeModal: () => void;
@@ -31,49 +25,11 @@ const defaultInvalidFields = {
 
 const CreateNewFile: FC<CreateNewFileProps> = ({ closeModal }) => {
 	const { user } = useContext(AuthContext);
-	const { setSelectedFile } = useContext(FilesContext);
-	const { showNotification } = useContext(NotificationContext);
-	const { getEncryptionKey } = useIndexedDB();
-	const queryClient = useQueryClient();
-	const navigate = useNavigate();
 	const [title, setTitle] = useState("");
 	const [content, setContent] = useState("");
 	const [showWarning, setShowWarning] = useState(false);
-	const [isDisabled, setIsDisabled] = useState(false);
-	const [errorTimeout, setErrorTimeout] = useState<NodeJS.Timeout | null>(null);
 	const [invalidFields, setInvalidFields] = useState<InvalidFieldType>(defaultInvalidFields);
-
-	const onSuccess = (newFileId: string) => {
-		queryClient.invalidateQueries({ queryKey: ["files", user?.uid] });
-		setSelectedFile({ id: newFileId, dateModified: Timestamp.now(), size: 1, title });
-		navigate(`/file/${newFileId}`);
-		showNotification({ content: "File created successfully!" });
-		closeModal();
-	};
-
-	const onError = () => {
-		setIsDisabled(false);
-		if (errorTimeout) clearTimeout(errorTimeout);
-		const timeout = setTimeout(() => {
-			addFileMutation.reset();
-		}, 6000);
-		setErrorTimeout(timeout);
-	};
-
-	// Use React Query to keep track of mutation state
-	const addFileMutation = useMutation({
-		mutationFn: async ({
-			userId,
-			title,
-			content,
-		}: {
-			userId: string;
-			title: string;
-			content: string;
-		}) => addFile(userId, title, content, await getEncryptionKey()),
-		onSuccess: (newFileId: string) => onSuccess(newFileId),
-		onError: onError,
-	});
+	const { createFileMutation, isPending, isError, error } = useCreateFile(closeModal);
 
 	const validateFieldsAndUpload = () => {
 		// Check for invalid fields
@@ -86,8 +42,7 @@ const CreateNewFile: FC<CreateNewFileProps> = ({ closeModal }) => {
 
 		// Upload file
 		if (!user) return;
-		setIsDisabled(true);
-		addFileMutation.mutate({ userId: user.uid, title, content });
+		createFileMutation({ userId: user.uid, title, content });
 	};
 
 	const clearInvalidField = (field: string) => {
@@ -103,7 +58,7 @@ const CreateNewFile: FC<CreateNewFileProps> = ({ closeModal }) => {
 	return (
 		<>
 			<Modal
-				closeModalFunction={isDisabled ? () => false : checkForUnsavedChanges}
+				closeModalFunction={isPending ? () => false : checkForUnsavedChanges}
 				styleOverride="relative max-w-[800px] max-h-[calc(100dvh-10rem)]">
 				{/* Main */}
 				<div className="flex flex-col mb-2">
@@ -114,18 +69,18 @@ const CreateNewFile: FC<CreateNewFileProps> = ({ closeModal }) => {
 							id="muistioTitle"
 							placeholder="Set file name..."
 							style={{ main: "bg-secondary/85 to-secondary/90" }}
-							disabled={isDisabled}
+							disabled={isPending}
 							warning={invalidFields.title}
 							onClick={() => clearInvalidField("title")}
 						/>
 						<div className="flex gap-3">
-							<Button onClick={checkForUnsavedChanges} disabled={isDisabled}>
+							<Button onClick={checkForUnsavedChanges} disabled={isPending}>
 								Cancel
 							</Button>
 							<Button
 								highlight
 								onClick={validateFieldsAndUpload}
-								disabled={isDisabled}
+								disabled={isPending}
 								style={{ main: "bg-opacity-80" }}>
 								<LuPlus /> Add file
 							</Button>
@@ -134,22 +89,18 @@ const CreateNewFile: FC<CreateNewFileProps> = ({ closeModal }) => {
 					<FilePreview
 						isCreatingNewFile
 						setContent={setContent}
-						disabled={isDisabled}
+						disabled={isPending}
 						warning={invalidFields.content}
 						onClick={() => clearInvalidField("content")}
 					/>
 				</div>
 				{/* Inner Notification */}
 				<AnimatePresence>
-					{(addFileMutation.isPending || addFileMutation.isError) && (
+					{(isPending || isError) && (
 						<motion.div className="absolute left-0 top-0 w-full flex justify-center pointer-events-none overflow-hidden">
 							<InnerStatus
-								content={
-									addFileMutation.isPending
-										? "Creating file..."
-										: addFileMutation.isError && `Error: ${addFileMutation.error.message}`
-								}
-								warning={addFileMutation.isError}
+								content={isPending ? "Creating file..." : isError ? `Error: ${error?.message}` : ""}
+								warning={isError}
 								height="md"
 							/>
 						</motion.div>

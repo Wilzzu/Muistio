@@ -134,7 +134,8 @@ const FilePreview: FC<FilePreviewProps> = ({
 							hasUnsavedChanges={checkForUnsavedChanges}
 							discardAndExit={discardAndExit}
 							showOnlyEditButton={isCreatingNewFile}
-							disabled={isUpdating}
+							disabled={isUpdating || isLoading || isRefetching}
+							content={data}
 						/>
 						{/* Main content with scroll */}
 						<section

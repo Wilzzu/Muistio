@@ -8,6 +8,7 @@ import { decrypt } from "../../lib/encryption";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { ImSpinner2 } from "react-icons/im";
 import useIndexedDB from "../../hooks/useIndexedDB";
+import { HiOutlineKey } from "react-icons/hi";
 
 const ValidateEncryptionKey = () => {
 	const [encryptionKey, setEncryptionKey] = useState("");
@@ -66,7 +67,9 @@ const ValidateEncryptionKey = () => {
 			<section className="flex flex-col gap-2">
 				{/* Title and Description */}
 				<div>
-					<h1 className="font-bold text-2xl mb-4">Verify Encryption Key</h1>
+					<h1 className="font-bold text-2xl mb-4">
+						<HiOutlineKey className="inline-block mb-1" /> Verify your Encryption Key
+					</h1>
 					<p>
 						Enter your encryption key to access your files. The key is never sent to our servers.
 						Decrypting your files is done locally on your device with the key you provide.

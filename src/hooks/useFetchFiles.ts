@@ -30,7 +30,9 @@ const useFetchFiles = () => {
 		queryKey: ["files", user?.uid],
 		queryFn: fetchFiles,
 		enabled: !!user?.uid,
+		staleTime: 1000 * 60 * 5,
 		retry: 2,
+		refetchOnWindowFocus: "always",
 	});
 
 	return { isLoading, isRefetching, isError, error };

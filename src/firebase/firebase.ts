@@ -51,7 +51,7 @@ const getFileSize = (content: string) => {
 };
 
 // Add file metadata and encrypted content
-export const addFile = async (
+export const createFile = async (
 	userId: string,
 	title: string,
 	content: string,
@@ -73,7 +73,15 @@ export const addFile = async (
 		nonce: encrypted.nonce,
 	});
 
-	return docRef.id;
+	return {
+		metadata: {
+			id: docRef.id,
+			dateModified: Timestamp.now(),
+			size: getFileSize(content),
+			title,
+		},
+		content,
+	};
 };
 
 export const getFiles = async (userId: string) => {

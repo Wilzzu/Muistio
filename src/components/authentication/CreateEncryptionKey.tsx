@@ -4,14 +4,15 @@ import Modal from "../common/Modal";
 import TextInput from "../common/TextInput";
 import AuthContext from "../../context/AuthContext";
 import usePasswordStrength from "../../hooks/usePasswordStrength";
-import { PiWarningDuotone } from "react-icons/pi";
-import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import PasswordStrengthBar from "./PasswordStrengthBar";
 import useLogOut from "../../hooks/useLogOut";
 import useUpdateMetadata from "../../hooks/useUpdateMetadata";
 import { EncryptionData } from "../../types/types";
 import useIndexedDB from "../../hooks/useIndexedDB";
 import { encodeBase64, encrypt, generateRandomBytes } from "../../lib/encryption";
+import { PiWarningDuotone } from "react-icons/pi";
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
+import { HiOutlineKey } from "react-icons/hi";
 
 type InvalidFieldType = {
 	key: boolean;
@@ -89,7 +90,9 @@ const CreateEncryptionKey = () => {
 			<section className="flex flex-col gap-5">
 				{/* Title and Description */}
 				<div>
-					<h1 className="font-bold text-2xl mb-4">Create Encryption Key</h1>
+					<h1 className="font-bold text-2xl mb-4">
+						<HiOutlineKey className="inline-block mb-1" /> Create an Encryption Key
+					</h1>
 					<p>
 						To secure your files, you need to create an encryption key. This key is used to encrypt
 						and decrypt your files. The key is never sent to our servers, only you know it.

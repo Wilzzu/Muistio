@@ -23,7 +23,7 @@ const useDeleteFile = (fileId: string | undefined) => {
 		setFiles((prevFiles) => prevFiles.filter((file) => file.id !== fileId));
 		if (selectedFile?.id === fileId) {
 			setSelectedFile(null);
-			navigate("/");
+			navigate("/home");
 		}
 		showNotification({ content: "File deleted!" });
 	};
