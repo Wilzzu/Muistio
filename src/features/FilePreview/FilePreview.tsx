@@ -1,31 +1,17 @@
-import Markdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import rehypeExternalLinks from "rehype-external-links";
 import PreviewOptions from "./PreviewOptions";
 import { Dispatch, FC, SetStateAction, useContext, useRef, useState } from "react";
 import Modal from "../../components/common/Modal";
 import Button from "../../components/common/Button";
 import useUnsavedChangesWarning from "../../hooks/useUnsavedChangesWarning";
-import ReactTextareaAutosize from "react-textarea-autosize";
 import { cn } from "../../lib/utils";
 import FilesContext from "../../context/FilesContext";
 import useUpdateFile from "../../hooks/useUpdateFile";
 import InnerStatus from "../../components/common/InnerStatus";
 import { AnimatePresence, motion } from "framer-motion";
 import useFetchFileContent from "../../hooks/useFetchFileContent";
+import ContentEditorAndPreview from "./ContentEditorAndPreview";
 
 const defaultText = "# Add your content here";
-
-const MarkdownPreview: FC<{ content: string }> = ({ content }) => (
-	<Markdown
-		remarkPlugins={[remarkGfm]}
-		rehypePlugins={[[rehypeExternalLinks, { target: "_blank" }]]}
-		className={
-			"prose prose-invert font-light text-white prose-headings:mt-6 prose-headings:mb-[0.85rem] prose-h1:text-2xl prose-h1:font-medium prose-h1:border-b-[1px] prose-h1:border-accent prose-h1:pb-1 prose-h2:text-xl prose-h2:font-medium prose-h3:text-lg prose-h3:font-medium prose-p:leading-6 prose-a:text-[#4dbaf8] prose-a:selection:text-black marker:text-accent prose-thead:border-accent prose-tr:border-accent break-words pr-2"
-		}>
-		{content}
-	</Markdown>
-);
 
 type FilePreviewProps = {
 	isCreatingNewFile?: boolean;
@@ -123,28 +109,37 @@ const FilePreview: FC<FilePreviewProps> = ({
 						{ "from-red-600 via-red-600/20 to-red-600": warning }
 					)}>
 					{/* Main content wrapper */}
-					<div className="relative w-full py-2 pl-5 pr-[0.35rem] rounded-2xl flex flex-col bg-gradient-radial from-secondary from-40% to-secondary/90">
-						<PreviewOptions
-							selectedFile={selectedFile}
-							isEditing={isEditing}
-							startEditing={startEditing}
-							saveEdits={saveEdits}
-							isPreviewingEdit={isPreviewingEdit}
-							toggleEditPreview={toggleEditPreview}
-							hasUnsavedChanges={checkForUnsavedChanges}
-							discardAndExit={discardAndExit}
-							showOnlyEditButton={isCreatingNewFile}
-							disabled={isUpdating || isLoading || isRefetching}
-							content={data}
-						/>
+					<div
+						className={cn(
+							"relative w-full pt-6 pb-2 pl-5 pr-[0.35rem] rounded-2xl flex flex-col bg-gradient-radial from-secondary from-40% to-secondary/90 duration-700",
+							{ "py-2": !isEditing },
+							{ "pt-4 pb-2": isCreatingNewFile }
+						)}>
+						{/* Preview Options */}
+						{!isLoading && !isError && !isRefetching && (
+							<PreviewOptions
+								selectedFile={selectedFile}
+								isEditing={isEditing}
+								startEditing={startEditing}
+								saveEdits={saveEdits}
+								isPreviewingEdit={isPreviewingEdit}
+								toggleEditPreview={toggleEditPreview}
+								hasUnsavedChanges={checkForUnsavedChanges}
+								discardAndExit={discardAndExit}
+								showOnlyEditButton={isCreatingNewFile}
+								disabled={isUpdating || isLoading || isRefetching}
+								content={data}
+							/>
+						)}
 						{/* Main content with scroll */}
 						<section
 							onDoubleClick={handleDoubleClick}
 							className={cn(
-								"h-[calc(100dvh-7.6rem)] overflow-y-scroll scrollbar scrollbar-w-[6px] scrollbar-thumb-primaryHighlight/50 scrollbar-thumb-rounded-full",
+								"h-[calc(100dvh-8.6rem)] overflow-y-scroll scrollbar scrollbar-w-[6px] scrollbar-thumb-primaryHighlight/50 scrollbar-thumb-rounded-full duration-700",
 								{
-									"h-fit min-h-48 max-h-[calc(100dvh-20rem)]": isCreatingNewFile,
-								}
+									"h-fit min-h-56 max-h-[calc(100dvh-20rem)]": isCreatingNewFile,
+								},
+								{ "h-[calc(100dvh-7.6rem)]": !isEditing }
 							)}
 							onClick={onClick}>
 							{/* Status */}
@@ -163,32 +158,20 @@ const FilePreview: FC<FilePreviewProps> = ({
 								)}
 							</AnimatePresence>
 							{/* Editor and Preview */}
-							{isEditing ? (
-								<>
-									{isPreviewingEdit ? (
-										<MarkdownPreview content={editedFileCache.current} />
-									) : (
-										<ReactTextareaAutosize
-											ref={editorRef}
-											name="muistioFileEditor"
-											id="muistioFileEditor"
-											disabled={disabled}
-											defaultValue={editedFileCache.current}
-											className={cn(
-												"w-full h-fit bg-transparent resize-none outline-none disabled:opacity-50",
-												{
-													"min-h-44": isCreatingNewFile,
-												}
-											)}
-											onChange={(e) =>
-												isCreatingNewFile && setContent && setContent(e.target.value)
-											}
-										/>
-									)}
-								</>
-							) : (
-								<MarkdownPreview content={data || "No content"} />
-							)}
+							<ContentEditorAndPreview
+								isEditing={isEditing}
+								isPreviewingEdit={isPreviewingEdit}
+								isCreatingNewFile={isCreatingNewFile}
+								editorRef={editorRef}
+								editedFileCache={editedFileCache}
+								setContent={setContent}
+								disabled={disabled}
+								isLoading={isLoading}
+								isRefetching={isRefetching}
+								isError={isError}
+								error={error}
+								data={data}
+							/>
 						</section>
 					</div>
 				</div>
