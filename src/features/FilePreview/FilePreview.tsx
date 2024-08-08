@@ -39,7 +39,7 @@ const FilePreview: FC<FilePreviewProps> = ({
 	const editorRef = useRef<HTMLTextAreaElement>(null);
 
 	const checkForUnsavedChanges = () => {
-		if (!isEditing || disabled) return false;
+		if (!isEditing || disabled || isCreatingNewFile) return false;
 		if (editorRef?.current) editedFileCache.current = editorRef.current.value;
 		if (data === editedFileCache.current) return false;
 		if (isCreatingNewFile && editedFileCache.current === defaultText) return false;
@@ -165,7 +165,7 @@ const FilePreview: FC<FilePreviewProps> = ({
 								editorRef={editorRef}
 								editedFileCache={editedFileCache}
 								setContent={setContent}
-								disabled={disabled}
+								disabled={disabled || isUpdating || isLoading || isRefetching}
 								isLoading={isLoading}
 								isRefetching={isRefetching}
 								isError={isError}

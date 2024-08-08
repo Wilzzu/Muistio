@@ -22,13 +22,16 @@ type ContentEditorAndPreviewProps = {
 	data: string | undefined;
 };
 
-const MarkdownPreview: FC<{ content: string }> = ({ content }) => (
+const MarkdownPreview: FC<{ content: string; disabled?: boolean }> = ({ content, disabled }) => (
 	<Markdown
 		remarkPlugins={[remarkGfm]}
 		rehypePlugins={[[rehypeExternalLinks, { target: "_blank" }]]}
-		className={
-			"prose prose-invert font-light text-white prose-headings:mt-6 prose-headings:mb-[0.85rem] prose-h1:text-2xl prose-h1:font-medium prose-h1:border-b-[1px] prose-h1:border-accent prose-h1:pb-1 prose-h2:text-xl prose-h2:font-medium prose-h3:text-lg prose-h3:font-medium prose-p:leading-6 prose-a:text-[#4dbaf8] prose-a:selection:text-black marker:text-accent prose-thead:border-accent prose-tr:border-accent break-words pr-2"
-		}>
+		className={cn(
+			"prose prose-invert font-light text-white prose-headings:mt-6 prose-headings:mb-[0.85rem] prose-h1:text-2xl prose-h1:font-medium prose-h1:border-b-[1px] prose-h1:border-accent prose-h1:pb-1 prose-h2:text-xl prose-h2:font-medium prose-h3:text-lg prose-h3:font-medium prose-p:leading-6 prose-a:text-[#4dbaf8] prose-a:selection:text-black marker:text-accent prose-thead:border-accent prose-tr:border-accent break-words pr-2",
+			{
+				"animate-pulse pointer-events-none select-none": disabled,
+			}
+		)}>
 		{content}
 	</Markdown>
 );
@@ -53,7 +56,7 @@ const ContentEditorAndPreview: FC<ContentEditorAndPreviewProps> = ({
 				<IoIosSad className="text-5xl text-warning" />
 				<div className="text-center font-semibold">
 					<h1 className="text-xl text-warning">Error fetching file content!</h1>
-					<p className="text-sm opacity-80">dawdj aiwj dawoij oij{error?.message}</p>
+					<p className="text-sm opacity-80">{error?.message}</p>
 				</div>
 			</div>
 		);
@@ -66,7 +69,7 @@ const ContentEditorAndPreview: FC<ContentEditorAndPreviewProps> = ({
 			</div>
 		);
 	}
-	if (!isEditing) return <MarkdownPreview content={data || "No content"} />;
+	if (!isEditing) return <MarkdownPreview content={data || "No content"} disabled={disabled} />;
 	if (!isPreviewingEdit) {
 		return (
 			<ReactTextareaAutosize
@@ -76,7 +79,7 @@ const ContentEditorAndPreview: FC<ContentEditorAndPreviewProps> = ({
 				disabled={disabled}
 				defaultValue={editedFileCache.current}
 				className={cn(
-					"w-full h-fit bg-transparent resize-none outline-none disabled:opacity-50 overflow-hidden",
+					"w-full h-fit bg-transparent resize-none outline-none overflow-hidden disabled:opacity-80 disabled:animate-pulse disabled:pointer-events-none disabled:select-none",
 					{
 						"min-h-44": isCreatingNewFile,
 					}
@@ -85,7 +88,7 @@ const ContentEditorAndPreview: FC<ContentEditorAndPreviewProps> = ({
 			/>
 		);
 	}
-	return <MarkdownPreview content={editedFileCache.current} />;
+	return <MarkdownPreview content={editedFileCache.current} disabled={disabled} />;
 };
 
 export default ContentEditorAndPreview;
