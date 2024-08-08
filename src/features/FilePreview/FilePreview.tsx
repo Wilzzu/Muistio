@@ -10,8 +10,7 @@ import InnerStatus from "../../components/common/InnerStatus";
 import { AnimatePresence, motion } from "framer-motion";
 import useFetchFileContent from "../../hooks/useFetchFileContent";
 import ContentEditorAndPreview from "./ContentEditorAndPreview";
-
-const defaultText = "# Add your content here";
+import useKeyboardSave from "../../hooks/useKeyboardSave";
 
 type FilePreviewProps = {
 	isCreatingNewFile?: boolean;
@@ -35,14 +34,15 @@ const FilePreview: FC<FilePreviewProps> = ({
 	const { updateFileMutation, isUpdating } = useUpdateFile(onFileUpdated);
 	const [isEditing, setIsEditing] = useState<boolean>(isCreatingNewFile || false);
 	const [isPreviewingEdit, setIsPreviewingEdit] = useState(false);
-	const editedFileCache = useRef<string>(defaultText);
+	const editedFileCache = useRef<string>("");
 	const editorRef = useRef<HTMLTextAreaElement>(null);
+	useKeyboardSave(saveEdits, isEditing);
 
 	const checkForUnsavedChanges = () => {
 		if (!isEditing || disabled || isCreatingNewFile) return false;
 		if (editorRef?.current) editedFileCache.current = editorRef.current.value;
 		if (data === editedFileCache.current) return false;
-		if (isCreatingNewFile && editedFileCache.current === defaultText) return false;
+		if (isCreatingNewFile && !editedFileCache.current) return false;
 		return true;
 	};
 	const blocker = useUnsavedChangesWarning(checkForUnsavedChanges); // For blocking navigation
@@ -81,12 +81,18 @@ const FilePreview: FC<FilePreviewProps> = ({
 		setIsEditing(false);
 	};
 
-	const saveEdits = () => {
+	function saveEdits() {
+		// Set cache to current value
 		if (editorRef?.current) editedFileCache.current = editorRef.current.value;
-		if (!selectedFile || data === editedFileCache.current) return discardAndExit(); // No changes made
 
+		// If no changes made
+		if (!selectedFile || !editedFileCache.current || data === editedFileCache.current) {
+			return discardAndExit();
+		}
+
+		// Update file
 		updateFileMutation({ fileId: selectedFile.id, value: { content: editedFileCache.current } });
-	};
+	}
 
 	function onFileUpdated() {
 		console.log("File updated");
