@@ -122,7 +122,7 @@ const FilePreview: FC<FilePreviewProps> = ({
 							{ "pt-4 pb-2": isCreatingNewFile }
 						)}>
 						{/* Preview Options */}
-						{!isLoading && !isError && !isRefetching && (
+						{(isCreatingNewFile || (!isLoading && !isError && !isRefetching)) && (
 							<PreviewOptions
 								selectedFile={selectedFile}
 								isEditing={isEditing}
@@ -133,7 +133,9 @@ const FilePreview: FC<FilePreviewProps> = ({
 								hasUnsavedChanges={checkForUnsavedChanges}
 								discardAndExit={discardAndExit}
 								showOnlyEditButton={isCreatingNewFile}
-								disabled={isUpdating || isLoading || isRefetching}
+								disabled={
+									((isLoading || isRefetching || isUpdating) && !isCreatingNewFile) || disabled
+								}
 								content={data}
 							/>
 						)}
