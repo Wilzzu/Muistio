@@ -2,9 +2,9 @@ import Button from "../../common/Button";
 import { LuPlus } from "react-icons/lu";
 import { MdSort } from "react-icons/md";
 import ButtonDropdown from "../../common/ButtonDropdown";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import FilesContext from "../../../context/FilesContext";
-import CreateNewFile from "../../../features/CreateNewFile/CreateNewFile";
+import { useNavigate } from "react-router-dom";
 
 type SortOption = {
 	id: number;
@@ -20,19 +20,15 @@ const sortOptions = [
 
 const TopOptions = () => {
 	const { files } = useContext(FilesContext);
-	const [showCreateNewFileModal, setShowCreateNewFileModal] = useState(false);
 	const [selectedSort, setSelectedSort] = useState<SortOption>(sortOptions[0]);
-
-	useEffect(() => {
-		console.log(selectedSort);
-	}, [selectedSort]);
+	const navigate = useNavigate();
 
 	return (
 		<>
 			<ul className="w-full flex justify-between z-10">
 				{/* New File button */}
 				<li>
-					<Button onClick={() => setShowCreateNewFileModal(true)} highlight={files?.length === 0}>
+					<Button onClick={() => navigate("#new")} highlight={files?.length === 0}>
 						<LuPlus />
 						New File
 					</Button>
@@ -45,9 +41,6 @@ const TopOptions = () => {
 					</ButtonDropdown>
 				</li>
 			</ul>
-			{showCreateNewFileModal && (
-				<CreateNewFile closeModal={() => setShowCreateNewFileModal(false)} />
-			)}
 		</>
 	);
 };

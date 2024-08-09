@@ -8,7 +8,12 @@ import useIndexedDB from "./useIndexedDB";
 import { useNavigate } from "react-router-dom";
 import { File } from "../types/types";
 
-const useCreateFile = (callback: () => void) => {
+type NewFile = {
+	metadata: File;
+	content: string;
+};
+
+const useCreateFile = () => {
 	const [errorTimeout, setErrorTimeout] = useState<NodeJS.Timeout | null>(null);
 	const { user } = useContext(AuthContext);
 	const { setSelectedFile } = useContext(FilesContext);
@@ -17,18 +22,12 @@ const useCreateFile = (callback: () => void) => {
 	const queryClient = useQueryClient();
 	const navigate = useNavigate();
 
-	type NewFile = {
-		metadata: File;
-		content: string;
-	};
-
 	const onSuccess = (newFile: NewFile) => {
 		queryClient.invalidateQueries({ queryKey: ["files", user?.uid] });
 		queryClient.setQueryData(["fileContent", newFile.metadata.id], newFile.content);
 		setSelectedFile(newFile.metadata);
 		navigate(`/file/${newFile.metadata.id}`);
 		showNotification({ content: "File created successfully!" });
-		callback();
 	};
 
 	const onError = (reset: () => void) => {

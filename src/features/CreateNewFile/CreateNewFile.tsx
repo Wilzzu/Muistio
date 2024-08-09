@@ -1,4 +1,4 @@
-import { FC, useContext, useState } from "react";
+import { useContext, useState } from "react";
 import { LuPlus } from "react-icons/lu";
 import AuthContext from "../../context/AuthContext";
 import Button from "../../components/common/Button";
@@ -8,10 +8,7 @@ import TextInput from "../../components/common/TextInput";
 import InnerStatus from "../../components/common/InnerStatus";
 import { motion, AnimatePresence } from "framer-motion";
 import useCreateFile from "../../hooks/useCreateFile";
-
-type CreateNewFileProps = {
-	closeModal: () => void;
-};
+import { useLocation, useNavigate } from "react-router-dom";
 
 type InvalidFieldType = {
 	title: boolean;
@@ -23,13 +20,15 @@ const defaultInvalidFields = {
 	content: false,
 };
 
-const CreateNewFile: FC<CreateNewFileProps> = ({ closeModal }) => {
+const CreateNewFile = () => {
 	const { user } = useContext(AuthContext);
 	const [title, setTitle] = useState("");
 	const [content, setContent] = useState("");
 	const [showWarning, setShowWarning] = useState(false);
 	const [invalidFields, setInvalidFields] = useState<InvalidFieldType>(defaultInvalidFields);
-	const { createFileMutation, isPending, isError, error } = useCreateFile(closeModal);
+	const { createFileMutation, isPending, isError, error } = useCreateFile();
+	const location = useLocation();
+	const navigate = useNavigate();
 
 	const validateFieldsAndUpload = () => {
 		// Check for invalid fields
@@ -52,7 +51,7 @@ const CreateNewFile: FC<CreateNewFileProps> = ({ closeModal }) => {
 
 	const checkForUnsavedChanges = () => {
 		if (title.trim() || content.trim()) setShowWarning(true);
-		else closeModal();
+		else navigate(location.pathname);
 	};
 
 	return (
@@ -124,7 +123,7 @@ const CreateNewFile: FC<CreateNewFileProps> = ({ closeModal }) => {
 						<Button
 							onClick={() => {
 								setShowWarning(false);
-								closeModal();
+								navigate(location.pathname);
 							}}
 							style={{
 								border: "from-red-500 via-red-500/50 to-red-500",

@@ -8,6 +8,7 @@ import AuthContext from "./context/AuthContext";
 import NotificationGlobal from "./components/common/NotificationGlobal";
 import CreateEncryptionKey from "./components/authentication/CreateEncryptionKey";
 import ValidateEncryptionKey from "./components/authentication/ValidateEncryptionKey";
+import CreateNewFile from "./features/CreateNewFile/CreateNewFile";
 
 const Root = () => {
 	const { user, encryptionKeyChallenge, userDataLoading, encryptionKeySet, error } =
@@ -29,6 +30,7 @@ const Root = () => {
 	return (
 		<>
 			<NotificationGlobal />
+			{location.hash === "#new" && <CreateNewFile />}
 			<Navbar />
 			{/* Container for main height and padding */}
 			<div className="h-[calc(100dvh-4rem)] p-2">

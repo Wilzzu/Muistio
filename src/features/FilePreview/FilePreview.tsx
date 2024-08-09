@@ -187,7 +187,7 @@ const FilePreview: FC<FilePreviewProps> = ({
 			{blocker.state === "blocked" && (
 				<Modal closeModalFunction={() => blocker.reset()}>
 					<h1 className="font-bold">You have unsaved changes!</h1>
-					<p>Are you sure you want to leave this page?</p>
+					<p>Are you sure you want to discard all changes and exit the editor?</p>
 					<div className="w-full mt-2 flex justify-end font-semibold gap-2">
 						<Button
 							onClick={() => blocker.reset()}
@@ -202,7 +202,7 @@ const FilePreview: FC<FilePreviewProps> = ({
 								border: "from-red-500 via-red-500/50 to-red-500",
 								main: "bg-gradient-radial bg-primary/50 hover:bg-transparent",
 							}}>
-							Leave page
+							Exit editor
 						</Button>
 					</div>
 				</Modal>

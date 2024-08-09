@@ -50,7 +50,7 @@ const ContentEditorAndPreview: FC<ContentEditorAndPreviewProps> = ({
 	error,
 	data,
 }) => {
-	if (isError) {
+	if (isError && !isCreatingNewFile) {
 		return (
 			<div className="min-h-fit h-2/5 flex flex-col gap-2 items-center justify-center">
 				<IoIosSad className="text-5xl text-warning" />
@@ -61,7 +61,7 @@ const ContentEditorAndPreview: FC<ContentEditorAndPreviewProps> = ({
 			</div>
 		);
 	}
-	if (isLoading || isRefetching) {
+	if ((isLoading || isRefetching) && !isCreatingNewFile) {
 		return (
 			<div className="min-h-fit h-2/5 flex flex-col gap-2 items-center justify-center animate-pulse opacity-80">
 				<h1 className="text-xl font-semibold">Loading file content...</h1>
