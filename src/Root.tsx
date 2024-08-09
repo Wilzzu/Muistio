@@ -25,7 +25,7 @@ const Root = () => {
 		return <Outlet />;
 	};
 
-	// File editor
+	// File manager
 	return (
 		<>
 			<NotificationGlobal />
@@ -33,7 +33,7 @@ const Root = () => {
 			{/* Container for main height and padding */}
 			<div className="h-[calc(100dvh-4rem)] p-2">
 				{/* Page content container with custom scrollbar */}
-				<div className="h-full overflow-y-scroll scrollbar scrollbar-w-[6px] scrollbar-thumb-primaryHighlight scrollbar-thumb-rounded-full">
+				<div className="h-full overflow-y-scroll scrollbar scrollbar-w-[6px] scrollbar-thumb-primaryHighlight scrollbar-thumb-rounded-full outline-none">
 					{userDataLoading || error.isError ? (
 						<LoadingModal content={"Loading user data"} error={error} />
 					) : (

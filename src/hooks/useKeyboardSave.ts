@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from "react";
 
-const useKeyboardSave = (callback: () => void, isEditing: boolean) => {
+const useKeyboardSave = (callback: () => void, isEditing: boolean, isCreatingNewFile?: boolean) => {
 	useEffect(() => {
-		if (!isEditing) return;
+		if (!isEditing || isCreatingNewFile) return;
 
 		const checkPressedKeys = (event: KeyboardEvent) => {
 			if (event.ctrlKey && event.key === "s") {

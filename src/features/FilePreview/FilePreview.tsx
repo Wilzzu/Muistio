@@ -36,7 +36,7 @@ const FilePreview: FC<FilePreviewProps> = ({
 	const [isPreviewingEdit, setIsPreviewingEdit] = useState(false);
 	const editedFileCache = useRef<string>("");
 	const editorRef = useRef<HTMLTextAreaElement>(null);
-	useKeyboardSave(saveEdits, isEditing);
+	useKeyboardSave(saveEdits, isEditing, isCreatingNewFile);
 
 	const checkForUnsavedChanges = () => {
 		if (!isEditing || disabled || isCreatingNewFile) return false;
