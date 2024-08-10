@@ -132,7 +132,7 @@ const FileButton: FC<FileButtonProps> = ({ file, showSkeleton }) => {
 					"from-accent/60 to-accent shadow-accent shadow-[0_0_24px_-14px]":
 						file.id === selectedFile?.id,
 				},
-				{ "opacity-30 animate-pulse": showSkeleton || isRenaming || isDeleting || file.isUploading }
+				{ "opacity-30 animate-pulse": showSkeleton || isDeleting || file.isUploading }
 			)}>
 			{/* File information */}
 			<button

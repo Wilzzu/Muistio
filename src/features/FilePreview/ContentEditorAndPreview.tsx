@@ -78,6 +78,7 @@ const ContentEditorAndPreview: FC<ContentEditorAndPreviewProps> = ({
 				id="muistioFileEditor"
 				disabled={disabled}
 				defaultValue={editedFileCache.current}
+				placeholder={isCreatingNewFile ? "# Add content here..." : ""}
 				className={cn(
 					"w-full h-fit bg-transparent resize-none outline-none overflow-hidden disabled:opacity-80 disabled:animate-pulse disabled:pointer-events-none disabled:select-none",
 					{

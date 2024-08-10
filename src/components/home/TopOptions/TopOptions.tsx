@@ -28,7 +28,7 @@ const TopOptions = () => {
 			<ul className="w-full flex justify-between z-10">
 				{/* New File button */}
 				<li>
-					<Button onClick={() => navigate("#new")} highlight={files?.length === 0}>
+					<Button onClick={() => navigate("?modal=new")} highlight={files?.length === 0}>
 						<LuPlus />
 						New File
 					</Button>

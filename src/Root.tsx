@@ -16,6 +16,7 @@ const Root = () => {
 
 	// Landing page
 	const location = useLocation();
+	const queryParams = new URLSearchParams(location.search);
 	if (location.pathname === "/") return <Outlet />;
 
 	// Authentication flow
@@ -30,7 +31,7 @@ const Root = () => {
 	return (
 		<>
 			<NotificationGlobal />
-			{location.hash === "#new" && <CreateNewFile />}
+			{queryParams.get("modal") === "new" && <CreateNewFile />}
 			<Navbar />
 			{/* Container for main height and padding */}
 			<div className="h-[calc(100dvh-4rem)] p-2">

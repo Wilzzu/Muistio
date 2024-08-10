@@ -20,7 +20,7 @@ const Navbar = () => {
 						</Button>
 					</li>
 					<li>
-						<Button highlight onClick={() => navigate("#new")}>
+						<Button highlight onClick={() => navigate("?modal=new")}>
 							<LuPlus />
 							New File
 						</Button>
