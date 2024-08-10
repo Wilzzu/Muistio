@@ -5,6 +5,7 @@ export type File = {
 	title: string;
 	dateModified: Timestamp;
 	size: number;
+	isUploading?: boolean;
 };
 
 export type FilteredList = {

@@ -54,7 +54,7 @@ const ContentEditorAndPreview: FC<ContentEditorAndPreviewProps> = ({
 		return (
 			<div className="min-h-fit h-2/5 flex flex-col gap-2 items-center justify-center">
 				<IoIosSad className="text-5xl text-warning" />
-				<div className="text-center font-semibold">
+				<div className="text-center">
 					<h1 className="text-xl text-warning">Error fetching file content!</h1>
 					<p className="text-sm opacity-80">{error?.message}</p>
 				</div>
@@ -63,8 +63,8 @@ const ContentEditorAndPreview: FC<ContentEditorAndPreviewProps> = ({
 	}
 	if ((isLoading || isRefetching) && !isCreatingNewFile) {
 		return (
-			<div className="min-h-fit h-2/5 flex flex-col gap-2 items-center justify-center animate-pulse opacity-80">
-				<h1 className="text-xl font-semibold">Loading file content...</h1>
+			<div className="min-h-fit h-2/5 flex flex-col gap-3 items-center justify-center animate-pulse opacity-80">
+				<h1 className="text-xl">Loading file content...</h1>
 				<ImSpinner2 className="animate-spin text-4xl" />
 			</div>
 		);

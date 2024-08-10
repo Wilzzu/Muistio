@@ -33,6 +33,7 @@ const GenerateDownloadLink: FC<GenerateDownloadLinkProps> = ({
 		const file = new Blob([content], { type: "text/plain" });
 		const url = URL.createObjectURL(file);
 		setDownloadUrl(url);
+		showNotification({ content: "Downloading file..." });
 	};
 
 	return (

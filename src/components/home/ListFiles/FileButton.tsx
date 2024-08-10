@@ -17,9 +17,10 @@ import NotificationContext from "../../../context/NotificationContext";
 
 type FileButtonProps = {
 	file: File;
+	showSkeleton?: boolean;
 };
 
-const FileButton: FC<FileButtonProps> = ({ file }) => {
+const FileButton: FC<FileButtonProps> = ({ file, showSkeleton }) => {
 	const [isRenaming, setIsRenaming] = useState(false);
 	const [showWarning, setShowWarning] = useState(false);
 	const [renameValue, setRenameValue] = useState(file.title);
@@ -130,17 +131,19 @@ const FileButton: FC<FileButtonProps> = ({ file }) => {
 				{
 					"from-accent/60 to-accent shadow-accent shadow-[0_0_24px_-14px]":
 						file.id === selectedFile?.id,
-				}
+				},
+				{ "opacity-30 animate-pulse": showSkeleton || isRenaming || isDeleting || file.isUploading }
 			)}>
 			{/* File information */}
 			<button
 				onClick={() => navigate(file.id === selectedFile?.id ? `/home` : `/file/${file.id}`)}
-				disabled={isRenaming || isDeleting}
+				disabled={isRenaming || isDeleting || showSkeleton || file.isUploading}
 				className={cn(
 					"h-full w-full flex flex-col p-4 bg-gradient-radial from-[#151A22] to-[#1B1D26]/95 rounded-xl",
 					{
 						"enabled:hover:bg-primary/60": file.id !== selectedFile?.id,
-					}
+					},
+					{ "font-placeholder": showSkeleton }
 				)}>
 				{/* Title and Rename text input */}
 				{isRenaming ? (
@@ -156,9 +159,13 @@ const FileButton: FC<FileButtonProps> = ({ file }) => {
 					/>
 				) : (
 					<h1
-						className={cn("w-full truncate text-left text-lg font-medium", {
-							"animate-pulse": isUpdating,
-						})}>
+						className={cn(
+							"w-full truncate text-left text-lg font-medium",
+							{
+								"animate-pulse": isUpdating,
+							},
+							{ "pl-1": showSkeleton }
+						)}>
 						{isUpdating ? renameValue : file.title}
 					</h1>
 				)}
@@ -166,17 +173,24 @@ const FileButton: FC<FileButtonProps> = ({ file }) => {
 				<p className="flex gap-2 text-xs">
 					<span>
 						<LuCalendar className="inline-block mb-[0.1rem]" />{" "}
-						{moment(file.dateModified.toDate()).format("DD.MM.YYYY, HH:mm")}
+						{moment(file.dateModified.toDate()).format(
+							showSkeleton ? "DD.MM" : "DD.MM.YYYY, HH:mm"
+						)}
 					</span>
 					<span>
-						<PiFileText className="inline-block text-sm mb-[0.1rem]" /> {formatFileSize(file.size)}
+						<PiFileText className="inline-block text-sm mb-[0.1rem]" />{" "}
+						{showSkeleton ? file.size : formatFileSize(file.size)}
 					</span>
 				</p>
 			</button>
 
 			{/* More options button */}
 			<div className="absolute top-1 right-1">
-				<ButtonMoreOptions dropdownSide="left" options={options} disabled={isDeleting} />
+				<ButtonMoreOptions
+					dropdownSide="left"
+					options={options}
+					disabled={isDeleting || showSkeleton || file.isUploading}
+				/>
 			</div>
 
 			{/* Delete modal */}

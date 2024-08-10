@@ -34,7 +34,7 @@ const ButtonMoreOptions: FC<ButtonProps> = ({ options, dropdownSide, disabled })
 				ref={buttonRef}
 				onClick={() => setOpen((prev) => !prev)}
 				disabled={disabled}
-				className="px-2 py-1 rounded-xl hover:bg-primary/60 duration-200 text-lg">
+				className="px-2 py-1 rounded-xl hover:bg-primary/60 disabled:hover:bg-transparent duration-200 text-lg">
 				<BsThreeDots />
 			</button>
 			{open && (

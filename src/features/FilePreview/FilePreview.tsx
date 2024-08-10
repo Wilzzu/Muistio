@@ -102,8 +102,8 @@ const FilePreview: FC<FilePreviewProps> = ({
 	return (
 		<>
 			<div
-				className={cn("w-1/2 p-3 pr-1 shrink-0", {
-					"w-full p-0": isCreatingNewFile,
+				className={cn("w-full lg:w-2/3 xl:w-[clamp(640px,60%,790px)] p-3 pr-1 shrink-0", {
+					"lg:w-full xl:w-full p-0": isCreatingNewFile,
 				})}>
 				{/* Sticky and border */}
 				<div
@@ -143,7 +143,7 @@ const FilePreview: FC<FilePreviewProps> = ({
 						<section
 							onDoubleClick={handleDoubleClick}
 							className={cn(
-								"h-[calc(100dvh-8.6rem)] overflow-y-scroll scrollbar scrollbar-w-[6px] scrollbar-thumb-primaryHighlight/50 scrollbar-thumb-rounded-full duration-700",
+								"h-[calc(100dvh-8.6rem)] overflow-scroll scrollbar scrollbar-w-[6px] scrollbar-h-[6px] scrollbar-thumb-primaryHighlight/50 scrollbar-thumb-rounded-full duration-700",
 								{
 									"h-fit min-h-56 max-h-[calc(100dvh-20rem)]": isCreatingNewFile,
 								},

@@ -3,6 +3,8 @@ import FileButton from "./FileButton";
 import FilesContext from "../../../context/FilesContext";
 import { File, FilteredList } from "../../../types/types";
 import useFetchFiles from "../../../hooks/useFetchFiles";
+import { Timestamp } from "firebase/firestore";
+import { IoIosSad } from "react-icons/io";
 
 type ListFilesProps = {
 	filteredList: FilteredList;
@@ -10,7 +12,7 @@ type ListFilesProps = {
 
 const ListFiles: FC<ListFilesProps> = ({ filteredList }) => {
 	const { files } = useContext(FilesContext);
-	const { isLoading, isRefetching, isError, error } = useFetchFiles();
+	const { isLoading, isError, error } = useFetchFiles();
 
 	// When searching
 	if (filteredList.isSearching) {
@@ -25,21 +27,44 @@ const ListFiles: FC<ListFilesProps> = ({ filteredList }) => {
 			</ul>
 		);
 	}
-	if (isLoading || isRefetching || isError)
-		console.log(
-			isLoading
-				? "loading files"
-				: isRefetching
-				? "refetching files"
-				: isError && `files error: ${error?.message}`
-		);
 
+	// Loading states
+	if (isLoading) {
+		return (
+			<>
+				{[...Array(8).keys()].map((_, i) => (
+					<FileButton
+						key={i}
+						file={{
+							id: i.toString(),
+							dateModified: Timestamp.now(),
+							size: 1234567,
+							title: "Loading file... ....",
+						}}
+						showSkeleton
+					/>
+				))}
+			</>
+		);
+	}
+
+	if (isError) {
+		return (
+			<div className="flex flex-col py-10 gap-1 items-center justify-center col-span-2">
+				<IoIosSad className="text-[40px] text-warning" />
+				<div className="text-center">
+					<h1 className="text-warning text-lg">Error fetching files</h1>
+					<p className="text-sm opacity-80">{error?.message}</p>
+				</div>
+			</div>
+		);
+	}
 	return (
-		<ul className="grid grid-cols-2 gap-2">
+		<>
 			{files.map((file: File) => {
 				return <FileButton key={file.id} file={file} />;
 			})}
-		</ul>
+		</>
 	);
 };
 
