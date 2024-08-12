@@ -11,21 +11,47 @@ type ListFilesProps = {
 	filteredList: FilteredList;
 };
 
-const ListFiles: FC<ListFilesProps> = ({ filteredList }) => {
-	const { files } = useContext(FilesContext);
-	const { isLoading, isError, error } = useFetchFiles();
+enum SortOption {
+	MOST_RECENT = 1,
+	OLDEST = 2,
+	NAME_A_Z = 3,
+	NAME_Z_A = 4,
+	SMALLEST_SIZE = 5,
+	LARGEST_SIZE = 6,
+}
 
+const sortFiles = (files: File[], selectedSort: number) => {
+	const sortedFiles = [...files];
+	switch (selectedSort) {
+		case SortOption.OLDEST:
+			return sortedFiles.sort((a, b) => a.dateModified.seconds - b.dateModified.seconds);
+		case SortOption.NAME_A_Z:
+			return sortedFiles.sort((a, b) => a.title.localeCompare(b.title));
+		case SortOption.NAME_Z_A:
+			return sortedFiles.sort((a, b) => b.title.localeCompare(a.title));
+		case SortOption.SMALLEST_SIZE:
+			return sortedFiles.sort((a, b) => a.size - b.size);
+		case SortOption.LARGEST_SIZE:
+			return sortedFiles.sort((a, b) => b.size - a.size);
+		default:
+			return sortedFiles.sort((a, b) => b.dateModified.seconds - a.dateModified.seconds);
+	}
+};
+
+const ListFiles: FC<ListFilesProps> = ({ filteredList }) => {
+	const { files, selectedSort } = useContext(FilesContext);
+	const { isLoading, isError, error } = useFetchFiles();
 	// When searching
 	if (filteredList.isSearching) {
 		if (filteredList.files.length <= 0)
-			return <h1 className="text-center mt-8 font-semibold">No files found with that name 🤔</h1>;
+			return <h1 className="col-span-2 text-center mt-8 font-semibold">No files found 🤔</h1>;
 
 		return (
-			<ul className="grid grid-cols-2 gap-2">
-				{filteredList.files.map((file: File) => {
+			<>
+				{sortFiles(filteredList.files, selectedSort).map((file: File) => {
 					return <FileButton key={file.id} file={file} />;
 				})}
-			</ul>
+			</>
 		);
 	}
 
@@ -77,7 +103,7 @@ const ListFiles: FC<ListFilesProps> = ({ filteredList }) => {
 
 	return (
 		<>
-			{files.map((file: File) => {
+			{sortFiles(files, selectedSort).map((file: File) => {
 				return <FileButton key={file.id} file={file} />;
 			})}
 		</>

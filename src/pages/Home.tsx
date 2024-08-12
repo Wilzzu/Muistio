@@ -10,11 +10,11 @@ import { useParams } from "react-router-dom";
 
 function Home() {
 	const { fileId } = useParams();
+	const { files, selectedFile, setSelectedFile } = useContext(FilesContext);
 	const [filteredList, setFilteredList] = useState<FilteredList>({
-		files: [],
+		files: files,
 		isSearching: false,
 	});
-	const { files, selectedFile, setSelectedFile } = useContext(FilesContext);
 
 	// Select a file if URL contains a file ID
 	useEffect(() => {

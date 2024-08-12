@@ -6,6 +6,7 @@ import FilesContext from "./FilesContext";
 const FilesProvider: FC<{ children: ReactNode }> = ({ children }) => {
 	const [files, setFiles] = useState<File[]>([]);
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
+	const [selectedSort, setSelectedSort] = useState<number>(1);
 
 	// When files get updated, update the selectedFile with latest values
 	useEffect(() => {
@@ -18,7 +19,8 @@ const FilesProvider: FC<{ children: ReactNode }> = ({ children }) => {
 	}, [files]);
 
 	return (
-		<FilesContext.Provider value={{ files, setFiles, selectedFile, setSelectedFile }}>
+		<FilesContext.Provider
+			value={{ files, setFiles, selectedFile, setSelectedFile, selectedSort, setSelectedSort }}>
 			{children}
 		</FilesContext.Provider>
 	);

@@ -6,6 +6,8 @@ type FilesContextType = {
 	setFiles: Dispatch<SetStateAction<File[]>>;
 	selectedFile: File | null;
 	setSelectedFile: Dispatch<SetStateAction<File | null>>;
+	selectedSort: number;
+	setSelectedSort: Dispatch<SetStateAction<number>>;
 };
 
 const defaultFilesContext: FilesContextType = {
@@ -13,6 +15,8 @@ const defaultFilesContext: FilesContextType = {
 	setFiles: () => {},
 	selectedFile: null,
 	setSelectedFile: () => {},
+	selectedSort: 1,
+	setSelectedSort: () => {},
 };
 
 const FilesContext = createContext<FilesContextType>(defaultFilesContext);

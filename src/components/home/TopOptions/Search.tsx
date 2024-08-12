@@ -16,7 +16,9 @@ const Search: FC<SearchProps> = ({ setFilteredList }) => {
 		setSearchInput(input);
 
 		// If we aren't searching, set searching to false
-		if (input?.trim().length <= 0) return setFilteredList({ files: [], isSearching: false });
+		if (input?.trim().length <= 0) {
+			return setFilteredList((prev) => ({ ...prev, isSearching: false }));
+		}
 
 		// Modify and split input
 		const splitInput = input.trim().toLowerCase().split(" ");

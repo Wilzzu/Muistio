@@ -1,26 +1,23 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import Button from "../../common/Button";
 import { LuPlus } from "react-icons/lu";
 import { MdSort } from "react-icons/md";
 import ButtonDropdown from "../../common/ButtonDropdown";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import FilesContext from "../../../context/FilesContext";
 import { useNavigate } from "react-router-dom";
-
-type SortOption = {
-	id: number;
-	title: string;
-};
 
 const sortOptions = [
 	{ id: 1, title: "Most Recent" },
 	{ id: 2, title: "Oldest" },
-	{ id: 3, title: "Largest Size" },
-	{ id: 4, title: "Smallest Size" },
+	{ id: 3, title: "Name A-Z" },
+	{ id: 4, title: "Name Z-A" },
+	{ id: 5, title: "Smallest Size" },
+	{ id: 6, title: "Largest Size" },
 ];
 
 const TopOptions = () => {
-	const { files } = useContext(FilesContext);
-	const [selectedSort, setSelectedSort] = useState<SortOption>(sortOptions[0]);
+	const { files, selectedSort, setSelectedSort } = useContext(FilesContext);
 	const navigate = useNavigate();
 
 	return (
@@ -37,7 +34,7 @@ const TopOptions = () => {
 				<li>
 					<ButtonDropdown options={sortOptions} onClick={setSelectedSort} dropdownSide="right">
 						<MdSort className="text-lg" />
-						{selectedSort.title}
+						{sortOptions.find((e) => e.id === selectedSort)?.title || "Most Recent"}
 					</ButtonDropdown>
 				</li>
 			</ul>

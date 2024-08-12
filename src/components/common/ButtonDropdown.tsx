@@ -10,7 +10,7 @@ type DropdownOption = {
 
 type ButtonProps = {
 	options: DropdownOption[];
-	onClick: (selected: DropdownOption) => void;
+	onClick: (selected: number) => void;
 	dropdownSide: "left" | "right";
 	children: ReactNode;
 };
@@ -22,9 +22,9 @@ const ButtonDropdown: FC<ButtonProps> = ({ options, onClick, dropdownSide, child
 	useClickOutside(buttonRef, () => setOpen(false), dropdownRef);
 
 	// Set selected ID and close the dropdown
-	const handleDropdownClick = (selected: DropdownOption) => {
+	const handleDropdownClick = (selectedId: number) => {
 		setOpen(false);
-		onClick(selected);
+		onClick(selectedId);
 	};
 
 	return (
@@ -63,7 +63,7 @@ const ButtonDropdown: FC<ButtonProps> = ({ options, onClick, dropdownSide, child
 								<li key={i}>
 									<button
 										className="text-nowrap py-2 pl-3 pr-6 w-full text-left bg-gradient-to-br from-transparent to-transparent hover:from-primaryHighlight/90 hover:to-primaryHighlight/20 rounded-md"
-										onClick={() => handleDropdownClick(e)}>
+										onClick={() => handleDropdownClick(e.id)}>
 										{e.title}
 									</button>
 								</li>

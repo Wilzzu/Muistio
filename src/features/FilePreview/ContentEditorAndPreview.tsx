@@ -45,7 +45,6 @@ const ContentEditorAndPreview: FC<ContentEditorAndPreviewProps> = ({
 	setContent,
 	disabled,
 	isLoading,
-	isRefetching,
 	isError,
 	error,
 	data,
@@ -61,7 +60,7 @@ const ContentEditorAndPreview: FC<ContentEditorAndPreviewProps> = ({
 			</div>
 		);
 	}
-	if ((isLoading || isRefetching) && !isCreatingNewFile) {
+	if (isLoading && !isCreatingNewFile) {
 		return (
 			<div className="min-h-fit h-2/5 flex flex-col gap-3 items-center justify-center animate-pulse opacity-80">
 				<h1 className="text-xl">Loading file content...</h1>

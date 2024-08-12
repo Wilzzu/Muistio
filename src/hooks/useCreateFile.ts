@@ -16,7 +16,7 @@ type NewFile = {
 const useCreateFile = () => {
 	const [errorTimeout, setErrorTimeout] = useState<NodeJS.Timeout | null>(null);
 	const { user } = useContext(AuthContext);
-	const { setSelectedFile } = useContext(FilesContext);
+	const { setFiles, setSelectedFile } = useContext(FilesContext);
 	const { showNotification } = useContext(NotificationContext);
 	const { getEncryptionKey } = useIndexedDB();
 	const queryClient = useQueryClient();
@@ -24,6 +24,7 @@ const useCreateFile = () => {
 
 	const onSuccess = (newFile: NewFile) => {
 		queryClient.invalidateQueries({ queryKey: ["files", user?.uid] });
+		setFiles((prevFiles) => [...prevFiles, newFile.metadata]);
 		queryClient.setQueryData(["fileContent", newFile.metadata.id], newFile.content);
 		setSelectedFile(newFile.metadata);
 		navigate(`/file/${newFile.metadata.id}`);
