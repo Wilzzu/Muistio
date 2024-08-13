@@ -1,23 +1,10 @@
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { auth } from "../../firebase/firebase";
 import Button from "../common/Button";
 import { FaGoogle } from "react-icons/fa";
 import Modal from "../common/Modal";
+import useLogin from "../../hooks/useLogin";
 
 const Login = () => {
-	const provider = new GoogleAuthProvider();
-
-	const login = () => {
-		signInWithPopup(auth, provider)
-			.then((result) => {
-				const credential = GoogleAuthProvider.credentialFromResult(result);
-				if (!credential) return;
-				console.log(credential);
-			})
-			.catch((error) => {
-				console.error(error.code, error.message);
-			});
-	};
+	const { login } = useLogin();
 
 	return (
 		<Modal closeModalFunction={() => false}>

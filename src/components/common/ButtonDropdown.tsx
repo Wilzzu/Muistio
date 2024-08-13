@@ -12,10 +12,17 @@ type ButtonProps = {
 	options: DropdownOption[];
 	onClick: (selected: number) => void;
 	dropdownSide: "left" | "right";
+	disabled?: boolean;
 	children: ReactNode;
 };
 
-const ButtonDropdown: FC<ButtonProps> = ({ options, onClick, dropdownSide, children }) => {
+const ButtonDropdown: FC<ButtonProps> = ({
+	options,
+	onClick,
+	dropdownSide,
+	disabled,
+	children,
+}) => {
 	const [open, setOpen] = useState(false);
 	const buttonRef = useRef<HTMLDivElement>(null);
 	const dropdownRef = useRef<HTMLDivElement>(null);
@@ -28,7 +35,7 @@ const ButtonDropdown: FC<ButtonProps> = ({ options, onClick, dropdownSide, child
 	};
 
 	return (
-		<div className="relative">
+		<div className={cn("relative z-10", { "opacity-50": disabled })}>
 			{/* Border for button */}
 			<div
 				ref={buttonRef}
@@ -36,8 +43,9 @@ const ButtonDropdown: FC<ButtonProps> = ({ options, onClick, dropdownSide, child
 				{/* Main button */}
 				<button
 					onClick={() => setOpen((prev) => !prev)}
+					disabled={disabled}
 					className="flex items-center justify-center h-9 group">
-					<span className="flex items-center justify-center gap-[6px] px-2 h-full rounded-l-lg bg-gradient-radial from-transparent bg-primary to-primary/60 group-hover:bg-primary/50 text-sm font-semibold duration-200">
+					<span className="p-[0.4rem] flex items-center justify-center gap-[6px] px-2 h-full rounded-l-lg bg-gradient-radial from-transparent bg-primary to-primary/60 group-hover:bg-primary/50 text-sm font-semibold duration-200">
 						{children}
 					</span>
 					<span className="h-full flex items-center justify-center px-[6px] bg-primary group-hover:bg-primary/70 border-l border-primaryHighlight/40 rounded-r-lg duration-200">
@@ -63,6 +71,7 @@ const ButtonDropdown: FC<ButtonProps> = ({ options, onClick, dropdownSide, child
 								<li key={i}>
 									<button
 										className="text-nowrap py-2 pl-3 pr-6 w-full text-left bg-gradient-to-br from-transparent to-transparent hover:from-primaryHighlight/90 hover:to-primaryHighlight/20 rounded-md"
+										disabled={disabled}
 										onClick={() => handleDropdownClick(e.id)}>
 										{e.title}
 									</button>

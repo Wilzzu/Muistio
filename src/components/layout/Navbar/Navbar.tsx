@@ -1,13 +1,38 @@
 import Button from "../../common/Button";
 import { LuPlus } from "react-icons/lu";
 import { BiHomeAlt2 } from "react-icons/bi";
-import { FiLogOut } from "react-icons/fi";
 import useLogOut from "../../../hooks/useLogOut";
 import { useNavigate } from "react-router-dom";
+import ButtonDropdown from "../../common/ButtonDropdown";
+import { useContext } from "react";
+import AuthContext from "../../../context/AuthContext";
+import { FaGoogle } from "react-icons/fa";
+import useLogin from "../../../hooks/useLogin";
+import defaultAvatar from "../../../assets/default-avatar.jpg";
+
+const profileOptions = [
+	{ id: 1, title: "Settings" },
+	{ id: 2, title: "Log out" },
+];
 
 const Navbar = () => {
 	const { handleLogOut } = useLogOut();
 	const navigate = useNavigate();
+	const { user, userDataLoading } = useContext(AuthContext);
+	const { login } = useLogin();
+
+	const handleClick = (option: number) => {
+		switch (option) {
+			case 1:
+				navigate("/settings");
+				break;
+			case 2:
+				handleLogOut();
+				break;
+			default:
+				break;
+		}
+	};
 
 	return (
 		<>
@@ -26,10 +51,34 @@ const Navbar = () => {
 						</Button>
 					</li>
 				</ul>
-				<Button onClick={handleLogOut}>
-					<FiLogOut className="text-lg mt-[1px]" />
-					Log out
-				</Button>
+
+				{user ? (
+					<ButtonDropdown options={profileOptions} onClick={handleClick} dropdownSide="right">
+						<img
+							src={user?.photoURL || defaultAvatar}
+							alt="User avatar"
+							className="h-full w-auto aspect-square rounded-full"
+						/>
+						<p>{user?.displayName || "User"}</p>
+					</ButtonDropdown>
+				) : userDataLoading ? (
+					<ButtonDropdown
+						options={profileOptions}
+						onClick={handleLogOut}
+						dropdownSide="right"
+						disabled>
+						<img
+							src={defaultAvatar}
+							alt="User avatar"
+							className="h-full w-auto aspect-square rounded-full animate-pulse"
+						/>
+						<p className="font-placeholder animate-pulse">Loading user...</p>
+					</ButtonDropdown>
+				) : (
+					<Button onClick={login} style={{ main: "bg-opacity-80" }}>
+						<FaGoogle /> Sign in with Google
+					</Button>
+				)}
 				{/* Bottom line */}
 				<div className="absolute bottom-0 w-full h-[1px] left-0 bg-gradient-radial from-primaryHighlight to-transparent" />
 			</nav>
