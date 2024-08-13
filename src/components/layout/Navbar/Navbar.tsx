@@ -72,7 +72,7 @@ const Navbar = () => {
 							alt="User avatar"
 							className="h-full w-auto aspect-square rounded-full animate-pulse"
 						/>
-						<p className="font-placeholder animate-pulse">Loading user...</p>
+						<p className="font-placeholder animate-pulse ml-1 opacity-20">Loading user...</p>
 					</ButtonDropdown>
 				) : (
 					<Button onClick={login} style={{ main: "bg-opacity-80" }}>
