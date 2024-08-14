@@ -2,21 +2,23 @@
 import { FC, ReactNode, useEffect, useState } from "react";
 import { File } from "../types/types";
 import FilesContext from "./FilesContext";
+import { useParams } from "react-router-dom";
 
 const FilesProvider: FC<{ children: ReactNode }> = ({ children }) => {
 	const [files, setFiles] = useState<File[]>([]);
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
 	const [selectedSort, setSelectedSort] = useState<number>(1);
+	const { fileId } = useParams();
 
-	// When files get updated, update the selectedFile with latest values
+	// Select a file if URL contains a file ID
 	useEffect(() => {
-		if (selectedFile) {
-			const updatedFile = files.find((file) => file.id === selectedFile.id);
-			if (!updatedFile) return;
-			console.log("updated,", updatedFile.title);
-			setSelectedFile(updatedFile);
-		}
-	}, [files]);
+		if (fileId && files) {
+			if (fileId === selectedFile?.id) return;
+			const foundFile = files.find((file) => fileId === file.id);
+			if (!foundFile) return setSelectedFile(null);
+			setSelectedFile(foundFile);
+		} else if (!fileId && files) return setSelectedFile(null);
+	}, [fileId, files]);
 
 	return (
 		<FilesContext.Provider

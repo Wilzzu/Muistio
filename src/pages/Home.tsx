@@ -1,30 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import ListFiles from "../components/home/ListFiles/ListFiles";
 import Search from "../components/home/TopOptions/Search";
 import TopOptions from "../components/home/TopOptions/TopOptions";
 import { FilteredList } from "../types/types";
 import FilePreview from "../features/FilePreview/FilePreview";
 import FilesContext from "../context/FilesContext";
-import { useParams } from "react-router-dom";
 
 function Home() {
-	const { fileId } = useParams();
-	const { files, selectedFile, setSelectedFile } = useContext(FilesContext);
+	const { files, selectedFile } = useContext(FilesContext);
 	const [filteredList, setFilteredList] = useState<FilteredList>({
 		files: files,
 		isSearching: false,
 	});
-
-	// Select a file if URL contains a file ID
-	useEffect(() => {
-		if (fileId && files) {
-			if (fileId === selectedFile?.id) return;
-			const foundFile = files.find((file) => fileId === file.id);
-			if (!foundFile) return setSelectedFile(null);
-			setSelectedFile(foundFile);
-		} else if (!fileId && files) return setSelectedFile(null);
-	}, [fileId, files]);
 
 	return (
 		<div className="flex justify-center">

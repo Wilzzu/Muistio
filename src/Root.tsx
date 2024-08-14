@@ -9,6 +9,7 @@ import NotificationGlobal from "./components/common/NotificationGlobal";
 import CreateEncryptionKey from "./components/authentication/CreateEncryptionKey";
 import ValidateEncryptionKey from "./components/authentication/ValidateEncryptionKey";
 import CreateNewFile from "./features/CreateNewFile/CreateNewFile";
+import FilesProvider from "./context/FilesProvider";
 
 const Root = () => {
 	const { user, encryptionKeyChallenge, userDataLoading, encryptionKeySet, error } =
@@ -29,7 +30,7 @@ const Root = () => {
 
 	// File manager
 	return (
-		<>
+		<FilesProvider>
 			<NotificationGlobal />
 			{queryParams.get("modal") === "new" && <CreateNewFile />}
 			<Navbar />
@@ -44,7 +45,7 @@ const Root = () => {
 					)}
 				</div>
 			</div>
-		</>
+		</FilesProvider>
 	);
 };
 
