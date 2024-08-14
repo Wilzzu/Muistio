@@ -12,7 +12,7 @@ import defaultAvatar from "../../../assets/default-avatar.jpg";
 
 const profileOptions = [
 	{ id: 1, title: "Settings" },
-	{ id: 2, title: "Log out" },
+	{ id: 2, title: "Log out", warning: true },
 ];
 
 const Navbar = () => {
@@ -59,7 +59,7 @@ const Navbar = () => {
 							alt="User avatar"
 							className="h-full w-auto aspect-square rounded-full"
 						/>
-						<p>{user?.displayName || "User"}</p>
+						<p>{user?.displayName || "Unknown User"}</p>
 					</ButtonDropdown>
 				) : userDataLoading ? (
 					<ButtonDropdown

@@ -28,10 +28,6 @@ const Settings = () => {
 				</div>
 
 				{/* Settings cards */}
-				<SettingsCard title="Normal Settings">
-					<p>Not much to see here right now</p>
-				</SettingsCard>
-
 				<SettingsCard title="Delete Account and All Files" warning>
 					<p className="mb-2">
 						All your files and account data will be permanently deleted. <br />
@@ -41,7 +37,7 @@ const Settings = () => {
 						warning
 						onClick={() => setShowAccountDeleteWarning(true)}
 						style={{ main: "bg-opacity-80" }}>
-						Delete Account and Files
+						Delete Account and All Files
 					</Button>
 				</SettingsCard>
 			</main>

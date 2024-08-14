@@ -6,6 +6,7 @@ import useClickOutside from "../../hooks/useClickOutside";
 type DropdownOption = {
 	id: number;
 	title: string;
+	warning?: boolean;
 };
 
 type ButtonProps = {
@@ -70,7 +71,13 @@ const ButtonDropdown: FC<ButtonProps> = ({
 							return (
 								<li key={i}>
 									<button
-										className="text-nowrap py-2 pl-3 pr-6 w-full text-left bg-gradient-to-br from-transparent to-transparent hover:from-primaryHighlight/90 hover:to-primaryHighlight/20 rounded-md"
+										className={cn(
+											"text-nowrap py-2 pl-3 pr-6 w-full text-left bg-gradient-to-br from-transparent to-transparent hover:from-primaryHighlight/90 hover:to-primaryHighlight/20 rounded-md",
+											{
+												"text-warning hover:text-red-100 hover:from-warning/80 hover:to-warning/20":
+													e?.warning,
+											}
+										)}
 										disabled={disabled}
 										onClick={() => handleDropdownClick(e.id)}>
 										{e.title}

@@ -15,8 +15,8 @@ function Home() {
 	});
 
 	return (
-		<div className="flex justify-center">
-			<main className="flex flex-col-reverse lg:flex-row justify-center gap-1 lg:gap-4 xl:gap-10 px-1 w-[clamp(1100px,80%,1600px)]">
+		<div className="flex justify-center overflow-hidden">
+			<main className="flex flex-col-reverse lg:flex-row justify-center gap-1 lg:gap-4 xl:gap-10 px-1 w-full lg:w-[clamp(1100px,80%,1600px)]">
 				<section className="flex flex-col gap-5 w-full lg:w-1/3 xl:w-1/2 px-3 shrink-0">
 					<Search setFilteredList={setFilteredList} />
 					<div className="flex flex-col gap-2">
