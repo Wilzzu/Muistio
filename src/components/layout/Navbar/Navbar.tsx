@@ -35,54 +35,56 @@ const Navbar = () => {
 	};
 
 	return (
-		<>
-			<nav className="relative flex justify-between items-center px-6 h-16">
-				<ul className="flex gap-4">
-					<li>
-						<Button link="/home">
-							<BiHomeAlt2 />
-							Home
-						</Button>
-					</li>
-					<li>
-						<Button highlight onClick={() => navigate("?modal=new")}>
-							<LuPlus />
-							New File
-						</Button>
-					</li>
-				</ul>
+		<nav className="relative flex justify-between items-center px-6 h-16">
+			<ul className="flex gap-4">
+				<li>
+					<Button link="/home">
+						<BiHomeAlt2 />
+						Home
+					</Button>
+				</li>
+				<li>
+					<Button highlight onClick={() => navigate("?modal=new")}>
+						<LuPlus />
+						New File
+					</Button>
+				</li>
+			</ul>
 
-				{user ? (
-					<ButtonDropdown options={profileOptions} onClick={handleClick} dropdownSide="right">
+			{user ? (
+				<ButtonDropdown options={profileOptions} onClick={handleClick} dropdownSide="right">
+					<div className="h-6 w-6 relative rounded-full overflow-hidden">
 						<img
 							src={user?.photoURL || defaultAvatar}
 							alt="User avatar"
-							className="h-full w-auto aspect-square rounded-full"
+							className="h-full w-auto object-contain"
 						/>
-						<p>{user?.displayName || "Unknown User"}</p>
-					</ButtonDropdown>
-				) : userDataLoading ? (
-					<ButtonDropdown
-						options={profileOptions}
-						onClick={handleLogOut}
-						dropdownSide="right"
-						disabled>
+					</div>
+					<p>{user?.displayName || "Unknown User"}</p>
+				</ButtonDropdown>
+			) : userDataLoading ? (
+				<ButtonDropdown
+					options={profileOptions}
+					onClick={handleLogOut}
+					dropdownSide="right"
+					disabled>
+					<div className="h-6 w-6 relative rounded-full overflow-hidden">
 						<img
 							src={defaultAvatar}
 							alt="User avatar"
-							className="h-full w-auto aspect-square rounded-full animate-pulse"
+							className="h-full w-auto object-contain animate-pulse"
 						/>
-						<p className="font-placeholder animate-pulse ml-1 opacity-20">Loading user...</p>
-					</ButtonDropdown>
-				) : (
-					<Button onClick={login} style={{ main: "bg-opacity-80" }}>
-						<FaGoogle /> Sign in with Google
-					</Button>
-				)}
-				{/* Bottom line */}
-				<div className="absolute bottom-0 w-full h-[1px] left-0 bg-gradient-radial from-primaryHighlight to-transparent" />
-			</nav>
-		</>
+					</div>
+					<p className="font-placeholder animate-pulse ml-1 opacity-20">Loading user...</p>
+				</ButtonDropdown>
+			) : (
+				<Button onClick={login} style={{ main: "bg-opacity-80" }}>
+					<FaGoogle /> Sign in with Google
+				</Button>
+			)}
+			{/* Bottom line */}
+			<div className="absolute bottom-0 w-full h-[1px] left-0 bg-gradient-radial from-primaryHighlight to-transparent" />
+		</nav>
 	);
 };
 

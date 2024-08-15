@@ -31,6 +31,16 @@ export default {
 				centered: "0 0 20px var(--tw-shadow-color)",
 				"centered-lg": "0 0 28px var(--tw-shadow-color)",
 			},
+			keyframes: {
+				"button-texture": {
+					"0%": { transform: "translateX(0) translateY(0) scale(2)" },
+					"100%": { transform: "translateX(-100%) translateY(-100%) scale(2)" },
+				},
+			},
+			animation: {
+				"button-texture": "button-texture 3s linear infinite",
+				"button-texture-fast": "button-texture 1.5s linear infinite",
+			},
 		},
 	},
 
