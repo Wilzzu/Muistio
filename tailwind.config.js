@@ -36,10 +36,33 @@ export default {
 					"0%": { transform: "translateX(0) translateY(0) scale(2)" },
 					"100%": { transform: "translateX(-100%) translateY(-100%) scale(2)" },
 				},
+				"cloud-main": {
+					"0%": { transform: "translateY(-128px) translateX(24px)" },
+					"50%": { transform: "translateY(-150px) translateX(24px)" },
+					"100%": { transform: "translateY(-128px) translateX(24px)" },
+				},
+				"cloud-left": {
+					"0%": { transform: "translateY(0) translateX(0)" },
+					"50%": { transform: "translateY(-8px) translateX(-8px)" },
+					"100%": { transform: "translateY(0) translateX(0)" },
+				},
+				"cloud-right": {
+					"0%": { transform: "translateX(0) translateY(0)" },
+					"50%": { transform: "translateY(8px) translateX(-16px)" },
+					"100%": { transform: "translateX(0) translateY(0)" },
+				},
+				underline: {
+					"0%": { width: "0" },
+					"100%": { width: "100%" },
+				},
 			},
 			animation: {
 				"button-texture": "button-texture 3s linear infinite",
 				"button-texture-fast": "button-texture 1.5s linear infinite",
+				"cloud-main": "cloud-main 6s ease-in-out infinite",
+				"cloud-left": "cloud-left 7s 0.5s ease-in-out infinite",
+				"cloud-right": "cloud-right 8s ease-in-out infinite",
+				underline: "underline 1.5s cubic-bezier(.69,.05,.16,1)",
 			},
 		},
 	},
