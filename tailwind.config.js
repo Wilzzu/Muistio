@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 import tailwindScrollbar from "tailwind-scrollbar";
 import tailwindTypography from "@tailwindcss/typography";
+import tailwindCss3d from "tailwindcss-3d";
 export default {
 	content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
 	theme: {
@@ -55,6 +56,10 @@ export default {
 					"0%": { width: "0" },
 					"100%": { width: "100%" },
 				},
+				"scroll-full-down": {
+					"0%": { transform: "translateY(0)" },
+					"100%": { transform: "translateY(200%)" },
+				},
 			},
 			animation: {
 				"button-texture": "button-texture 3s linear infinite",
@@ -63,6 +68,8 @@ export default {
 				"cloud-left": "cloud-left 7s 0.5s ease-in-out infinite",
 				"cloud-right": "cloud-right 8s ease-in-out infinite",
 				underline: "underline 1.5s cubic-bezier(.69,.05,.16,1)",
+				"scroll-full-down": "scroll-full-down 6s linear infinite",
+				"scroll-full-down-start-middle": "scroll-full-down 6s -3s linear infinite",
 			},
 		},
 	},
@@ -70,5 +77,6 @@ export default {
 	plugins: [
 		tailwindScrollbar({ nocompatible: true, preferredStrategy: "pseudoelements" }),
 		tailwindTypography,
+		tailwindCss3d({ legacy: true }),
 	],
 };
