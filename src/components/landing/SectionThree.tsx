@@ -23,7 +23,7 @@ const SectionThree = () => {
 	const S3Image = () => (
 		<>
 			{/* Encryption text */}
-			<div className="absolute h-1/2 w-[76%] -translate-x-2 -translate-y-36 z-0">
+			<div className="absolute h-1/2 w-[76%] -translate-x-2 -translate-y-36 z-0 perspective-750">
 				<ScrollingEncryptedText />
 			</div>
 			{/* Note */}

@@ -26,3 +26,4 @@ todo.md
 .env
 .firebaserc
 LandingPageDev.tsx
+firebase-export*

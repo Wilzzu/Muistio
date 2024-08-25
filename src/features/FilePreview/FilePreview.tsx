@@ -17,6 +17,7 @@ type FilePreviewProps = {
 	setContent?: Dispatch<SetStateAction<string>>;
 	disabled?: boolean;
 	warning?: boolean;
+	landing?: boolean;
 	onClick?: () => void;
 };
 
@@ -25,6 +26,7 @@ const FilePreview: FC<FilePreviewProps> = ({
 	setContent,
 	disabled,
 	warning,
+	landing,
 	onClick,
 }) => {
 	const { selectedFile } = useContext(FilesContext);
@@ -102,9 +104,15 @@ const FilePreview: FC<FilePreviewProps> = ({
 	return (
 		<>
 			<div
-				className={cn("w-full lg:w-2/3 xl:w-[clamp(640px,60%,790px)] p-3 pr-1 shrink-0", {
-					"lg:w-full xl:w-full p-0": isCreatingNewFile,
-				})}>
+				className={cn(
+					"w-full lg:w-2/3 xl:w-[clamp(640px,60%,790px)] p-3 pr-1 shrink-0",
+					{
+						"lg:w-full xl:w-full p-0": isCreatingNewFile,
+					},
+					{
+						"lg:w-full xl:w-full p-0": landing,
+					}
+				)}>
 				{/* Sticky and border */}
 				<div
 					className={cn(
@@ -147,7 +155,10 @@ const FilePreview: FC<FilePreviewProps> = ({
 								{
 									"h-fit min-h-56 max-h-[calc(100dvh-20rem)]": isCreatingNewFile,
 								},
-								{ "h-[calc(100dvh-7.6rem)]": !isEditing }
+								{ "h-[calc(100dvh-7.6rem)]": !isEditing },
+								{
+									"min-h-0 h-full aspect-[4/5]": landing,
+								}
 							)}
 							onClick={onClick}>
 							{/* Status */}

@@ -77,6 +77,6 @@ export default {
 	plugins: [
 		tailwindScrollbar({ nocompatible: true, preferredStrategy: "pseudoelements" }),
 		tailwindTypography,
-		tailwindCss3d({ legacy: true }),
+		tailwindCss3d,
 	],
 };

@@ -7,7 +7,7 @@ const SectionOne = () => {
 	const S1Text = () => (
 		<>
 			<h1 className="text-[3.5rem] leading-[3.9rem] font-bold">
-				<span className="text-accent selection:text-black">Your Ideas</span>, Securely Formatted
+				<span className="text-accent selection:text-black">Your Ideas</span>, Secured & Formatted
 			</h1>
 			<p className="text-lg leading-[1.575rem]">
 				Create and edit text files with Muistio Markdown editor, perfect for{" "}
