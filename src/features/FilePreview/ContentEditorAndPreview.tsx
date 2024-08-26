@@ -20,16 +20,27 @@ type ContentEditorAndPreviewProps = {
 	isError: boolean;
 	error: Error | null;
 	data: string | undefined;
+	landing?: boolean;
 };
 
-const MarkdownPreview: FC<{ content: string; disabled?: boolean }> = ({ content, disabled }) => (
+type MarkdownPreviewProps = {
+	content: string;
+	disabled?: boolean;
+	landing?: boolean;
+};
+
+const MarkdownPreview: FC<MarkdownPreviewProps> = ({ content, disabled, landing }) => (
 	<Markdown
 		remarkPlugins={[remarkGfm]}
 		rehypePlugins={[[rehypeExternalLinks, { target: "_blank" }]]}
 		className={cn(
-			"prose prose-invert font-light text-white prose-headings:mt-6 prose-headings:mb-[0.85rem] prose-h1:text-2xl prose-h1:font-medium prose-h1:border-b-[1px] prose-h1:border-accent prose-h1:pb-1 prose-h2:text-xl prose-h2:font-medium prose-h3:text-lg prose-h3:font-medium prose-p:leading-6 prose-a:text-[#4dbaf8] prose-a:selection:text-black marker:text-accent prose-thead:border-accent prose-tr:border-accent break-words pr-2",
+			"prose prose-invert font-light text-white prose-headings:mt-6 prose-headings:mb-[0.85rem] prose-h1:text-2xl prose-h1:font-medium prose-h1:border-b-[1px] prose-h1:border-accent prose-h2:border-b-[1px] prose-h2:border-accent/80 prose-h1:pb-1 prose-h2:text-xl prose-h2:font-medium prose-h3:text-lg prose-h3:font-medium prose-p:leading-6 prose-a:text-[#4dbaf8] prose-a:selection:text-black marker:text-accent prose-thead:border-accent prose-tr:border-accent break-words pr-2",
 			{
 				"animate-pulse pointer-events-none select-none": disabled,
+			},
+			{
+				"prose-sm text-xs prose-headings:mt-4 prose-h1:pb-0 prose-h1:text-lg prose-h2:text-base prose-h3:text-sm prose-p:text-xs prose-p:leading-5 prose-img:max-w-[80%]":
+					landing,
 			}
 		)}>
 		{content}
@@ -48,6 +59,7 @@ const ContentEditorAndPreview: FC<ContentEditorAndPreviewProps> = ({
 	isError,
 	error,
 	data,
+	landing,
 }) => {
 	if (isError && !isCreatingNewFile) {
 		return (
@@ -68,7 +80,8 @@ const ContentEditorAndPreview: FC<ContentEditorAndPreviewProps> = ({
 			</div>
 		);
 	}
-	if (!isEditing) return <MarkdownPreview content={data || "No content"} disabled={disabled} />;
+	if (!isEditing)
+		return <MarkdownPreview content={data || "No content"} disabled={disabled} landing={landing} />;
 	if (!isPreviewingEdit) {
 		return (
 			<ReactTextareaAutosize
@@ -82,13 +95,18 @@ const ContentEditorAndPreview: FC<ContentEditorAndPreviewProps> = ({
 					"w-full h-fit bg-transparent resize-none outline-none overflow-hidden disabled:opacity-80 disabled:animate-pulse disabled:pointer-events-none disabled:select-none",
 					{
 						"min-h-44": isCreatingNewFile,
+					},
+					{
+						"text-sm": landing,
 					}
 				)}
 				onChange={(e) => isCreatingNewFile && setContent && setContent(e.target.value)}
 			/>
 		);
 	}
-	return <MarkdownPreview content={editedFileCache.current} disabled={disabled} />;
+	return (
+		<MarkdownPreview content={editedFileCache.current} disabled={disabled} landing={landing} />
+	);
 };
 
 export default ContentEditorAndPreview;

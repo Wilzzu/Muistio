@@ -12,12 +12,20 @@ import useFetchFileContent from "../../hooks/useFetchFileContent";
 import ContentEditorAndPreview from "./ContentEditorAndPreview";
 import useKeyboardSave from "../../hooks/useKeyboardSave";
 
+type LandingOptions = {
+	enabled: boolean;
+	isPreviewingEdit: boolean;
+	isEditing: boolean;
+	landingContent: string;
+	setLandingContent: Dispatch<SetStateAction<string>>;
+};
+
 type FilePreviewProps = {
 	isCreatingNewFile?: boolean;
 	setContent?: Dispatch<SetStateAction<string>>;
 	disabled?: boolean;
 	warning?: boolean;
-	landing?: boolean;
+	landing?: LandingOptions;
 	onClick?: () => void;
 };
 
@@ -41,6 +49,7 @@ const FilePreview: FC<FilePreviewProps> = ({
 	useKeyboardSave(saveEdits, isEditing, isCreatingNewFile);
 
 	const checkForUnsavedChanges = () => {
+		if (landing?.enabled) return false;
 		if (!isEditing || disabled || isCreatingNewFile) return false;
 		if (editorRef?.current) editedFileCache.current = editorRef.current.value;
 		if (data === editedFileCache.current) return false;
@@ -50,8 +59,8 @@ const FilePreview: FC<FilePreviewProps> = ({
 	const blocker = useUnsavedChangesWarning(checkForUnsavedChanges); // For blocking navigation
 
 	const startEditing = () => {
-		if (isEditing || !data) return;
-		editedFileCache.current = data;
+		if (isEditing || (!landing?.enabled && !data)) return;
+		editedFileCache.current = landing?.landingContent || data || "";
 		setIsEditing(true);
 	};
 
@@ -86,6 +95,12 @@ const FilePreview: FC<FilePreviewProps> = ({
 	function saveEdits() {
 		// Set cache to current value
 		if (editorRef?.current) editedFileCache.current = editorRef.current.value;
+
+		// If landing page
+		if (landing?.enabled) {
+			landing.setLandingContent(editedFileCache.current);
+			return discardAndExit();
+		}
 
 		// If no changes made
 		if (!selectedFile || !editedFileCache.current || data === editedFileCache.current) {
@@ -189,7 +204,8 @@ const FilePreview: FC<FilePreviewProps> = ({
 								isRefetching={isRefetching}
 								isError={isError}
 								error={error}
-								data={data}
+								data={landing?.landingContent || data}
+								landing={landing?.enabled}
 							/>
 						</section>
 					</div>
