@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import FilePreview from "../../features/FilePreview/FilePreview";
 
 const defaultContent: string = `
@@ -55,16 +55,35 @@ To run the project locally:
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/Wilzzu/wilzzu.dev/blob/main/LICENSE) file for details.
 `;
 
 const LandingEditor = () => {
-	const [isPreviewingEdit, setIsPreviewingEdit] = useState(false);
-	const [isEditing, setIsEditing] = useState(false);
-	const [landingContent, setLandingContent] = useState(defaultContent);
+	const [landingContent, setLandingContent] = useState("# W");
+	const [interactedLanding, setInteractedLanding] = useState(false);
+	const [scrolledLanding, setScrolledLanding] = useState(false);
+	useEffect(() => {
+		if (interactedLanding) return;
+		if (landingContent.length < defaultContent.length) {
+			const timeout = setTimeout(() => {
+				setLandingContent(defaultContent.slice(0, landingContent.length + 1));
+			}, 5);
+
+			return () => clearTimeout(timeout);
+		}
+	}, [landingContent, interactedLanding]);
+
 	return (
 		<FilePreview
-			landing={{ enabled: true, isPreviewingEdit, isEditing, landingContent, setLandingContent }}
+			landing={{
+				enabled: true,
+				landingContent,
+				setLandingContent,
+				interactedLanding,
+				setInteractedLanding,
+				scrolledLanding,
+				setScrolledLanding,
+			}}
 		/>
 	);
 };

@@ -1,5 +1,5 @@
 import PreviewOptions from "./PreviewOptions";
-import { Dispatch, FC, SetStateAction, useContext, useRef, useState } from "react";
+import { Dispatch, FC, SetStateAction, useContext, useEffect, useRef, useState } from "react";
 import Modal from "../../components/common/Modal";
 import Button from "../../components/common/Button";
 import useUnsavedChangesWarning from "../../hooks/useUnsavedChangesWarning";
@@ -14,10 +14,12 @@ import useKeyboardSave from "../../hooks/useKeyboardSave";
 
 type LandingOptions = {
 	enabled: boolean;
-	isPreviewingEdit: boolean;
-	isEditing: boolean;
 	landingContent: string;
 	setLandingContent: Dispatch<SetStateAction<string>>;
+	interactedLanding: boolean;
+	setInteractedLanding: Dispatch<SetStateAction<boolean>>;
+	scrolledLanding: boolean;
+	setScrolledLanding: Dispatch<SetStateAction<boolean>>;
 };
 
 type FilePreviewProps = {
@@ -46,6 +48,8 @@ const FilePreview: FC<FilePreviewProps> = ({
 	const [isPreviewingEdit, setIsPreviewingEdit] = useState(false);
 	const editedFileCache = useRef<string>("");
 	const editorRef = useRef<HTMLTextAreaElement>(null);
+	const scrollRef = useRef<HTMLDivElement>(null);
+	const [scrollTop, setScrollTop] = useState<number>(0);
 	useKeyboardSave(saveEdits, isEditing, isCreatingNewFile);
 
 	const checkForUnsavedChanges = () => {
@@ -60,6 +64,7 @@ const FilePreview: FC<FilePreviewProps> = ({
 
 	const startEditing = () => {
 		if (isEditing || (!landing?.enabled && !data)) return;
+		if (landing?.enabled) landing.setInteractedLanding(true);
 		editedFileCache.current = landing?.landingContent || data || "";
 		setIsEditing(true);
 	};
@@ -116,6 +121,34 @@ const FilePreview: FC<FilePreviewProps> = ({
 		discardAndExit();
 	}
 
+	// Check if user has scrolled up from the bottom
+	useEffect(() => {
+		const container = scrollRef.current;
+		if (!container || !landing?.enabled) return;
+
+		const handleUserScroll = () => {
+			console.log(container.scrollTop);
+			const isBottom = container.scrollHeight - container.scrollTop - 50 < container.clientHeight;
+			if (scrollTop - 5 > container.scrollTop) landing?.setScrolledLanding(true);
+			setScrollTop(container.scrollTop);
+		};
+
+		container.addEventListener("scroll", handleUserScroll);
+		return () => container.removeEventListener("scroll", handleUserScroll);
+	}, [landing, scrollTop]);
+
+	// Scroll to bottom when landing content changes
+	useEffect(() => {
+		if (
+			scrollRef.current &&
+			landing?.enabled &&
+			!landing?.interactedLanding &&
+			!landing?.scrolledLanding
+		) {
+			scrollRef.current.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
+		}
+	}, [landing, landing?.landingContent, landing?.interactedLanding, landing?.scrolledLanding]);
+
 	return (
 		<>
 			<div
@@ -164,6 +197,7 @@ const FilePreview: FC<FilePreviewProps> = ({
 						)}
 						{/* Main content with scroll */}
 						<section
+							ref={scrollRef}
 							onDoubleClick={handleDoubleClick}
 							className={cn(
 								"h-[calc(100dvh-8.6rem)] overflow-scroll scrollbar scrollbar-w-[6px] scrollbar-h-[6px] scrollbar-thumb-primaryHighlight/50 scrollbar-thumb-rounded-full duration-700",
