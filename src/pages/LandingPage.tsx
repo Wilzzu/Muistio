@@ -1,13 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import LandingNavbar from "../components/layout/Navbar/LandingNavbar";
 import CTAButton from "../components/landing/CTAButton";
 import SectionOne from "../components/landing/SectionOne";
 import SectionTwo from "../components/landing/SectionTwo";
 import SectionThree from "../components/landing/SectionThree";
+import SectionSelector from "../components/landing/SectionSelector";
 
 const LandingPage = () => {
-	const [activeSection, setActiveSection] = useState(3);
+	const [activeSection, setActiveSection] = useState(1);
+	const [hasInteracted, setHasInteracted] = useState(false);
+	const scrollBuffer = useRef(false);
 
 	// Memoize section so we dont rerender them
 	const { S1Text, S1Image } = useMemo(() => SectionOne(), []);
@@ -26,6 +29,35 @@ const LandingPage = () => {
 	// Show the active section
 	const { Text: ActiveText, Image: ActiveImage } = sections[activeSection - 1];
 
+	// Scroll to next/prev section
+	useEffect(() => {
+		const handleScroll = (event: WheelEvent) => {
+			if (scrollBuffer.current) return;
+
+			if (event.deltaY > 0) setActiveSection((prev) => (prev === 3 ? 1 : prev + 1));
+			else setActiveSection((prev) => (prev === 1 ? 3 : prev - 1));
+			setHasInteracted(true);
+
+			// Buffer scroll so user doesn't skip multiple sections
+			scrollBuffer.current = true;
+			setTimeout(() => {
+				scrollBuffer.current = false;
+			}, 500);
+		};
+
+		window.addEventListener("wheel", handleScroll);
+		return () => window.removeEventListener("wheel", handleScroll);
+	}, []);
+
+	// Change section automatically after time
+	useEffect(() => {
+		const timeout = setTimeout(() => {
+			if (!hasInteracted) setActiveSection((prev) => (prev === 3 ? 1 : prev + 1));
+		}, 5600);
+
+		return () => clearTimeout(timeout);
+	}, [activeSection, hasInteracted]);
+
 	return (
 		<div className="h-dvh px-2 py-1 overflow-hidden">
 			{/* Scrollable container */}
@@ -35,10 +67,12 @@ const LandingPage = () => {
 					<section className="flex flex-col justify-center gap-8 px-4 col-span-2">
 						{ActiveText && <ActiveText />}
 						<CTAButton />
-						{/* DEV next button */}
-						<button onClick={() => setActiveSection((prev) => (prev === 3 ? 1 : prev + 1))}>
-							next
-						</button>
+						<SectionSelector
+							activeSection={activeSection}
+							setActiveSection={setActiveSection}
+							hasInteracted={hasInteracted}
+							setHasInteracted={setHasInteracted}
+						/>
 					</section>
 					{/* Images */}
 					<section className="relative min-h-[700px] col-span-3 flex flex-col items-center justify-center select-none">

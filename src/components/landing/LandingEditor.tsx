@@ -67,7 +67,7 @@ const LandingEditor = () => {
 		if (landingContent.length < defaultContent.length) {
 			const timeout = setTimeout(() => {
 				setLandingContent(defaultContent.slice(0, landingContent.length + 1));
-			}, 5);
+			}, 3);
 
 			return () => clearTimeout(timeout);
 		}

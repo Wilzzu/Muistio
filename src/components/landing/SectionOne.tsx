@@ -1,7 +1,5 @@
-import Landing2Note from "../../assets/landing-page/Landing_2_Note.webp";
-import Landing2CloudMain from "../../assets/landing-page/Landing_2_Cloud_Main.webp";
-import Landing2CloudLeft from "../../assets/landing-page/Landing_2_Cloud_Left.webp";
-import Landing2CloudRight from "../../assets/landing-page/Landing_2_Cloud_Right.webp";
+import Landing1Note from "../../assets/landing-page/Landing_1_Note.webp";
+import LandingEditor from "./LandingEditor";
 
 const SectionOne = () => {
 	const S1Text = () => (
@@ -20,25 +18,17 @@ const SectionOne = () => {
 
 	const S1Image = () => (
 		<>
-			{/* Cloud */}
-			<div className="absolute h-auto w-[76%] z-0 animate-cloud-main">
-				<img draggable={false} src={Landing2CloudMain} className="h-auto w-full object-contain" />
-				<img
-					draggable={false}
-					src={Landing2CloudLeft}
-					className="absolute top-[132px] left-[61px] h-auto w-[34%] object-contain animate-cloud-left"
-				/>
-				<img
-					draggable={false}
-					src={Landing2CloudRight}
-					className="absolute top-[112px] right-[44px] h-auto w-[32%] object-contain animate-cloud-right"
-				/>
+			{/* Editor */}
+			<div className="relative h-full w-full flex items-center justify-center z-0 perspective-750 overflow-hidden shadow-accent/15 drop-shadow-centered-2xl ">
+				<div className="absolute -translate-y-12 right-2 w-[74%] scale-x-[95%] rotate-x-12 rotate-y-[20deg] -rotate-z-6 transform-gpu">
+					<LandingEditor />
+				</div>
 			</div>
 			{/* Note */}
 			<img
 				draggable={false}
-				src={Landing2Note}
-				className="absolute h-auto w-[65%] translate-y-36 object-contain z-[1]"
+				src={Landing1Note}
+				className="absolute h-auto w-[60%] -translate-x-16 translate-y-36 object-contain z-[1] pointer-events-none"
 			/>
 		</>
 	);
