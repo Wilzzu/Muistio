@@ -77,7 +77,7 @@ export default {
 				underline: "underline 1.5s cubic-bezier(.69,.05,.16,1)",
 				"scroll-full-down": "scroll-full-down 6s linear infinite",
 				"scroll-full-down-start-middle": "scroll-full-down 6s -3s linear infinite",
-				progress: "progress 5.5s linear",
+				progress: "progress 7s linear",
 			},
 		},
 	},

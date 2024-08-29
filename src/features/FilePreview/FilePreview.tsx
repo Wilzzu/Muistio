@@ -127,8 +127,6 @@ const FilePreview: FC<FilePreviewProps> = ({
 		if (!container || !landing?.enabled) return;
 
 		const handleUserScroll = () => {
-			console.log(container.scrollTop);
-			const isBottom = container.scrollHeight - container.scrollTop - 50 < container.clientHeight;
 			if (scrollTop - 5 > container.scrollTop) landing?.setScrolledLanding(true);
 			setScrollTop(container.scrollTop);
 		};
@@ -152,6 +150,7 @@ const FilePreview: FC<FilePreviewProps> = ({
 	return (
 		<>
 			<div
+				id={landing?.enabled ? "muistioLandingEditor" : "muistioEditor"}
 				className={cn(
 					"w-full lg:w-2/3 xl:w-[clamp(640px,60%,790px)] p-3 pr-1 shrink-0",
 					{
