@@ -1,14 +1,18 @@
 import Landing3Note from "../../assets/landing-page/Landing_3_Note.webp";
+import LandingTextAnimation from "./LandingTextAnimation";
 import ScrollingEncryptedText from "./ScrollingEncryptedText";
 
 const SectionThree = () => {
 	const S3Text = () => (
 		<>
 			<h1 className="text-[3.5rem] leading-[3.9rem] font-bold">
-				Your Files,
-				<br /> Your Key,
-				<br />
-				<span className="text-accent selection:text-black">Your Privacy</span>
+				<LandingTextAnimation
+					content={[
+						{ text: "Your Files," },
+						{ text: "Your Key," },
+						{ text: "Your Privacy", highlight: [0, 11] },
+					]}
+				/>
 			</h1>
 			<p className="text-lg leading-[1.575rem]">
 				Your privacy is non-negotiable. We encrypt your files with a{" "}

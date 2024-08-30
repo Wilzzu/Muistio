@@ -1,4 +1,4 @@
-import { Dispatch, FC, SetStateAction, useState } from "react";
+import { Dispatch, FC, SetStateAction } from "react";
 import { cn } from "../../lib/utils";
 
 type SectionSelectorProps = {
@@ -55,7 +55,7 @@ const SectionSelector: FC<SectionSelectorProps> = ({
 	setHasInteracted,
 }) => {
 	return (
-		<div className="flex gap-4 py-4 items-center justify-start mt-20">
+		<div className="flex gap-4 py-4 items-center justify-start mt-14">
 			{[1, 2, 3].map((index) => (
 				<SelectorButton
 					key={index}

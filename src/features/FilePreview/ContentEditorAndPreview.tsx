@@ -39,7 +39,7 @@ const MarkdownPreview: FC<MarkdownPreviewProps> = ({ content, disabled, landing 
 				"animate-pulse pointer-events-none select-none": disabled,
 			},
 			{
-				"prose-sm text-xs prose-headings:mt-4 prose-h1:pb-0 prose-h1:text-lg prose-h2:text-base prose-h3:text-sm prose-p:text-xs prose-p:leading-5 prose-img:max-w-[80%]":
+				"prose-sm text-xs prose-headings:mt-4 prose-h1:pb-0 prose-h1:text-lg prose-h2:text-base prose-h3:text-sm prose-p:text-xs prose-p:leading-5 prose-img:max-w-[80%] select-text":
 					landing,
 			}
 		)}>

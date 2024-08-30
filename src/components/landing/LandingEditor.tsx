@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
 import FilePreview from "../../features/FilePreview/FilePreview";
 
 const defaultContent: string = `
@@ -58,12 +58,14 @@ To run the project locally:
 This project is licensed under the MIT License - see the [LICENSE](https://github.com/Wilzzu/wilzzu.dev/blob/main/LICENSE) file for details.
 `;
 
-const LandingEditor = () => {
+const LandingEditor: FC<{ setHasInteracted: Dispatch<SetStateAction<boolean>> }> = ({
+	setHasInteracted,
+}) => {
 	const [landingContent, setLandingContent] = useState("# W");
 	const [interactedLanding, setInteractedLanding] = useState(false);
 	const [scrolledLanding, setScrolledLanding] = useState(false);
 	useEffect(() => {
-		if (interactedLanding) return;
+		if (interactedLanding) return setHasInteracted(true);
 		if (landingContent.length < defaultContent.length) {
 			const timeout = setTimeout(() => {
 				setLandingContent(defaultContent.slice(0, landingContent.length + 1));
@@ -71,7 +73,7 @@ const LandingEditor = () => {
 
 			return () => clearTimeout(timeout);
 		}
-	}, [landingContent, interactedLanding]);
+	}, [landingContent, interactedLanding, setHasInteracted]);
 
 	return (
 		<FilePreview

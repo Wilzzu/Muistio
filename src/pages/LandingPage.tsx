@@ -7,14 +7,15 @@ import SectionTwo from "../components/landing/SectionTwo";
 import SectionThree from "../components/landing/SectionThree";
 import SectionSelector from "../components/landing/SectionSelector";
 import useDetectScroll from "../hooks/useDetectScroll";
+import { AnimatePresence } from "framer-motion";
 
 const LandingPage = () => {
 	const [activeSection, setActiveSection] = useState(1);
 	const [hasInteracted, setHasInteracted] = useState(false);
 	useDetectScroll(onPageScroll, "muistioLandingEditor");
 
-	// Memoize section so we dont rerender them
-	const { S1Text, S1Image } = useMemo(() => SectionOne(), []);
+	// Memoize sections so we dont rerender them
+	const { S1Text, S1Image } = useMemo(() => SectionOne(setHasInteracted), []);
 	const { S2Text, S2Image } = useMemo(() => SectionTwo(), []);
 	const { S3Text, S3Image } = useMemo(() => SectionThree(), []);
 
@@ -41,7 +42,7 @@ const LandingPage = () => {
 	useEffect(() => {
 		const timeout = setTimeout(() => {
 			if (!hasInteracted) setActiveSection((prev) => (prev === 3 ? 1 : prev + 1));
-		}, 7150);
+		}, 10150);
 
 		return () => clearTimeout(timeout);
 	}, [activeSection, hasInteracted]);
@@ -51,21 +52,27 @@ const LandingPage = () => {
 			{/* Scrollable container */}
 			<div className="h-dvh flex flex-col items-center overflow-y-scroll scrollbar scrollbar-w-[6px] scrollbar-thumb-primaryHighlight scrollbar-thumb-rounded-full">
 				<LandingNavbar />
-				<main className="max-w-[1200px] grid grid-cols-5 h-full min-h-[700px] pb-20">
-					<section className="flex flex-col justify-center gap-8 px-4 col-span-2">
-						{ActiveText && <ActiveText />}
-						<CTAButton />
-						<SectionSelector
-							activeSection={activeSection}
-							setActiveSection={setActiveSection}
-							hasInteracted={hasInteracted}
-							setHasInteracted={setHasInteracted}
-						/>
-					</section>
-					{/* Images */}
-					<section className="relative min-h-[700px] col-span-3 flex flex-col items-center justify-center select-none">
-						{ActiveImage && <ActiveImage />}
-					</section>
+				<main className="max-w-[1200px] w-full grid grid-cols-5 h-full min-h-[700px] pb-20">
+					<AnimatePresence>
+						<section
+							key="LandingTextSection"
+							className="flex flex-col justify-center gap-8 px-4 col-span-2">
+							{ActiveText && <ActiveText />}
+							<CTAButton />
+							<SectionSelector
+								activeSection={activeSection}
+								setActiveSection={setActiveSection}
+								hasInteracted={hasInteracted}
+								setHasInteracted={setHasInteracted}
+							/>
+						</section>
+						{/* Images */}
+						<section
+							key="LandingImageSection"
+							className="relative min-h-[700px] col-span-3 flex flex-col items-center justify-center select-none">
+							{ActiveImage && <ActiveImage />}
+						</section>
+					</AnimatePresence>
 				</main>
 			</div>
 		</div>
