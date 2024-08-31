@@ -1,13 +1,14 @@
 import { Dispatch, SetStateAction } from "react";
 import Landing1Note from "../../assets/landing-page/Landing_1_Note.webp";
 import LandingEditor from "./LandingEditor";
-import LandingTextAnimation from "./LandingTextAnimation";
+import LandingTitleAnimation from "./LandingTitleAnimation";
+import LandingParagraphAnimation from "./LandingParagraphAnimation";
 
 const SectionOne = (setHasInteracted: Dispatch<SetStateAction<boolean>>) => {
 	const S1Text = () => (
 		<>
 			<h1 className="text-[3.5rem] leading-[3.9rem] font-bold">
-				<LandingTextAnimation
+				<LandingTitleAnimation
 					content={[
 						{ text: "Your Ideas,", highlight: [0, 9] },
 						{ text: "Secured &" },
@@ -15,12 +16,12 @@ const SectionOne = (setHasInteracted: Dispatch<SetStateAction<boolean>>) => {
 					]}
 				/>
 			</h1>
-			<p className="text-lg leading-[1.575rem]">
+			<LandingParagraphAnimation>
 				Create and edit text files with Muistio Markdown editor, perfect for{" "}
 				<span className="text-[#21aeff] selection:text-black">quick notes</span> or{" "}
 				<span className="text-[#21aeff] selection:text-black">detailed documents</span>. All files
 				are encrypted locally and stored in the cloud.
-			</p>
+			</LandingParagraphAnimation>
 		</>
 	);
 

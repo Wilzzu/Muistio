@@ -53,22 +53,28 @@ const LandingPage = () => {
 			<div className="h-dvh flex flex-col items-center overflow-y-scroll scrollbar scrollbar-w-[6px] scrollbar-thumb-primaryHighlight scrollbar-thumb-rounded-full">
 				<LandingNavbar />
 				<main className="max-w-[1200px] w-full grid grid-cols-5 h-full min-h-[700px] pb-20">
-					<AnimatePresence>
-						<section
-							key="LandingTextSection"
-							className="flex flex-col justify-center gap-8 px-4 col-span-2">
-							{ActiveText && <ActiveText />}
-							<CTAButton />
+					<section className="flex flex-col justify-center gap-8 px-4 col-span-2">
+						{/* Text */}
+						<AnimatePresence mode="wait">
+							{ActiveText && <ActiveText key={`LandingTextContent-${activeSection}`} />}
+						</AnimatePresence>
+
+						<CTAButton />
+
+						{/* Section Selector */}
+						<AnimatePresence mode="wait">
 							<SectionSelector
 								activeSection={activeSection}
 								setActiveSection={setActiveSection}
 								hasInteracted={hasInteracted}
 								setHasInteracted={setHasInteracted}
 							/>
-						</section>
-						{/* Images */}
+						</AnimatePresence>
+					</section>
+					{/* Images */}
+					<AnimatePresence mode="wait">
 						<section
-							key="LandingImageSection"
+							key={`LandingImageSection-${activeSection}`}
 							className="relative min-h-[700px] col-span-3 flex flex-col items-center justify-center select-none">
 							{ActiveImage && <ActiveImage />}
 						</section>

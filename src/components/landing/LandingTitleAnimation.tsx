@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { FC } from "react";
 import { cn } from "../../lib/utils";
 
-type LandingTextContent = {
+type LandingTitleContent = {
 	text: string;
 	highlight?: number[];
 	underline?: string;
@@ -23,6 +23,15 @@ const textAnimation = {
 			ease: [0.18, 0.1, 0.25, 1],
 		},
 	},
+	exit: {
+		y: -16,
+		opacity: 0,
+		rotate: 0.0001,
+		transition: {
+			duration: 0.3,
+			ease: [0.18, 0.1, 0.25, 1],
+		},
+	},
 };
 
 const underlineAnimation = {
@@ -37,6 +46,14 @@ const underlineAnimation = {
 			duration: 1.7,
 			ease: [0.93, 0, 0.33, 1],
 			opacity: { duration: 1, ease: [0.93, 0, 0.33, 1] },
+		},
+	},
+	exit: {
+		width: 0,
+		opacity: 0,
+		transition: {
+			duration: 0.3,
+			ease: "easeInOut",
 		},
 	},
 };
@@ -57,7 +74,7 @@ const highlightCharacter = (
 	return startIndex >= range[0] && endIndex <= range[1];
 };
 
-const LandingTextAnimation: FC<{ content: LandingTextContent[] }> = ({ content }) => {
+const LandingTitleAnimation: FC<{ content: LandingTitleContent[] }> = ({ content }) => {
 	return (
 		<>
 			<span className="sr-only">{content.map((e) => e.text).join(" ")}</span>
@@ -65,9 +82,11 @@ const LandingTextAnimation: FC<{ content: LandingTextContent[] }> = ({ content }
 			<motion.span
 				initial="hidden"
 				animate="visible"
+				exit="exit"
 				variants={{
 					visible: { transition: { staggerChildren: 0.05 } },
 					hidden: {},
+					exit: { transition: { staggerChildren: 0.01, staggerDirection: -1 } },
 				}}
 				aria-hidden>
 				{/* Line */}
@@ -119,4 +138,4 @@ const LandingTextAnimation: FC<{ content: LandingTextContent[] }> = ({ content }
 	);
 };
 
-export default LandingTextAnimation;
+export default LandingTitleAnimation;

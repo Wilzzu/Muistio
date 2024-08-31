@@ -2,13 +2,14 @@ import Landing2Note from "../../assets/landing-page/Landing_2_Note.webp";
 import Landing2CloudMain from "../../assets/landing-page/Landing_2_Cloud_Main.webp";
 import Landing2CloudLeft from "../../assets/landing-page/Landing_2_Cloud_Left.webp";
 import Landing2CloudRight from "../../assets/landing-page/Landing_2_Cloud_Right.webp";
-import LandingTextAnimation from "./LandingTextAnimation";
+import LandingTitleAnimation from "./LandingTitleAnimation";
+import LandingParagraphAnimation from "./LandingParagraphAnimation";
 
 const SectionTwo = () => {
 	const S2Text = () => (
 		<>
 			<h1 className="text-[3.5rem] leading-[3.9rem] font-bold">
-				<LandingTextAnimation
+				<LandingTitleAnimation
 					content={[
 						{ text: "10MB of", highlight: [0, 4] },
 						{ text: "Cloud Storage" },
@@ -16,14 +17,14 @@ const SectionTwo = () => {
 					]}
 				/>
 			</h1>
-			<p className="text-lg leading-[1.575rem]">
+			<LandingParagraphAnimation>
 				That's enough space to store the entire
 				<br />
 				<span className="text-[#21aeff] selection:text-black">Lord of the Rings</span> and{" "}
 				<span className="text-[#21aeff] selection:text-black">Harry Potter</span> book series,
 				<br />
 				<i>combined</i>.
-			</p>
+			</LandingParagraphAnimation>
 		</>
 	);
 

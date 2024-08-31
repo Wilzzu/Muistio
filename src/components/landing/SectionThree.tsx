@@ -1,12 +1,13 @@
 import Landing3Note from "../../assets/landing-page/Landing_3_Note.webp";
-import LandingTextAnimation from "./LandingTextAnimation";
+import LandingParagraphAnimation from "./LandingParagraphAnimation";
+import LandingTitleAnimation from "./LandingTitleAnimation";
 import ScrollingEncryptedText from "./ScrollingEncryptedText";
 
 const SectionThree = () => {
 	const S3Text = () => (
 		<>
 			<h1 className="text-[3.5rem] leading-[3.9rem] font-bold">
-				<LandingTextAnimation
+				<LandingTitleAnimation
 					content={[
 						{ text: "Your Files," },
 						{ text: "Your Key," },
@@ -14,13 +15,13 @@ const SectionThree = () => {
 					]}
 				/>
 			</h1>
-			<p className="text-lg leading-[1.575rem]">
+			<LandingParagraphAnimation>
 				Your privacy is non-negotiable. We encrypt your files with a{" "}
 				<span className="text-[#21aeff] selection:text-black">key only you know</span>, that is
 				never sent to us.
 				<br />
 				No one else — <b>not even us</b> — can access your files.
-			</p>
+			</LandingParagraphAnimation>
 		</>
 	);
 
