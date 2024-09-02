@@ -75,7 +75,7 @@ const LandingPage = () => {
 					<AnimatePresence mode="wait">
 						<section
 							key={`LandingImageSection-${activeSection}`}
-							className="relative min-h-[700px] col-span-3 flex flex-col items-center justify-center select-none">
+							className="relative min-h-[700px] col-span-3 flex flex-col items-center justify-center select-none overflow-hidden shadow-accent/20 drop-shadow-centered-2xl">
 							{ActiveImage && <ActiveImage />}
 						</section>
 					</AnimatePresence>

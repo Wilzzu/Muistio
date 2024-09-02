@@ -2,6 +2,34 @@ import Landing3Note from "../../assets/landing-page/Landing_3_Note.webp";
 import LandingParagraphAnimation from "./LandingParagraphAnimation";
 import LandingTitleAnimation from "./LandingTitleAnimation";
 import ScrollingEncryptedText from "./ScrollingEncryptedText";
+import { motion } from "framer-motion";
+
+const imageAnimation = {
+	hidden: (mult = 1) => ({ opacity: 0, y: 16 * mult, scale: 0.9, filter: "blur(5px)" }),
+	visible: {
+		opacity: 1,
+		y: 0,
+		rotate: 0.001,
+		scale: 1,
+		filter: "blur(0)",
+		transition: {
+			duration: 1.4,
+			ease: [0.17, 0.5, 0.14, 1],
+			opacity: { duration: 1, ease: "easeOut" },
+		},
+	},
+	exit: (mult = 1) => ({
+		opacity: 0,
+		y: -50 * mult,
+		scale: 1.05,
+		filter: "blur(4px)",
+		transition: {
+			duration: 0.6,
+			ease: [0.55, 0.28, 0.88, 0.76],
+			opacity: { duration: 0.5, ease: "easeIn" },
+		},
+	}),
+};
 
 const SectionThree = () => {
 	const S3Text = () => (
@@ -28,11 +56,21 @@ const SectionThree = () => {
 	const S3Image = () => (
 		<>
 			{/* Encryption text */}
-			<div className="absolute h-1/2 w-[76%] -translate-x-2 -translate-y-36 z-0 perspective-750">
+			<motion.div
+				initial="hidden"
+				animate="visible"
+				exit="exit"
+				variants={imageAnimation}
+				custom={-1}
+				className="absolute h-1/2 w-[76%] -translate-x-2 -translate-y-36 z-0 perspective-750">
 				<ScrollingEncryptedText />
-			</div>
+			</motion.div>
 			{/* Note */}
-			<img
+			<motion.img
+				initial="hidden"
+				animate="visible"
+				exit="exit"
+				variants={imageAnimation}
 				draggable={false}
 				src={Landing3Note}
 				className="absolute h-auto w-[58%] translate-y-32 object-contain z-[1]"

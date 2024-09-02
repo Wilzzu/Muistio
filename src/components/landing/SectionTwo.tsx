@@ -4,6 +4,34 @@ import Landing2CloudLeft from "../../assets/landing-page/Landing_2_Cloud_Left.we
 import Landing2CloudRight from "../../assets/landing-page/Landing_2_Cloud_Right.webp";
 import LandingTitleAnimation from "./LandingTitleAnimation";
 import LandingParagraphAnimation from "./LandingParagraphAnimation";
+import { motion } from "framer-motion";
+
+const imageAnimation = {
+	hidden: (mult = 1) => ({ opacity: 0, y: 16 * mult, scale: 0.9, filter: "blur(5px)" }),
+	visible: {
+		opacity: 1,
+		y: 0,
+		rotate: 0.001,
+		scale: 1,
+		filter: "blur(0)",
+		transition: {
+			duration: 1.4,
+			ease: [0.17, 0.5, 0.14, 1],
+			opacity: { duration: 1, ease: "easeOut" },
+		},
+	},
+	exit: (mult = 1) => ({
+		opacity: 0,
+		y: -50 * mult,
+		scale: 1.05,
+		filter: "blur(4px)",
+		transition: {
+			duration: 0.6,
+			ease: [0.55, 0.28, 0.88, 0.76],
+			opacity: { duration: 0.5, ease: "easeIn" },
+		},
+	}),
+};
 
 const SectionTwo = () => {
 	const S2Text = () => (
@@ -31,21 +59,33 @@ const SectionTwo = () => {
 	const S2Image = () => (
 		<>
 			{/* Cloud */}
-			<div className="absolute h-auto w-[76%] z-0 animate-cloud-main">
-				<img draggable={false} src={Landing2CloudMain} className="h-auto w-full object-contain" />
-				<img
-					draggable={false}
-					src={Landing2CloudLeft}
-					className="absolute top-[132px] left-[61px] h-auto w-[34%] object-contain animate-cloud-left"
-				/>
-				<img
-					draggable={false}
-					src={Landing2CloudRight}
-					className="absolute top-[112px] right-[44px] h-auto w-[32%] object-contain animate-cloud-right"
-				/>
-			</div>
+			<motion.div
+				initial="hidden"
+				animate="visible"
+				exit="exit"
+				variants={imageAnimation}
+				custom={-10}
+				className="relative w-full h-full flex items-center justify-center">
+				<div className="absolute h-auto w-[76%] z-0 animate-cloud-main">
+					<img draggable={false} src={Landing2CloudMain} className="h-auto w-full object-contain" />
+					<img
+						draggable={false}
+						src={Landing2CloudLeft}
+						className="absolute top-[132px] left-[61px] h-auto w-[34%] object-contain animate-cloud-left"
+					/>
+					<img
+						draggable={false}
+						src={Landing2CloudRight}
+						className="absolute top-[112px] right-[44px] h-auto w-[32%] object-contain animate-cloud-right"
+					/>
+				</div>
+			</motion.div>
 			{/* Note */}
-			<img
+			<motion.img
+				initial="hidden"
+				animate="visible"
+				exit="exit"
+				variants={imageAnimation}
 				draggable={false}
 				src={Landing2Note}
 				className="absolute h-auto w-[65%] translate-y-36 object-contain z-[1]"

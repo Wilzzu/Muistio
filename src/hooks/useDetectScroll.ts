@@ -31,7 +31,7 @@ const useDetectScroll = (
 
 			// Buffer scroll so user doesn't skip multiple sections
 			scrollBuffer.current = true;
-			setTimeout(() => (scrollBuffer.current = false), 500);
+			setTimeout(() => (scrollBuffer.current = false), 700);
 		};
 
 		window.addEventListener("wheel", handleScroll);
