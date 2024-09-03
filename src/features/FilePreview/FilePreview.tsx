@@ -151,15 +151,9 @@ const FilePreview: FC<FilePreviewProps> = ({
 		<>
 			<div
 				id={landing?.enabled ? "muistioLandingEditor" : "muistioEditor"}
-				className={cn(
-					"w-full lg:w-2/3 xl:w-[clamp(640px,60%,790px)] p-3 pr-1 shrink-0",
-					{
-						"lg:w-full xl:w-full p-0": isCreatingNewFile,
-					},
-					{
-						"lg:w-full xl:w-full p-0": landing,
-					}
-				)}>
+				className={cn("w-full lg:w-2/3 xl:w-[clamp(640px,60%,790px)] p-3 pr-1 shrink-0", {
+					"lg:w-full xl:w-full p-0": isCreatingNewFile || landing?.enabled,
+				})}>
 				{/* Sticky and border */}
 				<div
 					className={cn(
@@ -174,7 +168,8 @@ const FilePreview: FC<FilePreviewProps> = ({
 						className={cn(
 							"relative w-full pt-6 pb-2 pl-5 pr-[0.35rem] rounded-2xl flex flex-col bg-gradient-radial from-secondary from-40% to-secondary/90 duration-700",
 							{ "py-2": !isEditing },
-							{ "pt-4 pb-2": isCreatingNewFile }
+							{ "pt-4 pb-2": isCreatingNewFile },
+							{ "pt-6 pb-0": isEditing && landing?.enabled }
 						)}>
 						{/* Preview Options */}
 						{(isCreatingNewFile || (!isLoading && !isError && !isRefetching)) && (
@@ -205,7 +200,7 @@ const FilePreview: FC<FilePreviewProps> = ({
 								},
 								{ "h-[calc(100dvh-7.6rem)]": !isEditing },
 								{
-									"min-h-0 h-full aspect-[4/5]": landing,
+									"min-h-0 h-full aspect-[4/5]": landing?.enabled,
 								}
 							)}
 							onClick={onClick}>

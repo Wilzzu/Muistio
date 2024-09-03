@@ -53,7 +53,7 @@ const LandingPage = () => {
 			<div className="h-dvh flex flex-col items-center overflow-y-scroll scrollbar scrollbar-w-[6px] scrollbar-thumb-primaryHighlight scrollbar-thumb-rounded-full">
 				<LandingNavbar />
 				<main className="max-w-[1200px] w-full grid grid-cols-5 h-full min-h-[700px] pb-20">
-					<section className="flex flex-col justify-center gap-8 px-4 col-span-2">
+					<section className="flex flex-col justify-center gap-8 px-4 pt-4 col-span-2">
 						{/* Text */}
 						<AnimatePresence mode="wait">
 							{ActiveText && <ActiveText key={`LandingTextContent-${activeSection}`} />}

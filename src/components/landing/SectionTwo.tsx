@@ -7,8 +7,13 @@ import LandingParagraphAnimation from "./LandingParagraphAnimation";
 import { motion } from "framer-motion";
 
 const imageAnimation = {
-	hidden: (mult = 1) => ({ opacity: 0, y: 16 * mult, scale: 0.9, filter: "blur(5px)" }),
-	visible: {
+	hidden: (cloud = false) => ({
+		opacity: 0,
+		y: cloud ? -200 : 16,
+		scale: 0.9,
+		filter: "blur(5px)",
+	}),
+	visible: (cloud = false) => ({
 		opacity: 1,
 		y: 0,
 		rotate: 0.001,
@@ -17,12 +22,12 @@ const imageAnimation = {
 		transition: {
 			duration: 1.4,
 			ease: [0.17, 0.5, 0.14, 1],
-			opacity: { duration: 1, ease: "easeOut" },
+			opacity: { duration: cloud ? 1 : 0.5, ease: "easeOut" },
 		},
-	},
-	exit: (mult = 1) => ({
+	}),
+	exit: (cloud = false) => ({
 		opacity: 0,
-		y: -50 * mult,
+		y: cloud ? 50 : -50,
 		scale: 1.05,
 		filter: "blur(4px)",
 		transition: {
@@ -64,7 +69,7 @@ const SectionTwo = () => {
 				animate="visible"
 				exit="exit"
 				variants={imageAnimation}
-				custom={-10}
+				custom={true}
 				className="relative w-full h-full flex items-center justify-center">
 				<div className="absolute h-auto w-[76%] z-0 animate-cloud-main">
 					<img draggable={false} src={Landing2CloudMain} className="h-auto w-full object-contain" />

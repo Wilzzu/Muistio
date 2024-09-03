@@ -44,3 +44,10 @@ body {
 		text-orientation: upright;
 	}
 }
+
+@layer utilities {
+	.maskText {
+		-webkit-mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
+		mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
+	}
+}

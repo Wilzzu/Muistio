@@ -39,7 +39,7 @@ const ScrollingEncryptedText = () => {
 	}, []);
 
 	return (
-		<div className="relative flex items-center h-full w-full verticalText font-mono text-accent text-5xl font-bold leading-[1.4] overflow-hidden rotate-y-[30deg]">
+		<div className="relative flex items-center h-full w-full verticalText font-mono text-accent text-5xl font-bold leading-[1.4] overflow-hidden rotate-y-[30deg] maskText">
 			<div className="absolute bottom-full animate-scroll-full-down shadow-accent drop-shadow-highlight">
 				<p>{text1.slice(0, 8)}</p>
 				<p>{text1.slice(8, 16)}</p>
@@ -52,8 +52,6 @@ const ScrollingEncryptedText = () => {
 				<p>{text2.slice(16, 24)}</p>
 				<p>{text2.slice(24, 32)}</p>
 			</div>
-			{/* Top shadow */}
-			<div className="absolute top-0 h-[10%] w-[76%] bg-gradient-to-b from-background to-transparent z-10" />
 		</div>
 	);
 };
