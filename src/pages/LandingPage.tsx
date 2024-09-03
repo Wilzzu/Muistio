@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import LandingNavbar from "../components/layout/Navbar/LandingNavbar";
 import CTAButton from "../components/landing/CTAButton";
 import SectionOne from "../components/landing/SectionOne";
@@ -12,6 +12,7 @@ import { AnimatePresence } from "framer-motion";
 const LandingPage = () => {
 	const [activeSection, setActiveSection] = useState(1);
 	const [hasInteracted, setHasInteracted] = useState(false);
+	const scrollContainerRef = useRef<HTMLDivElement>(null);
 	useDetectScroll(onPageScroll, "muistioLandingEditor");
 
 	// Memoize sections so we dont rerender them
@@ -33,6 +34,13 @@ const LandingPage = () => {
 
 	// Change section on scroll
 	function onPageScroll(event: WheelEvent) {
+		// Ignore scroll if the container has a scrollbar
+		if (
+			scrollContainerRef.current &&
+			scrollContainerRef.current.scrollHeight > scrollContainerRef.current.clientHeight
+		)
+			return;
+
 		if (event.deltaY > 0) setActiveSection((prev) => (prev === 3 ? 1 : prev + 1));
 		else setActiveSection((prev) => (prev === 1 ? 3 : prev - 1));
 		setHasInteracted(true);
@@ -49,9 +57,11 @@ const LandingPage = () => {
 
 	return (
 		<div className="h-dvh px-2 py-1 overflow-hidden">
-			{/* Scrollable container */}
-			<div className="h-dvh flex flex-col items-center overflow-y-scroll scrollbar scrollbar-w-[6px] scrollbar-thumb-primaryHighlight scrollbar-thumb-rounded-full">
-				<LandingNavbar />
+			{/* Scroll container */}
+			<div
+				ref={scrollContainerRef}
+				className="h-dvh flex flex-col items-center overflow-y-scroll scrollbar scrollbar-w-[6px] scrollbar-thumb-primaryHighlight scrollbar-thumb-rounded-full">
+				<LandingNavbar setActiveSection={setActiveSection} />
 				<main className="max-w-[1200px] w-full grid grid-cols-5 h-full min-h-[700px] pb-20">
 					<section className="flex flex-col justify-center gap-8 px-4 pt-4 col-span-2">
 						{/* Text */}
@@ -62,14 +72,12 @@ const LandingPage = () => {
 						<CTAButton />
 
 						{/* Section Selector */}
-						<AnimatePresence mode="wait">
-							<SectionSelector
-								activeSection={activeSection}
-								setActiveSection={setActiveSection}
-								hasInteracted={hasInteracted}
-								setHasInteracted={setHasInteracted}
-							/>
-						</AnimatePresence>
+						<SectionSelector
+							activeSection={activeSection}
+							setActiveSection={setActiveSection}
+							hasInteracted={hasInteracted}
+							setHasInteracted={setHasInteracted}
+						/>
 					</section>
 					{/* Images */}
 					<AnimatePresence mode="wait">

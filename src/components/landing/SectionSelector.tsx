@@ -1,5 +1,5 @@
 import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
-import { cn } from "../../lib/utils";
+import { motion, AnimatePresence } from "framer-motion";
 
 type SectionSelectorProps = {
 	activeSection: number;
@@ -12,16 +12,31 @@ type SelectorButtonProps = {
 	index: number;
 	active: boolean;
 	setActiveSection: Dispatch<SetStateAction<number>>;
+	hasInteracted: boolean;
 	setHasInteracted: Dispatch<SetStateAction<boolean>>;
 	animate: boolean;
 	disabled?: boolean;
 };
 
+const selectedAnimation = {
+	hidden: {
+		transform: "translateX(-100%)",
+	},
+	visible: (interacted: boolean) => ({
+		transform: "translateX(0)",
+		transition: { duration: interacted ? 0.5 : 10, ease: "linear" },
+	}),
+	exit: {
+		transform: "translateX(100%)",
+		transition: { duration: 0.5 },
+	},
+};
 // Button for each section
 const SelectorButton: FC<SelectorButtonProps> = ({
 	index,
 	active,
 	setActiveSection,
+	hasInteracted,
 	setHasInteracted,
 	animate,
 	disabled,
@@ -35,15 +50,21 @@ const SelectorButton: FC<SelectorButtonProps> = ({
 			{/* Border container */}
 			<div className="w-16 h-2 rounded-full bg-primaryHighlight p-[1px] overflow-hidden">
 				{/* Content */}
-				<div className="h-full w-full rounded-full bg-secondaryHighlight">
-					{active && (
-						// Color selected section
-						<div
-							className={cn("h-full w-full  bg-[#07a4ff] rounded-full", {
-								"animate-progress": animate,
-							})}
-						/>
-					)}
+				<div className="h-full w-full rounded-full bg-secondaryHighlight overflow-hidden">
+					<AnimatePresence custom={hasInteracted}>
+						{active && (
+							// Color selected section
+							<motion.div
+								key={index}
+								initial="hidden"
+								animate="visible"
+								exit="exit"
+								variants={selectedAnimation}
+								custom={hasInteracted}
+								className="h-full w-full bg-[#07a4ff] rounded-full"
+							/>
+						)}
+					</AnimatePresence>
 				</div>
 			</div>
 		</button>
@@ -71,6 +92,7 @@ const SectionSelector: FC<SectionSelectorProps> = ({
 					index={index}
 					active={activeSection === index}
 					setActiveSection={setActiveSection}
+					hasInteracted={hasInteracted}
 					setHasInteracted={setHasInteracted}
 					animate={!hasInteracted}
 					disabled={disabled}

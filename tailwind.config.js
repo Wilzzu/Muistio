@@ -26,6 +26,7 @@ export default {
 			dropShadow: {
 				highlight: "0 0 10px var(--tw-shadow-color)",
 				"text-sm": "0 1px 1px var(--tw-shadow-color)",
+				"centered-base": "0 0 16px var(--tw-shadow-color)",
 				"centered-lg": "0 0 24px var(--tw-shadow-color)",
 				"centered-xl": "0 0 32px var(--tw-shadow-color)",
 				"centered-2xl": "0 0 52px var(--tw-shadow-color)",
@@ -64,8 +65,8 @@ export default {
 					"100%": { transform: "translateY(200%)" },
 				},
 				progress: {
-					"0%": { width: "0" },
-					"100%": { width: "100%" },
+					"0%": { transform: "translateX(-100%)" },
+					"100%": { transform: "translateX(0)" },
 				},
 			},
 			animation: {
