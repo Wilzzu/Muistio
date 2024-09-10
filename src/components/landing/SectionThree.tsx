@@ -78,7 +78,7 @@ const SectionThree = () => {
 			</h1>
 			<LandingParagraphAnimation>
 				Your privacy is non-negotiable. We encrypt your files with a{" "}
-				<span className="text-[#21aeff] selection:text-black">key only you know</span>, that is
+				<span className="text-textAccent selection:text-black">key only you know</span>, that is
 				never sent to us.
 				<br />
 				No one else — <b>not even us</b> — can access your files.

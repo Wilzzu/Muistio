@@ -34,7 +34,7 @@ const MarkdownPreview: FC<MarkdownPreviewProps> = ({ content, disabled, landing 
 		remarkPlugins={[remarkGfm]}
 		rehypePlugins={[[rehypeExternalLinks, { target: "_blank" }]]}
 		className={cn(
-			"prose prose-invert font-light text-white prose-headings:mt-6 prose-headings:mb-[0.85rem] prose-h1:text-2xl prose-h1:font-medium prose-h1:border-b-[1px] prose-h1:border-accent prose-h2:border-b-[1px] prose-h2:border-accent/80 prose-h1:pb-1 prose-h2:text-xl prose-h2:font-medium prose-h3:text-lg prose-h3:font-medium prose-p:leading-6 prose-a:text-[#4dbaf8] prose-a:selection:text-black marker:text-accent prose-thead:border-accent prose-tr:border-accent break-words pr-2",
+			"prose prose-invert font-light text-white prose-headings:mt-6 prose-headings:mb-[0.85rem] prose-h1:text-2xl prose-h1:font-medium prose-h1:border-b-[1px] prose-h1:border-accent prose-h2:border-b-[1px] prose-h2:border-accent/80 prose-h1:pb-1 prose-h2:text-xl prose-h2:font-medium prose-h3:text-lg prose-h3:font-medium prose-p:leading-6 prose-a:text-textAccent prose-a:selection:text-black marker:text-accent prose-thead:border-accent prose-tr:border-accent break-words pr-2",
 			{
 				"animate-pulse pointer-events-none select-none": disabled,
 			},

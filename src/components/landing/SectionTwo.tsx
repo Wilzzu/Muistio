@@ -53,8 +53,8 @@ const SectionTwo = () => {
 			<LandingParagraphAnimation>
 				That's enough space to store the entire
 				<br />
-				<span className="text-[#21aeff] selection:text-black">Lord of the Rings</span> and{" "}
-				<span className="text-[#21aeff] selection:text-black">Harry Potter</span> book series,
+				<span className="text-textAccent selection:text-black">Lord of the Rings</span> and{" "}
+				<span className="text-textAccent selection:text-black">Harry Potter</span> book series,
 				<br />
 				<i>combined</i>.
 			</LandingParagraphAnimation>

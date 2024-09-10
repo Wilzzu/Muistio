@@ -2,6 +2,7 @@ import Button from "../common/Button";
 import { FaGoogle } from "react-icons/fa";
 import Modal from "../common/Modal";
 import useLogin from "../../hooks/useLogin";
+import { Link } from "react-router-dom";
 
 const Login = () => {
 	const { login } = useLogin();
@@ -16,6 +17,17 @@ const Login = () => {
 				<Button highlight onClick={login} style={{ main: "bg-opacity-80" }}>
 					<FaGoogle /> Sign in with Google
 				</Button>
+				<p className="text-[0.76rem] leading-tight text-white/50">
+					By continuing, you agree to Muistio's <br />
+					<Link to="/terms-of-service" className="text-textAccent hover:underline">
+						Terms of Service
+					</Link>{" "}
+					and{" "}
+					<Link to="/privacy-policy" className="text-textAccent hover:underline">
+						Privacy Policy
+					</Link>
+					.
+				</p>
 			</section>
 		</Modal>
 	);

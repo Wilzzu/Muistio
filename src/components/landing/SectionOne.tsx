@@ -46,8 +46,8 @@ const SectionOne = (setHasInteracted: Dispatch<SetStateAction<boolean>>) => {
 			</h1>
 			<LandingParagraphAnimation>
 				Create and edit text files with Muistio Markdown editor, perfect for{" "}
-				<span className="text-[#21aeff] selection:text-black">quick notes</span> or{" "}
-				<span className="text-[#21aeff] selection:text-black">detailed documents</span>. All files
+				<span className="text-textAccent selection:text-black">quick notes</span> or{" "}
+				<span className="text-textAccent selection:text-black">detailed documents</span>. All files
 				are encrypted locally and stored in the cloud.
 			</LandingParagraphAnimation>
 		</>

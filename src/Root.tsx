@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Navbar from "./components/layout/Navbar/Navbar";
 import Login from "./components/authentication/Login";
 import LoadingModal from "./components/common/LoadingModal";
@@ -10,6 +10,21 @@ import CreateEncryptionKey from "./components/authentication/CreateEncryptionKey
 import ValidateEncryptionKey from "./components/authentication/ValidateEncryptionKey";
 import CreateNewFile from "./features/CreateNewFile/CreateNewFile";
 import FilesProvider from "./context/FilesProvider";
+import LandingNavbar from "./components/layout/Navbar/LandingNavbar";
+
+const DefaultLayout = () => {
+	const navigate = useNavigate();
+	return (
+		<div className="h-dvh px-2 py-1 overflow-hidden">
+			<div className="h-full flex flex-col items-center overflow-y-scroll scrollbar scrollbar-w-[6px] scrollbar-thumb-primaryHighlight scrollbar-thumb-rounded-full pb-4">
+				<LandingNavbar logoClickFunction={() => navigate("/")} />
+				<main className="flex flex-col gap-10 w-full max-w-[800px] pt-3">
+					<Outlet />
+				</main>
+			</div>
+		</div>
+	);
+};
 
 const Root = () => {
 	const { user, encryptionKeyChallenge, userDataLoading, encryptionKeySet, error } =
@@ -19,13 +34,14 @@ const Root = () => {
 	const location = useLocation();
 	const queryParams = new URLSearchParams(location.search);
 	if (location.pathname === "/") return <Outlet />;
+	if (!["/home", "/file", "/settings"].includes(location.pathname)) return <DefaultLayout />;
 
 	// Authentication flow
 	const Authentication = () => {
 		if (!user) return <Login />;
 		if (!encryptionKeyChallenge) return <CreateEncryptionKey />;
 		if (!encryptionKeySet) return <ValidateEncryptionKey />;
-		return <Outlet />;
+		return <DefaultLayout />;
 	};
 
 	// File manager
