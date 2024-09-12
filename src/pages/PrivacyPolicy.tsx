@@ -1,4 +1,17 @@
+import { useEffect, useRef } from "react";
+import { useLocation } from "react-router-dom";
+
 const PrivacyPolicy = () => {
+	const location = useLocation();
+	const cookiesRef = useRef<HTMLDivElement>(null);
+
+	// Scroll to the cookies section if the user navigated from the GDPR popup
+	useEffect(() => {
+		if (location.hash === "#cookies") {
+			cookiesRef.current?.scrollIntoView({ behavior: "smooth" });
+		}
+	}, [location.hash]);
+
 	return (
 		<div>
 			<div className="mt-2">
@@ -43,16 +56,24 @@ const PrivacyPolicy = () => {
 					or respond to your inquiries.
 				</p>
 
-				<h3>4. Cookies</h3>
+				<h3 id="cookies" ref={cookiesRef}>
+					4. Cookies
+				</h3>
 				<p>
 					<strong>What are cookies?</strong> Cookies are small text files placed on your device by a
 					website. They are used by websites to remember your preferences, improve your browsing
 					experience, and collect data for analytics.
 				</p>
 				<p>
-					<strong>Cookies Used by Third-Party Services:</strong> While we do not use cookies
-					ourselves, our website uses third-party services that may set cookies to provide their
-					functionalities. These services include:
+					<strong>Our Use of Cookies:</strong> We use a single cookie to remember your consent to
+					our GDPR notice, ensuring that you don't have to agree again during future visits. This
+					cookie is only used to store your consent and does not track any other information about
+					you. The cookie is set to expire after 365 days.
+				</p>
+				<p>
+					<strong>Cookies Used by Third-Party Services:</strong> Our website uses third-party
+					services for e.g. secure login functionality and website protection. These services may
+					set cookies to provide their functionalities. These services include:
 				</p>
 				<ul>
 					<li>

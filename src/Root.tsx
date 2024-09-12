@@ -11,6 +11,7 @@ import ValidateEncryptionKey from "./components/authentication/ValidateEncryptio
 import CreateNewFile from "./features/CreateNewFile/CreateNewFile";
 import FilesProvider from "./context/FilesProvider";
 import LandingNavbar from "./components/layout/Navbar/LandingNavbar";
+import GDPRPopup from "./components/layout/GDPRPopup";
 
 const DefaultLayout = () => {
 	const navigate = useNavigate();
@@ -19,6 +20,7 @@ const DefaultLayout = () => {
 			<div className="h-full flex flex-col items-center overflow-y-scroll scrollbar scrollbar-w-[6px] scrollbar-thumb-primaryHighlight scrollbar-thumb-rounded-full pb-4">
 				<LandingNavbar logoClickFunction={() => navigate("/")} />
 				<main className="flex flex-col gap-10 w-full max-w-[800px] pt-3">
+					<GDPRPopup />
 					<Outlet />
 				</main>
 			</div>
@@ -33,20 +35,29 @@ const Root = () => {
 	// Landing page
 	const location = useLocation();
 	const queryParams = new URLSearchParams(location.search);
-	if (location.pathname === "/") return <Outlet />;
-	if (!["/home", "/file", "/settings"].includes(location.pathname)) return <DefaultLayout />;
+	if (location.pathname === "/")
+		return (
+			<>
+				<GDPRPopup />
+				<Outlet />
+			</>
+		);
+
+	// Return default layout if not on home, file, or settings page
+	if (!/(\/home|\/file|\/settings)/.test(location.pathname)) return <DefaultLayout />;
 
 	// Authentication flow
 	const Authentication = () => {
 		if (!user) return <Login />;
 		if (!encryptionKeyChallenge) return <CreateEncryptionKey />;
 		if (!encryptionKeySet) return <ValidateEncryptionKey />;
-		return <DefaultLayout />;
+		return <Outlet />;
 	};
 
 	// File manager
 	return (
 		<FilesProvider>
+			<GDPRPopup />
 			<NotificationGlobal />
 			{queryParams.get("modal") === "new" && <CreateNewFile />}
 			<Navbar />
