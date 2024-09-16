@@ -10,12 +10,14 @@ const useClearValues = () => {
 	const { setEncryptionKeyChallenge } = useContext(AuthContext);
 	const { clearEncryptionKey } = useIndexedDB();
 
-	const clear = () => {
+	const clear = (clearKey: boolean) => {
 		queryClient.removeQueries();
 		setFiles([]);
 		setSelectedFile(null);
-		setEncryptionKeyChallenge(null);
-		clearEncryptionKey();
+		if (clearKey) {
+			setEncryptionKeyChallenge(null);
+			clearEncryptionKey();
+		}
 	};
 
 	return { clear };

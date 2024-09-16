@@ -23,7 +23,7 @@ const useDeleteAccountAndFiles = () => {
 
 	const onSuccess = () => {
 		showNotification({ content: "Account and Files successfully deleted!" });
-		clear();
+		clear(true);
 		navigate("/home");
 	};
 

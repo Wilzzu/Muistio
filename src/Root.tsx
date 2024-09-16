@@ -12,6 +12,7 @@ import CreateNewFile from "./features/CreateNewFile/CreateNewFile";
 import FilesProvider from "./context/FilesProvider";
 import LandingNavbar from "./components/layout/Navbar/LandingNavbar";
 import GDPRPopup from "./components/layout/GDPRPopup";
+import useClearValues from "./hooks/useClearValues";
 
 const DefaultLayout = () => {
 	const navigate = useNavigate();
@@ -31,6 +32,7 @@ const DefaultLayout = () => {
 const Root = () => {
 	const { user, encryptionKeyChallenge, userDataLoading, encryptionKeySet, error } =
 		useContext(AuthContext);
+	const { clear } = useClearValues();
 
 	// Landing page
 	const location = useLocation();
@@ -44,7 +46,10 @@ const Root = () => {
 		);
 
 	// Return default layout if not on home, file, or settings page
-	if (!/(\/home|\/file|\/settings)/.test(location.pathname)) return <DefaultLayout />;
+	if (!/(\/home|\/file|\/settings)/.test(location.pathname)) {
+		clear(false);
+		return <DefaultLayout />;
+	}
 
 	// Authentication flow
 	const Authentication = () => {

@@ -10,7 +10,7 @@ const useLogOut = () => {
 		const auth = getAuth();
 		return signOut(auth)
 			.then(() => {
-				clear();
+				clear(true);
 				navigate("/home");
 			})
 			.catch((error) => console.error(error));
