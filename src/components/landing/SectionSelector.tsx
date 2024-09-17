@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -10,7 +11,7 @@ type SectionSelectorProps = {
 
 type SelectorButtonProps = {
 	index: number;
-	active: boolean;
+	activeSection: number;
 	setActiveSection: Dispatch<SetStateAction<number>>;
 	hasInteracted: boolean;
 	setHasInteracted: Dispatch<SetStateAction<boolean>>;
@@ -18,41 +19,69 @@ type SelectorButtonProps = {
 	disabled?: boolean;
 };
 
+type SelectedAnimationProps = {
+	reverse?: boolean;
+	interacted?: boolean;
+};
+
 const selectedAnimation = {
-	hidden: {
-		transform: "translateX(-100%)",
-	},
-	visible: (interacted: boolean) => ({
+	hidden: ({ reverse }: SelectedAnimationProps) => ({
+		transform: `translateX(${reverse ? "100%" : "-100%"})`,
+	}),
+	visible: ({ interacted }: SelectedAnimationProps) => ({
 		transform: "translateX(0)",
 		transition: { duration: interacted ? 0.5 : 10, ease: "linear" },
 	}),
-	exit: {
-		transform: "translateX(100%)",
-		transition: { duration: 0.5 },
-	},
+	exit: ({ reverse, interacted }: SelectedAnimationProps) => ({
+		transform: `translateX(${reverse ? "-100%" : "100%"})`,
+		transition: { duration: interacted ? 0.5 : 1 },
+	}),
 };
 // Button for each section
 const SelectorButton: FC<SelectorButtonProps> = ({
 	index,
-	active,
+	activeSection,
 	setActiveSection,
 	hasInteracted,
 	setHasInteracted,
 	animate,
 	disabled,
 }) => {
+	const [section, setSection] = useState(activeSection);
+	const [reverse, setReverse] = useState(false);
+	const [ready, setReady] = useState(false);
 	const handleClick = () => {
-		if (!active) setActiveSection(index);
+		if (activeSection !== index) setActiveSection(index);
 		if (animate) setHasInteracted(true);
 	};
+
+	const calculateReverse = () => {
+		if (activeSection === 1 && section === 3) return false;
+		if (activeSection === 3 && section === 1) return true;
+		return activeSection < section;
+	};
+
+	// Calculate if the animation should be reversed, and set ready to true to trigger the section change
+	useEffect(() => {
+		setReverse(calculateReverse);
+		setReady(true);
+	}, [activeSection]);
+
+	// We need to wait for the reverse calculation to be done before changing the section, otherwise the exit animation will be wrong
+	useEffect(() => {
+		if (!ready) return;
+		setSection(activeSection);
+		setReady(false);
+	}, [ready]);
+
 	return (
 		<button className="py-4" disabled={disabled} onClick={handleClick}>
 			{/* Border container */}
 			<div className="w-16 h-2 rounded-full bg-primaryHighlight p-[1px] overflow-hidden">
 				{/* Content */}
 				<div className="h-full w-full rounded-full bg-secondaryHighlight overflow-hidden">
-					<AnimatePresence custom={hasInteracted}>
-						{active && (
+					<AnimatePresence>
+						{section === index && (
 							// Color selected section
 							<motion.div
 								key={index}
@@ -60,7 +89,7 @@ const SelectorButton: FC<SelectorButtonProps> = ({
 								animate="visible"
 								exit="exit"
 								variants={selectedAnimation}
-								custom={hasInteracted}
+								custom={{ interacted: hasInteracted, reverse: reverse }}
 								className="h-full w-full bg-[#07a4ff] rounded-full"
 							/>
 						)}
@@ -80,7 +109,7 @@ const SectionSelector: FC<SectionSelectorProps> = ({
 	const [disabled, setDisabled] = useState(false);
 	useEffect(() => {
 		setDisabled(true);
-		const timeout = setTimeout(() => setDisabled(false), 600);
+		const timeout = setTimeout(() => setDisabled(false), 700);
 
 		return () => clearTimeout(timeout);
 	}, [activeSection]);
@@ -90,7 +119,7 @@ const SectionSelector: FC<SectionSelectorProps> = ({
 				<SelectorButton
 					key={index}
 					index={index}
-					active={activeSection === index}
+					activeSection={activeSection}
 					setActiveSection={setActiveSection}
 					hasInteracted={hasInteracted}
 					setHasInteracted={setHasInteracted}
