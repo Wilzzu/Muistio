@@ -1,17 +1,12 @@
 import { onDocumentWritten } from "firebase-functions/v2/firestore";
 import * as functions from "firebase-functions/v1";
-import * as admin from "firebase-admin";
-import { FieldValue } from "firebase-admin/firestore";
+import { FieldValue, getFirestore } from "firebase-admin/firestore";
+import { initializeApp } from "firebase-admin/app";
 
-admin.initializeApp();
+initializeApp();
 
 const userMetadata = (userId: string) => {
-	return admin.firestore().collection("users").doc(userId);
-};
-
-const getFileSize = (content: string) => {
-	const blob = new Blob([content]);
-	return blob.size;
+	return getFirestore().collection("users").doc(userId);
 };
 
 // Add metadata for new user
@@ -25,37 +20,37 @@ export const newuser = functions.auth.user().onCreate((user) => {
 /*
  * Update totalFileSize in user metadata when a file is added, deleted or the content is updated
  */
-export const modifyfile = onDocumentWritten("users/{userId}/files/{fileId}", async (event) => {
-	const eventData = event?.data;
-	const newData = eventData?.after.data();
-	const oldData = eventData?.before.data();
+export const modifyfile = onDocumentWritten(
+	"users/{userId}/files/{fileId}/encrypted/file",
+	async (event) => {
+		const eventData = event?.data;
+		const newData = eventData?.after.data();
+		const oldData = eventData?.before.data();
 
-	// New document
-	if (!oldData && newData) {
-		const newFileSize = getFileSize(newData.content) + 128; // Add 128 bytes to make up for other fields in the document
+		// New document
+		if (!oldData && newData) {
+			return userMetadata(event.params.userId).update({
+				totalFileSize: FieldValue.increment(newData.ciphertext.length + 304), // Add 304 bytes to make up for other fields in the document
+			});
+		}
 
-		// Update metadata
-		return userMetadata(event.params.userId).update({
-			totalFileSize: FieldValue.increment(newFileSize),
-		});
+		// Deleted document
+		if (!newData && oldData) {
+			return userMetadata(event.params.userId).update({
+				totalFileSize: FieldValue.increment(-(oldData.ciphertext.length + 304)),
+			});
+		}
+
+		// Content updated in document
+		if (newData && oldData && newData.ciphertext !== oldData.ciphertext) {
+			const sizeDiff = newData.ciphertext.length - oldData.ciphertext.length;
+			if (sizeDiff === 0) return;
+
+			userMetadata(event.params.userId).update({
+				totalFileSize: FieldValue.increment(sizeDiff),
+			});
+		}
+
+		return null;
 	}
-
-	// Deleted document
-	if (!newData && oldData) {
-		return userMetadata(event.params.userId).update({
-			totalFileSize: FieldValue.increment(-(getFileSize(oldData.content) + 128)),
-		});
-	}
-
-	// Content updated in document
-	if (newData && oldData && newData.content !== oldData.content) {
-		const sizeDiff = getFileSize(newData.content) - getFileSize(oldData.content);
-		if (sizeDiff === 0) return;
-
-		userMetadata(event.params.userId).update({
-			totalFileSize: FieldValue.increment(sizeDiff),
-		});
-	}
-
-	return null;
-});
+);
