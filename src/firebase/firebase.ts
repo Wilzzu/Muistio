@@ -59,6 +59,15 @@ export const createFile = async (
 	encryptionKey: string | null
 ) => {
 	if (!encryptionKey) throw new Error("Encryption key not found");
+
+	// Encrypt file content
+	const encrypted = encrypt(content, encryptionKey);
+
+	// 1MB max size - 304 bytes for other fields
+	if (encrypted?.ciphertext?.length > 1_000_000 - 304) {
+		throw new Error("File size exceeds 1MB limit");
+	}
+
 	// Add file metadata
 	const docRef = await addDoc(collection(db, "users", userId, "files"), {
 		title,
@@ -66,8 +75,7 @@ export const createFile = async (
 		size: getFileSize(content),
 	});
 
-	// Encrypt and add file content
-	const encrypted = encrypt(content, encryptionKey);
+	// Add encrypted file content
 	await setDoc(doc(db, "users", userId, "files", docRef.id, "encrypted", "file"), {
 		ciphertext: encrypted.ciphertext,
 		salt: encrypted.salt,

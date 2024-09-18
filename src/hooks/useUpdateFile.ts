@@ -40,6 +40,10 @@ const useUpdateFile = (callback: () => void) => {
 			const encryptionKey = await getEncryptionKey();
 			if (!encryptionKey) throw new Error("Encryption key not found");
 			encryptedContent = encrypt(value.content, encryptionKey);
+			// 1MB max size - 304 bytes for other fields
+			if (encryptedContent.ciphertext.length > 1_000_000 - 304) {
+				throw new Error("File size exceeds 1MB limit");
+			}
 		}
 
 		// Update the file
