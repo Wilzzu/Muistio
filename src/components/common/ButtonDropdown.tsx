@@ -74,7 +74,7 @@ const ButtonDropdown: FC<ButtonProps> = ({
 										className={cn(
 											"text-nowrap py-2 pl-3 pr-6 w-full text-left bg-gradient-to-br from-transparent to-transparent hover:from-primaryHighlight/90 hover:to-primaryHighlight/20 rounded-md",
 											{
-												"text-warning hover:text-red-100 hover:from-warning/80 hover:to-warning/20":
+												"text-red-400 hover:from-red-600/80 hover:to-red-900/50 hover:text-red-100 duration-100":
 													e?.warning,
 											}
 										)}

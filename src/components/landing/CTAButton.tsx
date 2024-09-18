@@ -11,7 +11,12 @@ const CTAButton = () => {
 				<img
 					src={ButtonTexture}
 					alt="Launch Muistio"
-					className="absolute inset-0 object-cover animate-button-texture group-hover:animate-button-texture-fast opacity-20 group-hover:opacity-80 duration-300"
+					className="absolute bottom-0 right-0 object-cover animate-button-texture group-hover:animate-button-texture-fast opacity-20 group-hover:opacity-80 duration-300"
+				/>
+				<img
+					src={ButtonTexture}
+					alt="Launch Muistio"
+					className="absolute bottom-0 right-0 object-cover animate-button-texture-start-middle group-hover:animate-button-texture-fast-start-middle opacity-20 group-hover:opacity-80 duration-300"
 				/>
 			</div>
 		</Link>

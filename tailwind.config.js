@@ -39,8 +39,8 @@ export default {
 			},
 			keyframes: {
 				"button-texture": {
-					"0%": { transform: "translateX(0) translateY(0) scale(2)" },
-					"100%": { transform: "translateX(-100%) translateY(-100%) scale(2)" },
+					"0%": { transform: "translateX(150%) translateY(150%) scale(2)" },
+					"100%": { transform: "translateX(-200%) translateY(-200%) scale(2)" },
 				},
 				"cloud-main": {
 					"0%": { transform: "translateY(-128px) translateX(24px)" },
@@ -71,8 +71,10 @@ export default {
 				},
 			},
 			animation: {
-				"button-texture": "button-texture 3s linear infinite",
-				"button-texture-fast": "button-texture 1.5s linear infinite",
+				"button-texture": "button-texture 5.5s linear infinite",
+				"button-texture-start-middle": "button-texture 5.5s -2.75s linear infinite",
+				"button-texture-fast": "button-texture 3s linear infinite",
+				"button-texture-fast-start-middle": "button-texture 3s -1.6s linear infinite",
 				"cloud-main": "cloud-main 6s ease-in-out infinite",
 				"cloud-left": "cloud-left 7s 0.5s ease-in-out infinite",
 				"cloud-right": "cloud-right 8s ease-in-out infinite",
