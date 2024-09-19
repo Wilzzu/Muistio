@@ -7,13 +7,14 @@ import AuthContext from "../context/AuthContext";
 const useClearValues = () => {
 	const queryClient = useQueryClient();
 	const { setFiles, setSelectedFile } = useContext(FilesContext);
-	const { setEncryptionKeyChallenge } = useContext(AuthContext);
+	const { setEncryptionKeyChallenge, setStorageSize } = useContext(AuthContext);
 	const { clearEncryptionKey } = useIndexedDB();
 
 	const clear = (clearKey: boolean) => {
 		queryClient.removeQueries();
 		setFiles([]);
 		setSelectedFile(null);
+		setStorageSize(0);
 		if (clearKey) {
 			setEncryptionKeyChallenge(null);
 			clearEncryptionKey();

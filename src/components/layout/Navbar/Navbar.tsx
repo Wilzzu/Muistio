@@ -1,38 +1,11 @@
 import Button from "../../common/Button";
+import ProfileButton from "./ProfileButton";
 import { LuPlus } from "react-icons/lu";
 import { BiHomeAlt2 } from "react-icons/bi";
-import useLogOut from "../../../hooks/useLogOut";
 import { Link, useNavigate } from "react-router-dom";
-import ButtonDropdown from "../../common/ButtonDropdown";
-import { useContext } from "react";
-import AuthContext from "../../../context/AuthContext";
-import { FaGoogle } from "react-icons/fa";
-import useLogin from "../../../hooks/useLogin";
-import defaultAvatar from "../../../assets/default-avatar.jpg";
-
-const profileOptions = [
-	{ id: 1, title: "Settings" },
-	{ id: 2, title: "Log out", warning: true },
-];
 
 const Navbar = () => {
-	const { handleLogOut } = useLogOut();
 	const navigate = useNavigate();
-	const { user, userDataLoading } = useContext(AuthContext);
-	const { login } = useLogin();
-
-	const handleProfileClick = (option: number) => {
-		switch (option) {
-			case 1:
-				navigate("/settings");
-				break;
-			case 2:
-				handleLogOut();
-				break;
-			default:
-				break;
-		}
-	};
 
 	return (
 		<nav className="relative flex justify-between items-center px-6 h-16">
@@ -63,40 +36,7 @@ const Navbar = () => {
 					</Link>
 				</li>
 				<li>
-					{user ? (
-						<ButtonDropdown
-							options={profileOptions}
-							onClick={handleProfileClick}
-							dropdownSide="right">
-							<div className="h-6 w-6 relative rounded-full overflow-hidden">
-								<img
-									src={user?.photoURL || defaultAvatar}
-									alt="User avatar"
-									className="h-full w-auto object-contain"
-								/>
-							</div>
-							<p>{user?.displayName || "Unknown User"}</p>
-						</ButtonDropdown>
-					) : userDataLoading ? (
-						<ButtonDropdown
-							options={profileOptions}
-							onClick={handleLogOut}
-							dropdownSide="right"
-							disabled>
-							<div className="h-6 w-6 relative rounded-full overflow-hidden">
-								<img
-									src={defaultAvatar}
-									alt="User avatar"
-									className="h-full w-auto object-contain animate-pulse"
-								/>
-							</div>
-							<p className="font-placeholder animate-pulse ml-1 opacity-20">Loading user...</p>
-						</ButtonDropdown>
-					) : (
-						<Button onClick={login} style={{ main: "bg-opacity-80" }}>
-							<FaGoogle /> Sign in with Google
-						</Button>
-					)}
+					<ProfileButton />
 				</li>
 			</ul>
 			{/* Bottom line */}

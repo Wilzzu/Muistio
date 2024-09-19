@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useContext } from "react";
 import AuthContext from "../context/AuthContext";
-import { MetadataObject, updateFile } from "../firebase/firebase";
+import { FILE_PADDING, UpdatedObject, updateFile } from "../firebase/firebase";
 import FilesContext from "../context/FilesContext";
 import NotificationContext from "../context/NotificationContext";
 import useIndexedDB from "./useIndexedDB";
@@ -24,7 +24,7 @@ type UpdateProps = {
 };
 
 const useUpdateFile = (callback: () => void) => {
-	const { user } = useContext(AuthContext);
+	const { user, updateStorageSize } = useContext(AuthContext);
 	const { setFiles } = useContext(FilesContext);
 	const { showNotification } = useContext(NotificationContext);
 	const { getEncryptionKey } = useIndexedDB();
@@ -41,7 +41,7 @@ const useUpdateFile = (callback: () => void) => {
 			if (!encryptionKey) throw new Error("Encryption key not found");
 			encryptedContent = encrypt(value.content, encryptionKey);
 			// 1MB max size - 304 bytes for other fields
-			if (encryptedContent.ciphertext.length > 1_000_000 - 304) {
+			if (encryptedContent.ciphertext.length > 1_000_000 - FILE_PADDING) {
 				throw new Error("File size exceeds 1MB limit");
 			}
 		}
@@ -57,7 +57,7 @@ const useUpdateFile = (callback: () => void) => {
 	};
 
 	// Update files list and query cache with the updated file
-	const onSuccess = (updatedObject: { metadata: MetadataObject; content: string | undefined }) => {
+	const onSuccess = (updatedObject: UpdatedObject) => {
 		// Update files list with latest metadata
 		setFiles((prevFiles) => {
 			return prevFiles.map((file) => {
@@ -70,6 +70,9 @@ const useUpdateFile = (callback: () => void) => {
 		if (updatedObject.content) {
 			queryClient.setQueryData(["fileContent", updatedObject.metadata.id], updatedObject.content);
 		}
+
+		// Update storage size
+		if (updatedObject.fileSizeUpdated) updateStorageSize();
 
 		// Used for example clearing renameValue in FileButton.tsx
 		callback();

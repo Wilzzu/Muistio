@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import NotificationContext from "../context/NotificationContext";
 
 const useDeleteFile = (fileId: string | undefined) => {
-	const { user } = useContext(AuthContext);
+	const { user, updateStorageSize } = useContext(AuthContext);
 	const { selectedFile, setSelectedFile, setFiles } = useContext(FilesContext);
 	const { showNotification } = useContext(NotificationContext);
 	const navigate = useNavigate();
@@ -16,11 +16,12 @@ const useDeleteFile = (fileId: string | undefined) => {
 		if (!user?.uid) throw new Error("User not found");
 		if (!fileId) throw new Error("File not found");
 		showNotification({ content: "Deleting file...", disableAutoHide: true });
-		await deleteFile(user.uid, fileId);
+		return await deleteFile(user.uid, fileId);
 	};
 
 	const onSuccess = () => {
 		setFiles((prevFiles) => prevFiles.filter((file) => file.id !== fileId));
+		updateStorageSize();
 		if (selectedFile?.id === fileId) {
 			setSelectedFile(null);
 			navigate("/home");

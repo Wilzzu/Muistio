@@ -46,6 +46,8 @@ export const updateMetadata = async (userId: string, fieldObject: EncryptionData
 };
 
 /* --- Files --- */
+export const FILE_PADDING = 304;
+
 const getFileSize = (content: string) => {
 	const blob = new Blob([content]);
 	return blob.size;
@@ -64,7 +66,7 @@ export const createFile = async (
 	const encrypted = encrypt(content, encryptionKey);
 
 	// 1MB max size - 304 bytes for other fields
-	if (encrypted?.ciphertext?.length > 1_000_000 - 304) {
+	if (encrypted?.ciphertext?.length > 1_000_000 - FILE_PADDING) {
 		throw new Error("File size exceeds 1MB limit");
 	}
 
@@ -113,7 +115,7 @@ export const getFileContent = async (
 };
 
 // Update file
-export type MetadataObject = {
+type MetadataObject = {
 	dateModified: Timestamp;
 	title?: string;
 	size?: number;
@@ -130,6 +132,12 @@ type UpdateValue = {
 	content?: Content;
 };
 
+export type UpdatedObject = {
+	metadata: MetadataObject;
+	content: string | undefined;
+	fileSizeUpdated?: boolean;
+};
+
 const createMetadataObject = (updateValue: UpdateValue) => {
 	const metadataObject = <MetadataObject>{
 		dateModified: serverTimestamp(),
@@ -144,20 +152,27 @@ export const updateFile = async (userId: string, fileId: string, updateValue: Up
 	const metadataObject = createMetadataObject(updateValue);
 
 	// Update content if it exists
-	if (updateValue.content)
+	if (updateValue.content) {
 		await updateDoc(
 			doc(db, "users", userId, "files", fileId, "encrypted", "file"),
 			updateValue.content.encrypted
 		);
+	}
 
 	// Update metadata
 	await updateDoc(doc(db, "users", userId, "files", fileId), metadataObject);
 
-	// Return updated file metadata and content
-	return {
+	// Create return object
+	const updatedObject: UpdatedObject = {
 		metadata: { ...metadataObject, dateModified: Timestamp.now(), id: fileId }, // We have to use client's time for this, unless we would need to make a fetch request to get the server time
 		content: updateValue?.content?.plaintext,
 	};
+
+	// Add fileSizeUpdated if content was updated
+	if (updateValue.content) updatedObject.fileSizeUpdated = true;
+
+	// Return updated file metadata and content
+	return updatedObject;
 };
 
 // Delete file

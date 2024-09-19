@@ -11,6 +11,8 @@ type AuthContextType = {
 	setUserDataLoading: Dispatch<SetStateAction<boolean>>;
 	encryptionKeySet: boolean;
 	setEncryptionKeySet: Dispatch<SetStateAction<boolean>>;
+	storageSize: number;
+	updateStorageSize: () => Promise<void>;
 	error: AuthError;
 };
 
@@ -23,6 +25,8 @@ const defaultAuthContext: AuthContextType = {
 	setUserDataLoading: () => {},
 	encryptionKeySet: false,
 	setEncryptionKeySet: () => {},
+	storageSize: 0,
+	updateStorageSize: async () => {},
 	error: { isError: false },
 };
 

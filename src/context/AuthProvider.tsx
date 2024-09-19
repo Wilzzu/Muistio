@@ -6,11 +6,17 @@ import { auth, getMetadata } from "../firebase/firebase";
 import { AuthError, EncryptionData } from "../types/types";
 import useIndexedDB from "../hooks/useIndexedDB";
 
+type Metadata = {
+	encryptionKey: EncryptionData;
+	totalFileSize: number;
+};
+
 const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
 	const [user, setUser] = useState<User | null>(null);
 	const [encryptionKeyChallenge, setEncryptionKeyChallenge] = useState<EncryptionData | null>(null);
 	const [userDataLoading, setUserDataLoading] = useState(true);
 	const [encryptionKeySet, setEncryptionKeySet] = useState(false);
+	const [storageSize, setStorageSize] = useState(0);
 	const [error, setError] = useState<AuthError>({ isError: false });
 	const { getEncryptionKey } = useIndexedDB();
 
@@ -23,7 +29,7 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
 				if (user) {
 					const metadata = await getMetadata(user.uid);
 					if (metadata.exists()) {
-						const data = metadata.data();
+						const data = metadata.data() as Metadata;
 
 						// Set encryption key challenge if user has one
 						if (data?.encryptionKey && Object.keys(data?.encryptionKey).length > 0) {
@@ -32,8 +38,10 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
 						// Set encryptionKeySet if one is found in IndexedDB
 						const key = await getEncryptionKey();
-						console.log(key);
 						setEncryptionKeySet(!!key);
+
+						// Set storage size
+						setStorageSize(data?.totalFileSize || 0);
 					}
 				}
 			} catch (error) {
@@ -47,6 +55,16 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
 		return authListener;
 	}, []);
 
+	const updateStorageSize = async () => {
+		if (!user) return;
+		const metadata = await getMetadata(user?.uid);
+
+		if (metadata.exists()) {
+			const data = metadata.data() as Metadata;
+			setStorageSize(data?.totalFileSize || 0);
+		}
+	};
+
 	return (
 		<AuthContext.Provider
 			value={{
@@ -58,6 +76,8 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
 				setUserDataLoading,
 				encryptionKeySet,
 				setEncryptionKeySet,
+				storageSize,
+				updateStorageSize,
 				error,
 			}}>
 			{children}

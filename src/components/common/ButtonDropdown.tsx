@@ -14,6 +14,7 @@ type ButtonProps = {
 	onClick: (selected: number) => void;
 	dropdownSide: "left" | "right";
 	disabled?: boolean;
+	customElement?: ReactNode;
 	children: ReactNode;
 };
 
@@ -22,6 +23,7 @@ const ButtonDropdown: FC<ButtonProps> = ({
 	onClick,
 	dropdownSide,
 	disabled,
+	customElement,
 	children,
 }) => {
 	const [open, setOpen] = useState(false);
@@ -62,11 +64,11 @@ const ButtonDropdown: FC<ButtonProps> = ({
 						"absolute top-10 p-[1px] min-w-full bg-gradient-to-br from-primaryHighlight via-primaryHighlight/50 to-primaryHighlight rounded-[9px] duration-200",
 						dropdownSide === "left" ? "left-0" : "right-0"
 					)}>
-					{/* Dropdown buttons */}
-					<ul
-						className={cn(
-							"p-1 rounded-lg bg-gradient-to-br from-primary to-secondary text-sm font-semibold"
-						)}>
+					{/* Dropdown Content */}
+					<ul className="p-1 rounded-lg bg-gradient-to-br from-primary to-secondary text-sm font-semibold">
+						{/* Custom content */}
+						{customElement}
+						{/* Option buttons */}
 						{options.map((e, i) => {
 							return (
 								<li key={i}>
