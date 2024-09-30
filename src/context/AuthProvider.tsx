@@ -55,7 +55,8 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
 		return authListener;
 	}, []);
 
-	const updateStorageSize = async () => {
+	const updateStorageSize = async (clear: boolean = false) => {
+		if (clear) setStorageSize(0);
 		if (!user) return;
 		const metadata = await getMetadata(user?.uid);
 

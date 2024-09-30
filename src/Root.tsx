@@ -3,7 +3,7 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Navbar from "./components/layout/Navbar/Navbar";
 import Login from "./components/authentication/Login";
 import LoadingModal from "./components/common/LoadingModal";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import AuthContext from "./context/AuthContext";
 import NotificationGlobal from "./components/common/NotificationGlobal";
 import CreateEncryptionKey from "./components/authentication/CreateEncryptionKey";
@@ -37,19 +37,23 @@ const Root = () => {
 	// Landing page
 	const location = useLocation();
 	const queryParams = new URLSearchParams(location.search);
-	if (location.pathname === "/")
+
+	// Clear values if user isn't in the app
+	useEffect(() => {
+		if (!/(\/home|\/file|\/settings)/.test(location.pathname)) clear(false);
+	}, [location.pathname, clear]);
+
+	if (location.pathname === "/") {
 		return (
 			<>
 				<GDPRPopup />
 				<Outlet />
 			</>
 		);
-
-	// Return default layout if not on home, file, or settings page
-	if (!/(\/home|\/file|\/settings)/.test(location.pathname)) {
-		clear(false);
-		return <DefaultLayout />;
 	}
+
+	// Return default layout if user isn't in the app
+	if (!/(\/home|\/file|\/settings)/.test(location.pathname)) return <DefaultLayout />;
 
 	// Authentication flow
 	const Authentication = () => {
