@@ -35,7 +35,7 @@ const imageAnimation = {
 const SectionOne = (setHasInteracted: Dispatch<SetStateAction<boolean>>) => {
 	const S1Text = () => (
 		<>
-			<h1 className="text-[3.5rem] leading-[3.9rem] font-bold">
+			<h1 className="text-4xl sm:text-[3.5rem] sm:leading-[3.9rem] font-bold text-center sm:text-left">
 				<LandingTitleAnimation
 					content={[
 						{ text: "Your Ideas,", highlight: [0, 9] },
@@ -62,8 +62,8 @@ const SectionOne = (setHasInteracted: Dispatch<SetStateAction<boolean>>) => {
 				exit="exit"
 				variants={imageAnimation}
 				custom={-1}
-				className="relative h-full w-full flex items-center justify-center z-0 perspective-750 overflow-hidden">
-				<div className="absolute -translate-y-12 right-2 w-[74%] scale-x-[95%] rotate-x-12 rotate-y-[20deg] -rotate-z-6 transform-gpu">
+				className="relative h-full w-full flex items-center justify-center z-0 perspective-750 sm:overflow-hidden">
+				<div className="absolute -translate-y-6 sm:-translate-y-12 translate-x-3 sm:translate-x-0 right-2 w-[95%] sm:w-[74%] scale-x-[95%] rotate-x-12 rotate-y-[20deg] -rotate-z-6 transform-gpu">
 					<LandingEditor setHasInteracted={setHasInteracted} />
 				</div>
 			</motion.div>
@@ -75,7 +75,7 @@ const SectionOne = (setHasInteracted: Dispatch<SetStateAction<boolean>>) => {
 				variants={imageAnimation}
 				draggable={false}
 				src={Landing1Note}
-				className="absolute h-auto w-[60%] -translate-x-16 translate-y-36 object-contain z-[1] pointer-events-none"
+				className="absolute h-auto bottom-0 sm:bottom-auto w-[70%] sm:w-[60%] sm:-translate-x-16 sm:translate-y-36 object-contain z-[1] pointer-events-none"
 			/>
 		</>
 	);

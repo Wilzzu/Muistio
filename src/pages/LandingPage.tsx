@@ -56,13 +56,15 @@ const LandingPage = () => {
 	}, [activeSection, hasInteracted]);
 
 	return (
-		<div className="h-dvh px-2 py-1 overflow-hidden">
+		<div className="sm:h-dvh sm:px-2 sm:py-1 sm:overflow-hidden">
 			{/* Scroll container */}
 			<div
 				ref={scrollContainerRef}
-				className="h-full flex flex-col items-center overflow-y-scroll scrollbar scrollbar-w-[6px] scrollbar-thumb-primaryHighlight scrollbar-thumb-rounded-full">
+				className="h-full flex flex-col items-center overflow-y-scroll px-2 sm:px-0 sm:scrollbar scrollbar-w-[6px] scrollbar-thumb-primaryHighlight scrollbar-thumb-rounded-full">
 				<LandingNavbar logoClickFunction={() => setActiveSection(1)} />
-				<main className="max-w-[1200px] w-full grid grid-cols-5 h-full min-h-[700px] pb-20">
+
+				{/* Desktop */}
+				<main className="hidden sm:grid max-w-[1200px] w-full grid-cols-5 h-full min-h-[700px] pb-20">
 					<section className="flex flex-col justify-center gap-8 px-4 pt-4 col-span-2">
 						{/* Text */}
 						<AnimatePresence mode="wait">
@@ -87,6 +89,31 @@ const LandingPage = () => {
 							{ActiveImage && <ActiveImage />}
 						</section>
 					</AnimatePresence>
+				</main>
+
+				{/* Mobile */}
+				<main className="sm:hidden flex flex-col gap-10 px-3">
+					<section>
+						<div className="flex flex-col items-center justify-center gap-4 py-12">
+							<S1Text />
+							<CTAButton />
+						</div>
+						<div className="relative w-full h-[calc(100dvh/1.9)] my-8 shadow-accent/10 drop-shadow-centered-xl">
+							<S1Image />
+						</div>
+					</section>
+					<section>
+						<div className="flex flex-col items-center justify-center gap-4 pb-12">
+							<S2Text />
+							<CTAButton />
+						</div>
+						{/* <div className="relative w-full h-[calc(100dvh/1.9)] my-8 shadow-accent/10 drop-shadow-centered-xl">
+							<S2Image />
+						</div> */}
+					</section>
+					{/* 
+					<S3Text />
+					<S3Image /> */}
 				</main>
 			</div>
 		</div>

@@ -28,7 +28,7 @@ const InnerStatus: FC<InnerStatusProps> = ({ content, warning, fadeOnHover, heig
 			{/* Content */}
 			<div
 				className={cn(
-					"px-6 bg-gradient-radial from-[#077bff] from-40% to-accent text-sm font-semibold drop-shadow-md rounded-b-lg",
+					"px-6 bg-gradient-radial from-[#077bff] from-40% to-accent text-xs sm:text-sm font-semibold drop-shadow-md rounded-b-lg",
 					{
 						"from-red-700/50 to-red-500/50": warning,
 					},

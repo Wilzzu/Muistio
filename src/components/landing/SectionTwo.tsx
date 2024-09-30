@@ -41,7 +41,7 @@ const imageAnimation = {
 const SectionTwo = () => {
 	const S2Text = () => (
 		<>
-			<h1 className="text-[3.5rem] leading-[3.9rem] font-bold">
+			<h1 className="text-4xl sm:text-[3.5rem] sm:leading-[3.9rem] font-bold text-center sm:text-left">
 				<LandingTitleAnimation
 					content={[
 						{ text: "10MB of", highlight: [0, 4] },

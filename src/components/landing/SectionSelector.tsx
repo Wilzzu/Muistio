@@ -114,7 +114,7 @@ const SectionSelector: FC<SectionSelectorProps> = ({
 		return () => clearTimeout(timeout);
 	}, [activeSection]);
 	return (
-		<div className="flex gap-4 py-4 items-center justify-start mt-10">
+		<div className="hidden sm:flex gap-4 py-4 items-center justify-start mt-10">
 			{[1, 2, 3].map((index) => (
 				<SelectorButton
 					key={index}

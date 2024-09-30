@@ -39,7 +39,7 @@ const MarkdownPreview: FC<MarkdownPreviewProps> = ({ content, disabled, landing 
 				"animate-pulse pointer-events-none select-none": disabled,
 			},
 			{
-				"prose-sm text-xs prose-headings:mt-4 prose-h1:pb-0 prose-h1:text-lg prose-h2:text-base prose-h3:text-sm prose-p:text-xs prose-p:leading-5 prose-img:max-w-[80%] select-text":
+				"prose-sm text-xs prose-headings:mt-4 prose-h1:pb-0 prose-h1:text-base sm:prose-h1:text-lg prose-h2:text-sm sm:prose-h2:text-base prose-h3:text-xs sm:prose-h3:text-sm prose-p:text-[0.6rem] sm:prose-p:text-xs sm:prose-p:leading-5 sm:prose-img:max-w-[80%] prose-li:text-[0.6rem] sm:prose-li:text-xs select-text":
 					landing,
 			}
 		)}>
@@ -97,7 +97,7 @@ const ContentEditorAndPreview: FC<ContentEditorAndPreviewProps> = ({
 						"min-h-44": isCreatingNewFile,
 					},
 					{
-						"text-sm": landing,
+						"text-xs sm:text-sm": landing,
 					}
 				)}
 				onChange={(e) => isCreatingNewFile && setContent && setContent(e.target.value)}

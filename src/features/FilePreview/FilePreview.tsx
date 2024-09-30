@@ -152,12 +152,12 @@ const FilePreview: FC<FilePreviewProps> = ({
 			<div
 				id={landing?.enabled ? "muistioLandingEditor" : "muistioEditor"}
 				className={cn("w-full lg:w-2/3 xl:w-[clamp(640px,60%,790px)] p-3 pr-1 shrink-0", {
-					"lg:w-full xl:w-full p-0": isCreatingNewFile || landing?.enabled,
+					"lg:w-full xl:w-full p-0 pt-1": isCreatingNewFile || landing?.enabled,
 				})}>
 				{/* Sticky and border */}
 				<div
 					className={cn(
-						"sticky top-3 p-[1px] rounded-[17px] bg-gradient-to-r from-primaryHighlight via-primaryHighlight/20 to-primaryHighlight overflow-hidden",
+						"sticky top-3 p-[1px] rounded-[9px] sm:rounded-[17px] bg-gradient-to-r from-primaryHighlight via-primaryHighlight/20 to-primaryHighlight overflow-hidden",
 						{
 							relative: isCreatingNewFile,
 						},
@@ -166,7 +166,7 @@ const FilePreview: FC<FilePreviewProps> = ({
 					{/* Main content wrapper */}
 					<div
 						className={cn(
-							"relative w-full pt-6 pb-2 pl-5 pr-[0.35rem] rounded-2xl flex flex-col bg-gradient-radial from-secondary from-40% to-secondary/90 duration-700",
+							"relative w-full pt-6 pb-2 pl-5 pr-[0.35rem] rounded-lg sm:rounded-2xl flex flex-col bg-gradient-radial from-secondary from-40% to-secondary/90 duration-700",
 							{ "py-2": !isEditing },
 							{ "pt-4 pb-2": isCreatingNewFile },
 							{ "pt-6 pb-0": isEditing && landing?.enabled }
@@ -194,13 +194,13 @@ const FilePreview: FC<FilePreviewProps> = ({
 							ref={scrollRef}
 							onDoubleClick={handleDoubleClick}
 							className={cn(
-								"h-[calc(100dvh-8.6rem)] overflow-scroll scrollbar scrollbar-w-[6px] scrollbar-h-[6px] scrollbar-thumb-primaryHighlight/50 scrollbar-thumb-rounded-full duration-700",
+								"h-[calc(100dvh-8.6rem)] overflow-scroll scrollbar scrollbar-w-[3px] sm:scrollbar-w-[6px] scrollbar-h-[6px] scrollbar-thumb-primaryHighlight/50 scrollbar-thumb-rounded-full duration-700",
 								{
 									"h-fit min-h-56 max-h-[calc(100dvh-20rem)]": isCreatingNewFile,
 								},
 								{ "h-[calc(100dvh-7.6rem)]": !isEditing },
 								{
-									"min-h-0 h-full aspect-[4/5]": landing?.enabled,
+									"min-h-0 h-full aspect-[4/5.4] sm:aspect-[4/5]": landing?.enabled,
 								}
 							)}
 							onClick={onClick}>
