@@ -12,7 +12,7 @@ type AuthContextType = {
 	encryptionKeySet: boolean;
 	setEncryptionKeySet: Dispatch<SetStateAction<boolean>>;
 	storageSize: number;
-	updateStorageSize: () => Promise<void>;
+	updateStorageSize: (clear?: boolean) => Promise<void>;
 	error: AuthError;
 };
 
