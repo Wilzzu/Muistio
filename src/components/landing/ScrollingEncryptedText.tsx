@@ -39,7 +39,7 @@ const ScrollingEncryptedText = () => {
 	}, []);
 
 	return (
-		<div className="relative flex items-center h-full w-full verticalText font-mono text-accent text-5xl font-bold leading-[1.4] overflow-hidden rotate-y-[30deg] maskText">
+		<div className="relative flex items-center h-full w-full verticalText font-mono text-accent text-4xl sm:text-5xl font-bold sm:leading-[1.4] overflow-hidden rotate-y-[30deg] maskText">
 			<div className="absolute bottom-full animate-scroll-full-down shadow-accent drop-shadow-highlight">
 				<p>{text1.slice(0, 8)}</p>
 				<p>{text1.slice(8, 16)}</p>

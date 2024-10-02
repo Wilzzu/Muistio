@@ -33,7 +33,7 @@ const LandingNavbar: FC<LandingNavbarProps> = ({ logoClickFunction }) => {
 				<li>
 					<button
 						onClick={logoClickFunction}
-						className="flex items-center gap-2 sm:gap-3 mr-3 text-white hover:text-accent duration-200">
+						className="flex items-center gap-2 sm:gap-3 mr-3 text-white sm:hover:text-accent duration-200">
 						<img src={Logo} alt="Muistio Logo" className="h-8 sm:h-10 w-auto" />
 						<p className="font-bold text-xl sm:text-3xl">Muistio</p>
 					</button>

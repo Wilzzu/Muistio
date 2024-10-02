@@ -17,10 +17,10 @@ import useClearValues from "./hooks/useClearValues";
 const DefaultLayout = () => {
 	const navigate = useNavigate();
 	return (
-		<div className="h-dvh px-2 py-1 overflow-hidden">
-			<div className="h-full flex flex-col items-center overflow-y-scroll scrollbar scrollbar-w-[6px] scrollbar-thumb-primaryHighlight scrollbar-thumb-rounded-full pb-4">
+		<div className="sm:h-dvh px-2 sm:py-1 sm:overflow-hidden">
+			<div className="h-full flex flex-col items-center overflow-y-scroll sm:scrollbar scrollbar-w-[6px] scrollbar-thumb-primaryHighlight scrollbar-thumb-rounded-full pb-4">
 				<LandingNavbar logoClickFunction={() => navigate("/")} />
-				<main className="flex flex-col gap-10 w-full max-w-[800px] pt-3">
+				<main className="flex flex-col gap-10 w-full sm:max-w-[800px] pt-3">
 					<GDPRPopup />
 					<Outlet />
 				</main>

@@ -8,6 +8,7 @@ import SectionThree from "../components/landing/SectionThree";
 import SectionSelector from "../components/landing/SectionSelector";
 import useDetectScroll from "../hooks/useDetectScroll";
 import { AnimatePresence } from "framer-motion";
+import Footer from "../components/layout/Footer/Footer";
 
 const LandingPage = () => {
 	const [activeSection, setActiveSection] = useState(1);
@@ -107,14 +108,22 @@ const LandingPage = () => {
 							<S2Text />
 							<CTAButton />
 						</div>
-						{/* <div className="relative w-full h-[calc(100dvh/1.9)] my-8 shadow-accent/10 drop-shadow-centered-xl">
+						<div className="relative w-full h-[calc(100dvh/2.2)] my-8 shadow-accent/10 drop-shadow-centered-xl">
 							<S2Image />
-						</div> */}
+						</div>
 					</section>
-					{/* 
-					<S3Text />
-					<S3Image /> */}
+					<section>
+						<div className="flex flex-col items-center justify-center gap-4 pb-9">
+							<S3Text />
+							<CTAButton />
+						</div>
+						<div className="relative flex items-center justify-center w-full h-[calc(100dvh/1.8)] my-8 shadow-accent/10 drop-shadow-centered-xl overflow-hidden">
+							<S3Image />
+						</div>
+					</section>
 				</main>
+
+				<Footer />
 			</div>
 		</div>
 	);

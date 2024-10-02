@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const PrivacyPolicy = () => {
 	const location = useLocation();
@@ -34,8 +34,13 @@ const PrivacyPolicy = () => {
 				<p>
 					<strong>Account Information:</strong> When you create an account, we collect your email
 					address and other account details. Refer to{" "}
-					<a href="https://firebase.google.com/support/privacy">Firebase's Privacy Policy</a> for
-					more information.
+					<Link
+						to="https://firebase.google.com/support/privacy"
+						target="_blank"
+						rel="noopener noreferrer">
+						Firebase's Privacy Policy
+					</Link>{" "}
+					for more information.
 				</p>
 				<p>
 					<strong>File Data:</strong> We store the text files you create and their metadata.The
@@ -81,16 +86,25 @@ const PrivacyPolicy = () => {
 						of our website. Cloudflare sets essential cookies to ensure the website functions
 						correctly and to protect against security threats. For more information on Cloudflare's
 						cookies, please refer to their{" "}
-						<a href="https://www.cloudflare.com/cookie-policy/">Cookie Policy</a>.{" "}
+						<Link
+							to="https://www.cloudflare.com/cookie-policy/"
+							target="_blank"
+							rel="noopener noreferrer">
+							Cookie Policy
+						</Link>
+						.{" "}
 					</li>
 					<li>
 						<strong>Firebase:</strong> Once you create an account and log in, we use Firebase to
 						enhance our services. Firebase may set cookies related to user authentication,
 						performance monitoring, and analytics. For detailed information on how Firebase uses
 						cookies, please refer to their{" "}
-						<a href="https://firebase.google.com/docs/auth/admin/manage-cookies">
+						<Link
+							to="https://firebase.google.com/docs/auth/admin/manage-cookies"
+							target="_blank"
+							rel="noopener noreferrer">
 							Session Cookies page
-						</a>
+						</Link>
 						.
 					</li>
 				</ul>
@@ -138,14 +152,26 @@ const PrivacyPolicy = () => {
 					<strong>Firebase:</strong> We use Firebase to store and manage your data. Firebase may use
 					cookies and collect data to provide and improve their services. For more information on
 					how Firebase handles data, please refer to their{" "}
-					<a href="https://firebase.google.com/support/privacy">Privacy Policy</a>.
+					<Link
+						to="https://firebase.google.com/support/privacy"
+						target="_blank"
+						rel="noopener noreferrer">
+						Privacy Policy
+					</Link>
+					.
 				</p>
 				<p>
 					<strong>Cloudflare:</strong> We use Cloudflare to enhance the performance and security of
 					our website. Cloudflare may collect and process data related to website traffic, including
 					IP addresses, for security and operational purposes. For more information on how
 					Cloudflare handles data, please refer to their{" "}
-					<a href="https://www.cloudflare.com/privacypolicy/">Privacy Policy</a>.
+					<Link
+						to="https://www.cloudflare.com/privacypolicy/"
+						target="_blank"
+						rel="noopener noreferrer">
+						Privacy Policy
+					</Link>
+					.
 				</p>
 
 				<h3>9. Changes to Privacy Policy</h3>

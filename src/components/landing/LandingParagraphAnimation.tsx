@@ -33,9 +33,10 @@ const LandingParagraphAnimation: FC<{ children: ReactNode }> = ({ children }) =>
 	return (
 		<motion.p
 			initial="hidden"
-			animate="visible"
+			whileInView="visible"
 			exit="exit"
 			variants={textAnimation}
+			viewport={{ once: true }}
 			className="text-base sm:text-lg leading-[1.4rem] sm:leading-[1.575rem] text-balance sm:text-wrap text-center sm:text-left mb-8 sm:mb-0">
 			{children}
 		</motion.p>
