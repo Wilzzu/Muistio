@@ -28,8 +28,10 @@ const StorageIndicator = () => {
 		<li>
 			<div className="w-full flex flex-col justify-center gap-1 px-3 pt-2 pb-1 mb-1 rounded-md text-xs font-normal">
 				<p className="flex items-center gap-1">
-					<CiCloudOn className="inline-block text-lg stroke-1" /> Storage (
-					{storageUsed >= 1 ? Math.floor(storageUsed) : storageUsed.toFixed(2)}% full)
+					<CiCloudOn className="inline-block text-lg stroke-1" /> Storage
+					<span className="text-[0.67rem]">
+						({storageUsed >= 1 ? Math.floor(storageUsed) : storageUsed.toFixed(2)}%)
+					</span>
 				</p>
 				{/* Percentage bar */}
 				<div className="relative bg-primaryHighlight w-full h-1 rounded-full overflow-hidden">
@@ -91,14 +93,18 @@ const ProfileButton = () => {
 				onClick={handleProfileClick}
 				customElement={<StorageIndicator />}
 				dropdownSide="right">
-				<div className="h-6 w-6 relative rounded-full overflow-hidden">
+				<div className="h-4 sm:h-6 w-4 sm:w-6 relative rounded-full overflow-hidden">
 					<img
 						src={user?.photoURL || defaultAvatar}
 						alt="User avatar"
 						className="h-full w-auto object-contain"
 					/>
 				</div>
-				<p>{user?.displayName || "Unknown User"}</p>
+				<span className="max-w-24 sm:max-w-36 overflow-hidden">
+					<p title={user?.displayName || "Unknown User"} className="truncate">
+						{user?.displayName || "Unknown User"}
+					</p>
+				</span>
 			</ButtonDropdown>
 		);
 	}

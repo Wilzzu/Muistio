@@ -21,8 +21,8 @@ type ButtonProps = {
 
 const defaultButtonStyles = {
 	border:
-		"w-fit p-[1px] bg-gradient-to-br from-primaryHighlight via-primaryHighlight/50 to-primaryHighlight rounded-[9px] duration-200",
-	main: "h-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-gradient-radial from-transparent bg-primary to-primary/60 hover:bg-primary/50 duration-200 text-sm font-semibold disabled:opacity-50 disabled:pointer-events-none",
+		"w-fit p-[1px] bg-gradient-to-br from-primaryHighlight via-primaryHighlight/50 to-primaryHighlight rounded-[7px] sm:rounded-[9px] duration-200",
+	main: "h-full flex items-center justify-center gap-2 px-3 sm:px-4 py-2 rounded-md sm:rounded-lg bg-gradient-radial from-transparent bg-primary to-primary/60 hover:bg-primary/50 duration-200 text-xs sm:text-sm font-semibold disabled:opacity-50 disabled:pointer-events-none text-nowrap",
 };
 
 const Button: FC<ButtonProps> = ({

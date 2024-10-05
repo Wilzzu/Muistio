@@ -1,4 +1,6 @@
+import { useState } from "react";
 import Landing3Note from "../../assets/landing-page/Landing_3_Note.webp";
+import useCheckMobile from "../../hooks/useCheckMobile";
 import LandingParagraphAnimation from "./LandingParagraphAnimation";
 import LandingTitleAnimation from "./LandingTitleAnimation";
 import ScrollingEncryptedText from "./ScrollingEncryptedText";
@@ -6,19 +8,20 @@ import { motion } from "framer-motion";
 
 const textAnimation = {
 	hidden: { opacity: 0, y: "-100%", scale: 1, filter: "blur(4px)" },
-	visible: {
+	visible: (isMobile: boolean) => ({
 		opacity: 1,
 		y: 0,
 		rotate: 0.001,
 		scale: 1,
-		filter: "blur(0)",
+		filter: "blur(0px)",
 		transition: {
 			duration: 2.4,
 			ease: [0.38, 0.39, 0.56, 0.98],
-			scale: { duration: 2.6, ease: "easeOut" },
-			opacity: { duration: 1.2, ease: "easeInOut" },
+			delay: isMobile ? 1.5 : 0,
+			scale: { delay: isMobile ? 1.5 : 0, duration: 2.6, ease: "easeOut" },
+			opacity: { delay: isMobile ? 1.5 : 0, duration: 1.2, ease: "easeInOut" },
 		},
-	},
+	}),
 	exit: {
 		opacity: 0,
 		height: 0,
@@ -39,18 +42,19 @@ const noteAnimation = {
 		scale: 0.9,
 		filter: "blur(5px)",
 	},
-	visible: {
+	visible: (isMobile: boolean) => ({
 		opacity: 1,
 		y: 0,
 		rotate: 0.001,
 		scale: 1,
-		filter: "blur(0)",
+		filter: "blur(0px)",
 		transition: {
 			duration: 1.4,
+			delay: isMobile ? 2 : 0,
 			ease: [0.17, 0.5, 0.14, 1],
-			opacity: { duration: 0.5, ease: "easeOut" },
+			opacity: { delay: isMobile ? 2 : 0, duration: 0.5, ease: "easeOut" },
 		},
-	},
+	}),
 	exit: {
 		opacity: 0,
 		y: -50,
@@ -67,7 +71,7 @@ const noteAnimation = {
 const SectionThree = () => {
 	const S3Text = () => (
 		<>
-			<h1 className="text-[3.5rem] leading-[3.9rem] font-bold">
+			<h1 className="text-4xl sm:text-[3.5rem] sm:leading-[3.9rem] font-bold text-center sm:text-left">
 				<LandingTitleAnimation
 					content={[
 						{ text: "Your Files," },
@@ -80,36 +84,46 @@ const SectionThree = () => {
 				Your privacy is non-negotiable. We encrypt your files with a{" "}
 				<span className="text-textAccent selection:text-black">key only you know</span>, that is
 				never sent to us.
-				<br />
-				No one else — <b>not even us</b> — can access your files.
+				<br /> <br className="inline-block sm:hidden" />
+				No one else <br className="inline-block sm:hidden" /> — <b>not even us</b> —{" "}
+				<br className="inline-block sm:hidden" /> can access your files.
 			</LandingParagraphAnimation>
 		</>
 	);
 
-	const S3Image = () => (
-		<>
-			{/* Encryption text */}
-			<motion.div
-				initial="hidden"
-				animate="visible"
-				exit="exit"
-				variants={textAnimation}
-				className="absolute h-1/2 w-[76%] -translate-x-2 -translate-y-36 z-0 perspective-750">
-				<ScrollingEncryptedText />
-			</motion.div>
+	const S3Image = () => {
+		const isMobile = useCheckMobile();
+		const [isAnimating, setIsAnimating] = useState(false);
 
-			{/* Note */}
-			<motion.img
-				initial="hidden"
-				animate="visible"
-				exit="exit"
-				variants={noteAnimation}
-				draggable={false}
-				src={Landing3Note}
-				className="absolute h-auto w-[58%] translate-y-32 object-contain z-[1]"
-			/>
-		</>
-	);
+		return (
+			<>
+				{/* Encryption text */}
+				<motion.div
+					initial="hidden"
+					whileInView="visible"
+					viewport={{ once: true }}
+					exit="exit"
+					variants={textAnimation}
+					onAnimationStart={() => setIsAnimating(true)}
+					custom={isMobile}
+					className="absolute h-2/3 sm:h-1/2 w-[76%] sm:-translate-x-2 top-4 sm:top-auto sm:-translate-y-36 z-0 perspective-750">
+					<ScrollingEncryptedText />
+				</motion.div>
+
+				{/* Note */}
+				<motion.img
+					initial="hidden"
+					animate={isMobile ? (isAnimating ? "visible" : "hidden") : "visible"}
+					exit="exit"
+					variants={noteAnimation}
+					custom={isMobile}
+					draggable={false}
+					src={Landing3Note}
+					className="absolute h-auto bottom-0 sm:bottom-auto w-[70%] sm:w-[58%] translate-x-2 sm:translate-x-0 sm:translate-y-32 object-contain z-[1]"
+				/>
+			</>
+		);
+	};
 
 	return { S3Text, S3Image };
 };

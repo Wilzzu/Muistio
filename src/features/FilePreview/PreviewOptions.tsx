@@ -65,7 +65,7 @@ const PreviewOptions: FC<PreviewOptionsProps> = ({
 				{isEditing ? (
 					<>
 						<Button
-							style={{ main: "p-2 text-base" }}
+							style={{ main: "p-[0.4rem] sm:p-2 text-sm sm:text-base" }}
 							onClick={toggleEditPreview}
 							disabled={disabled}>
 							{isPreviewingEdit ? <MdEdit /> : <FiSearch />}
@@ -74,14 +74,14 @@ const PreviewOptions: FC<PreviewOptionsProps> = ({
 							<>
 								<Button
 									highlight
-									style={{ main: "p-2 text-base" }}
+									style={{ main: "p-[0.4rem] sm:p-2 text-sm sm:text-base" }}
 									onClick={saveEdits}
 									disabled={disabled}>
 									<FiCheck />
 								</Button>
 								<Button
 									warning
-									style={{ main: "p-2 text-base" }}
+									style={{ main: "p-[0.4rem] sm:p-2 text-sm sm:text-base" }}
 									onClick={handleExitButtonClick}
 									disabled={disabled}>
 									<FiX />
@@ -92,7 +92,7 @@ const PreviewOptions: FC<PreviewOptionsProps> = ({
 				) : (
 					<>
 						<Button
-							style={{ main: "p-2 text-base" }}
+							style={{ main: "p-[0.4rem] sm:p-2 text-sm sm:text-base" }}
 							onClick={startEditing}
 							disabled={disabled || isDeleting}>
 							<MdEdit />
@@ -103,13 +103,15 @@ const PreviewOptions: FC<PreviewOptionsProps> = ({
 									title={selectedFile.title}
 									content={content}
 									disabled={disabled || isDeleting || !content}>
-									<Button style={{ main: "p-2 text-base" }} disabled={disabled || isDeleting}>
+									<Button
+										style={{ main: "p-[0.4rem] sm:p-2 text-sm sm:text-base" }}
+										disabled={disabled || isDeleting}>
 										<FiDownload className="text-white" />
 									</Button>
 								</GenerateDownloadLink>
 								<Button
 									warning
-									style={{ main: "p-2 text-base" }}
+									style={{ main: "p-[0.4rem] sm:p-2 text-sm sm:text-base" }}
 									disabled={disabled || isDeleting}
 									onClick={() => setShowDeleteWarning(true)}>
 									<LuTrash2 />

@@ -90,10 +90,10 @@ const CreateEncryptionKey = () => {
 			<section className="flex flex-col gap-5">
 				{/* Title and Description */}
 				<div>
-					<h1 className="font-bold text-2xl mb-4">
+					<h1 className="font-bold text-xl sm:text-2xl mb-2 sm:mb-4">
 						<HiOutlineKey className="inline-block mb-1" /> Create an Encryption Key
 					</h1>
-					<p>
+					<p className="text-sm sm:text-base mb-2 sm:mb-1">
 						To secure your files, you need to create an encryption key. This key is used to encrypt
 						and decrypt your files. The key is never sent to our servers, only you know it.
 					</p>
@@ -156,8 +156,8 @@ const CreateEncryptionKey = () => {
 					<Button
 						onClick={validateFieldsAndStrength}
 						highlight
-						disabled={isUpdating}
-						style={{ main: "bg-opacity-80 py-3 w-full", border: "w-full mt-3" }}>
+						disabled={isUpdating || encryptionKey.length <= 0 || encryptionKeyConfirm.length <= 0}
+						style={{ main: "bg-opacity-80 py-3 w-full text-sm", border: "w-full mt-3" }}>
 						Create encryption key
 					</Button>
 					<button

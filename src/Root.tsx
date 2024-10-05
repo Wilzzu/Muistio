@@ -13,14 +13,15 @@ import FilesProvider from "./context/FilesProvider";
 import LandingNavbar from "./components/layout/Navbar/LandingNavbar";
 import GDPRPopup from "./components/layout/GDPRPopup";
 import useClearValues from "./hooks/useClearValues";
+import Footer from "./components/layout/Footer/Footer";
 
 const DefaultLayout = () => {
 	const navigate = useNavigate();
 	return (
-		<div className="h-dvh px-2 py-1 overflow-hidden">
-			<div className="h-full flex flex-col items-center overflow-y-scroll scrollbar scrollbar-w-[6px] scrollbar-thumb-primaryHighlight scrollbar-thumb-rounded-full pb-4">
+		<div className="sm:h-dvh px-2 sm:py-1 sm:overflow-hidden">
+			<div className="h-full flex flex-col items-center overflow-y-scroll sm:scrollbar scrollbar-w-[6px] scrollbar-thumb-primaryHighlight scrollbar-thumb-rounded-full pb-4">
 				<LandingNavbar logoClickFunction={() => navigate("/")} />
-				<main className="flex flex-col gap-10 w-full max-w-[800px] pt-3">
+				<main className="flex flex-col gap-10 w-full sm:max-w-[800px] pt-3">
 					<GDPRPopup />
 					<Outlet />
 				</main>
@@ -71,15 +72,18 @@ const Root = () => {
 			{queryParams.get("modal") === "new" && <CreateNewFile />}
 			<Navbar />
 			{/* Container for main height and padding */}
-			<div className="h-[calc(100dvh-4rem)] p-2">
+			<div className="min-h-[calc(100dvh-80px-80px)] sm:min-h-0 sm:h-[calc(100dvh-4rem)] p-2">
 				{/* Page content container with custom scrollbar */}
-				<div className="h-full overflow-y-scroll scrollbar scrollbar-w-[6px] scrollbar-thumb-primaryHighlight scrollbar-thumb-rounded-full outline-none">
+				<div className="h-full overflow-y-scroll sm:scrollbar scrollbar-w-[6px] scrollbar-thumb-primaryHighlight scrollbar-thumb-rounded-full outline-none">
 					{userDataLoading || error.isError ? (
 						<LoadingModal content={"Loading user data"} error={error} />
 					) : (
 						<Authentication />
 					)}
 				</div>
+			</div>
+			<div className="block sm:hidden">
+				<Footer marginTop={24} />
 			</div>
 		</FilesProvider>
 	);

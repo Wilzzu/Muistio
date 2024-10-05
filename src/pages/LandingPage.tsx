@@ -8,6 +8,7 @@ import SectionThree from "../components/landing/SectionThree";
 import SectionSelector from "../components/landing/SectionSelector";
 import useDetectScroll from "../hooks/useDetectScroll";
 import { AnimatePresence } from "framer-motion";
+import Footer from "../components/layout/Footer/Footer";
 
 const LandingPage = () => {
 	const [activeSection, setActiveSection] = useState(1);
@@ -56,13 +57,15 @@ const LandingPage = () => {
 	}, [activeSection, hasInteracted]);
 
 	return (
-		<div className="h-dvh px-2 py-1 overflow-hidden">
+		<div className="sm:h-dvh sm:px-2 sm:py-1 sm:overflow-hidden">
 			{/* Scroll container */}
 			<div
 				ref={scrollContainerRef}
-				className="h-full flex flex-col items-center overflow-y-scroll scrollbar scrollbar-w-[6px] scrollbar-thumb-primaryHighlight scrollbar-thumb-rounded-full">
+				className="h-full flex flex-col items-center overflow-y-scroll px-2 sm:px-0 sm:scrollbar scrollbar-w-[6px] scrollbar-thumb-primaryHighlight scrollbar-thumb-rounded-full">
 				<LandingNavbar logoClickFunction={() => setActiveSection(1)} />
-				<main className="max-w-[1200px] w-full grid grid-cols-5 h-full min-h-[700px] pb-20">
+
+				{/* Desktop */}
+				<main className="hidden sm:grid max-w-[1200px] w-full grid-cols-5 h-full min-h-[700px] pb-20">
 					<section className="flex flex-col justify-center gap-8 px-4 pt-4 col-span-2">
 						{/* Text */}
 						<AnimatePresence mode="wait">
@@ -88,6 +91,39 @@ const LandingPage = () => {
 						</section>
 					</AnimatePresence>
 				</main>
+
+				{/* Mobile */}
+				<main className="sm:hidden flex flex-col gap-10 px-3">
+					<section>
+						<div className="flex flex-col items-center justify-center gap-4 py-12">
+							<S1Text />
+							<CTAButton />
+						</div>
+						<div className="relative w-full h-[calc(100dvh/1.9)] my-8 shadow-accent/10 drop-shadow-centered-xl">
+							<S1Image />
+						</div>
+					</section>
+					<section>
+						<div className="flex flex-col items-center justify-center gap-4 pb-12">
+							<S2Text />
+							<CTAButton />
+						</div>
+						<div className="relative w-full h-[calc(100dvh/2.2)] my-8 shadow-accent/10 drop-shadow-centered-xl">
+							<S2Image />
+						</div>
+					</section>
+					<section>
+						<div className="flex flex-col items-center justify-center gap-4 pb-9">
+							<S3Text />
+							<CTAButton />
+						</div>
+						<div className="relative flex items-center justify-center w-full h-[calc(100dvh/1.8)] my-8 shadow-accent/10 drop-shadow-centered-xl overflow-hidden">
+							<S3Image />
+						</div>
+					</section>
+				</main>
+
+				<Footer marginTop={32} />
 			</div>
 		</div>
 	);

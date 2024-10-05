@@ -64,13 +64,13 @@ const ValidateEncryptionKey = () => {
 
 	return (
 		<Modal closeModalFunction={() => false}>
-			<section className="flex flex-col gap-2">
+			<section className="flex flex-col gap-1 sm:gap-2">
 				{/* Title and Description */}
 				<div>
-					<h1 className="font-bold text-2xl mb-4">
-						<HiOutlineKey className="inline-block mb-1" /> Verify your Encryption Key
+					<h1 className="font-bold text-xl sm:text-2xl mb-2 sm:mb-4">
+						<HiOutlineKey className="inline-block sm:mb-1" /> Verify your Encryption Key
 					</h1>
-					<p>
+					<p className="text-sm sm:text-base">
 						Enter your encryption key to access your files. The key is never sent to our servers.
 						Decrypting your files is done locally on your device with the key you provide.
 					</p>
@@ -78,7 +78,7 @@ const ValidateEncryptionKey = () => {
 
 				{/* Inputs */}
 				<div className="flex flex-col gap-1">
-					<p className="text-warning font-medium h-6">
+					<p className="text-warning text-sm sm:text-base font-medium h-5 sm:h-6">
 						{invalidField.invalid && invalidField.message}
 					</p>
 					<label htmlFor="muistioEncryptionKey" className="sr-only">
@@ -109,8 +109,8 @@ const ValidateEncryptionKey = () => {
 					<Button
 						onClick={validate}
 						highlight
-						disabled={isValidating}
-						style={{ main: "bg-opacity-80 py-3 w-full", border: "w-full mt-3" }}>
+						disabled={isValidating || encryptionKey.length <= 0}
+						style={{ main: "bg-opacity-80 py-3 w-full text-sm", border: "w-full mt-3" }}>
 						{isValidating ? (
 							<ImSpinner2 className="ml-1 animate-spin inline-block h-5" />
 						) : (

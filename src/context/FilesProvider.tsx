@@ -17,6 +17,7 @@ const FilesProvider: FC<{ children: ReactNode }> = ({ children }) => {
 			const foundFile = files.find((file) => fileId === file.id);
 			if (!foundFile) return setSelectedFile(null);
 			setSelectedFile(foundFile);
+			window.scrollTo({ top: 0, behavior: "smooth" });
 		} else if (!fileId && files) return setSelectedFile(null);
 	}, [fileId, files]);
 

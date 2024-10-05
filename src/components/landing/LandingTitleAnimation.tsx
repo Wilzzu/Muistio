@@ -81,7 +81,8 @@ const LandingTitleAnimation: FC<{ content: LandingTitleContent[] }> = ({ content
 			{/* Container for staggering */}
 			<motion.span
 				initial="hidden"
-				animate="visible"
+				whileInView="visible"
+				viewport={{ once: true }}
 				exit="exit"
 				variants={{
 					visible: { transition: { staggerChildren: 0.05 } },

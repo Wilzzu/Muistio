@@ -42,16 +42,16 @@ const ButtonDropdown: FC<ButtonProps> = ({
 			{/* Border for button */}
 			<div
 				ref={buttonRef}
-				className="p-[1px] bg-gradient-to-br from-primaryHighlight via-primaryHighlight/50 to-primaryHighlight rounded-[9px] duration-200">
+				className="p-[1px] bg-gradient-to-br from-primaryHighlight via-primaryHighlight/50 to-primaryHighlight rounded-[7px] sm:rounded-[9px] duration-200">
 				{/* Main button */}
 				<button
 					onClick={() => setOpen((prev) => !prev)}
 					disabled={disabled}
-					className="flex items-center justify-center h-9 group">
-					<span className="p-[0.4rem] flex items-center justify-center gap-[6px] px-2 h-full rounded-l-lg bg-gradient-radial from-transparent bg-primary to-primary/60 group-hover:bg-primary/50 text-sm font-semibold duration-200">
+					className="flex items-center justify-center h-8 sm:h-9 group">
+					<span className="p-2 sm:p-[0.4rem] flex items-center justify-center gap-[6px] px-2 h-full rounded-l-md sm:rounded-l-lg bg-gradient-radial from-transparent bg-primary to-primary/60 group-hover:bg-primary/50 text-xs sm:text-sm font-semibold duration-200">
 						{children}
 					</span>
-					<span className="h-full flex items-center justify-center px-[6px] bg-primary group-hover:bg-primary/70 border-l border-primaryHighlight/40 rounded-r-lg duration-200">
+					<span className="h-full flex items-center justify-center px-[6px] bg-primary group-hover:bg-primary/70 border-l border-primaryHighlight/40 rounded-r-md sm:rounded-r-lg duration-200">
 						<IoIosArrowDown className="opacity-80" />
 					</span>
 				</button>

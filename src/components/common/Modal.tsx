@@ -26,14 +26,14 @@ const Modal: FC<ModalProps> = ({ closeModalFunction, styleOverride, children }) 
 		<motion.div
 			initial={{ opacity: 0 }}
 			animate={{ opacity: 1 }}
-			className="fixed inset-0 w-full h-full flex items-center justify-center bg-black/50 z-[100]">
+			className="fixed inset-0 w-full h-full px-3 sm:px-0 flex items-center justify-center bg-black/50 z-[100] text-sm sm:text-base">
 			{/* Border container */}
 			<motion.div
 				initial={{ y: 20 }}
 				animate={{ y: 0 }}
 				ref={mainRef}
 				className={cn(
-					"p-[1px] w-full max-w-[600px] bg-gradient-to-br from-primaryHighlight via-primaryHighlight/60 to-primaryHighlight rounded-[13px] shadow-black/60 shadow-centered-lg mr-2",
+					"p-[1px] w-full max-w-[600px] bg-gradient-to-br from-primaryHighlight via-primaryHighlight/60 to-primaryHighlight rounded-[13px] shadow-black/60 shadow-centered-lg sm:mr-[6px]",
 					styleOverride
 				)}>
 				{/* Hidden button so we can bring focus to the modal */}
