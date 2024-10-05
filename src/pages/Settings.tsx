@@ -12,7 +12,7 @@ const Settings = () => {
 
 	return (
 		<div className="flex justify-center">
-			<main className="flex flex-col gap-10 w-full max-w-[800px] pt-3">
+			<main className="flex flex-col gap-6 sm:gap-10 w-full max-w-[800px] pt-3 px-3 sm:px-0">
 				{/* Header */}
 				<div>
 					<Link
@@ -22,7 +22,7 @@ const Settings = () => {
 						Back
 					</Link>
 					<div className="mt-2">
-						<h1 className="text-2xl font-medium">Settings</h1>
+						<h1 className="text-xl sm:text-2xl font-medium">Settings</h1>
 						<div className="mt-1 h-[2px] bg-primary" />
 					</div>
 				</div>
@@ -30,7 +30,8 @@ const Settings = () => {
 				{/* Settings cards */}
 				<SettingsCard title="Delete Account and All Files" warning>
 					<p className="mb-2">
-						All your files and account data will be permanently deleted. <br />
+						All your files and account data will be permanently deleted.{" "}
+						<br className="hidden sm:inline-block" />
 						This action is irreversible.
 					</p>
 					<Button

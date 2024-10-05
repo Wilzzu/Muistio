@@ -8,8 +8,8 @@ const Navbar = () => {
 	const navigate = useNavigate();
 
 	return (
-		<nav className="relative flex justify-between items-center px-6 h-16">
-			<ul className="flex gap-4">
+		<nav className="relative flex justify-between items-center px-3 sm:px-6 w-full h-16">
+			<ul className="flex gap-3 sm:gap-4">
 				<li>
 					<Button link="/home">
 						<BiHomeAlt2 />
@@ -25,12 +25,12 @@ const Navbar = () => {
 			</ul>
 
 			<ul className="flex items-center gap-4">
-				<li>
+				<li className="hidden sm:block">
 					<Link to="/terms-of-service" className="text-sm hover:text-textAccent duration-200">
 						Terms of Service
 					</Link>
 				</li>
-				<li className="mr-1">
+				<li className="hidden sm:block mr-1">
 					<Link to="/privacy-policy" className="text-sm hover:text-textAccent duration-200">
 						Privacy Policy
 					</Link>

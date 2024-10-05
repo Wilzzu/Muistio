@@ -151,9 +151,12 @@ const FilePreview: FC<FilePreviewProps> = ({
 		<>
 			<div
 				id={landing?.enabled ? "muistioLandingEditor" : "muistioEditor"}
-				className={cn("w-full lg:w-2/3 xl:w-[clamp(640px,60%,790px)] p-3 pr-1 shrink-0", {
-					"lg:w-full xl:w-full p-0 pt-1": isCreatingNewFile || landing?.enabled,
-				})}>
+				className={cn(
+					"w-full lg:w-2/3 xl:w-[clamp(640px,60%,790px)] pt-1 sm:p-3 sm:pt-3 sm:pr-1 shrink-0",
+					{
+						"lg:w-full xl:w-full sm:p-0 sm:pt-1": isCreatingNewFile || landing?.enabled,
+					}
+				)}>
 				{/* Sticky and border */}
 				<div
 					className={cn(
@@ -194,13 +197,13 @@ const FilePreview: FC<FilePreviewProps> = ({
 							ref={scrollRef}
 							onDoubleClick={handleDoubleClick}
 							className={cn(
-								"h-[calc(100dvh-8.6rem)] overflow-scroll scrollbar scrollbar-w-[3px] sm:scrollbar-w-[6px] scrollbar-h-[6px] scrollbar-thumb-primaryHighlight/50 scrollbar-thumb-rounded-full duration-700",
+								"h-[calc(100dvh-17rem)] sm:h-[calc(100dvh-8.6rem)] overflow-scroll scrollbar scrollbar-w-[3px] sm:scrollbar-w-[6px] scrollbar-h-[6px] scrollbar-thumb-primaryHighlight/50 scrollbar-thumb-rounded-full duration-700",
 								{
 									"h-fit min-h-56 max-h-[calc(100dvh-20rem)]": isCreatingNewFile,
 								},
-								{ "h-[calc(100dvh-7.6rem)]": !isEditing },
+								{ "h-[calc(100dvh-16rem)] sm:h-[calc(100dvh-7.6rem)]": !isEditing },
 								{
-									"min-h-0 h-full aspect-[4/5.4] sm:aspect-[4/5]": landing?.enabled,
+									"min-h-0 h-full sm:h-full aspect-[4/5.4] sm:aspect-[4/5]": landing?.enabled,
 								}
 							)}
 							onClick={onClick}>

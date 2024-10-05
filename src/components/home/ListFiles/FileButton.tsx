@@ -127,7 +127,7 @@ const FileButton: FC<FileButtonProps> = ({ file, showSkeleton }) => {
 		<li
 			key={file.id}
 			className={cn(
-				"relative h-20 p-[1px] bg-gradient-radial from-[#465268] to-primaryHighlight rounded-[13px] duration-500",
+				"relative h-[4.25rem] sm:h-20 p-[1px] bg-gradient-radial from-[#465268] to-primaryHighlight rounded-[9px] sm:rounded-[13px] duration-500",
 				{
 					"from-accent/60 to-accent shadow-accent shadow-[0_0_24px_-14px]":
 						file.id === selectedFile?.id,
@@ -139,7 +139,7 @@ const FileButton: FC<FileButtonProps> = ({ file, showSkeleton }) => {
 				onClick={() => navigate(file.id === selectedFile?.id ? `/home` : `/file/${file.id}`)}
 				disabled={isRenaming || isDeleting || showSkeleton || file.isUploading}
 				className={cn(
-					"h-full w-full flex flex-col p-4 bg-gradient-radial from-[#151A22] to-[#1B1D26]/95 rounded-xl",
+					"h-full w-full flex flex-col justify-center sm:justify-normal p-2 sm:p-4 bg-gradient-radial from-[#151A22] to-[#1B1D26]/95 rounded-lg sm:rounded-xl",
 					{
 						"enabled:hover:bg-primary/60": file.id !== selectedFile?.id,
 					},
@@ -155,12 +155,13 @@ const FileButton: FC<FileButtonProps> = ({ file, showSkeleton }) => {
 						onBlur={onBlur}
 						onKeyDown={(e) => onInputKeyDown(e)}
 						onChange={(e) => setRenameValue(e.target.value)}
-						className="bg-transparent text-lg font-medium rounded-sm outline-none outline-1 outline-accent w-[93%] disabled:animate-pulse"
+						className="bg-transparent text-sm sm:text-lg font-medium rounded-sm outline-none outline-1 outline-accent w-[93%] disabled:animate-pulse"
 					/>
 				) : (
 					<h1
+						title={file?.title || ""}
 						className={cn(
-							"w-full truncate text-left text-lg font-medium",
+							"w-full truncate text-left text-sm sm:text-lg font-normal sm:font-medium",
 							{
 								"animate-pulse": isUpdating,
 							},
@@ -170,7 +171,7 @@ const FileButton: FC<FileButtonProps> = ({ file, showSkeleton }) => {
 					</h1>
 				)}
 				{/* Other information */}
-				<p className="flex gap-2 text-xs">
+				<p className="flex gap-2 text-[0.6rem] sm:text-xs text-nowrap">
 					<span>
 						<LuCalendar className="inline-block mb-[0.1rem]" />{" "}
 						{moment(file.dateModified.toDate()).format(
@@ -187,7 +188,7 @@ const FileButton: FC<FileButtonProps> = ({ file, showSkeleton }) => {
 			{/* More options button */}
 			<div className="absolute top-1 right-1">
 				<ButtonMoreOptions
-					dropdownSide="left"
+					dropdownSide="right"
 					options={options}
 					disabled={isDeleting || showSkeleton || file.isUploading}
 				/>

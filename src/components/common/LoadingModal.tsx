@@ -32,21 +32,21 @@ const LoadingModal: FC<LoadingModalProps> = ({ content, error }) => {
 			closeModalFunction={() => false}>
 			{error.isError ? (
 				<>
-					<h1 className="text-center text-lg text-warning font-semibold">
+					<h1 className="text-center text-base sm:text-lg text-warning font-semibold">
 						Oops! An error occurred.
 					</h1>
-					<p className="text-center text-sm text-white/70">Error: "{error.message}"</p>
-					<p className="text-center text-sm text-white/70 mt-4">
+					<p className="text-center text-xs sm:text-sm text-white/70">Error: "{error.message}"</p>
+					<p className="text-center text-xs sm:text-sm text-white/70 mt-4">
 						Try <RefreshLink />.
 					</p>
 				</>
 			) : (
 				<>
-					<h1 className="text-center text-lg">
+					<h1 className="text-center text-base sm:text-lg">
 						{content} <ImSpinner2 className="ml-2 animate-spin inline-block" />
 					</h1>
 					{showWarning && (
-						<p className="text-center text-sm text-white/70">
+						<p className="text-center text-xs sm:text-sm text-white/70">
 							This is taking longer than expected, try <RefreshLink />.
 						</p>
 					)}

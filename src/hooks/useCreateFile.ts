@@ -29,6 +29,7 @@ const useCreateFile = () => {
 		setSelectedFile(newFile.metadata);
 		navigate(`/file/${newFile.metadata.id}`);
 		updateStorageSize();
+		window.scrollTo({ top: 0, behavior: "smooth" });
 		showNotification({ content: "File created successfully!" });
 	};
 

@@ -22,7 +22,7 @@ const TopOptions = () => {
 
 	return (
 		<>
-			<ul className="w-full flex justify-between z-10">
+			<ul className="w-full flex justify-between z-[2]">
 				{/* New File button */}
 				<li>
 					<Button onClick={() => navigate("?modal=new")} highlight={files?.length === 0}>

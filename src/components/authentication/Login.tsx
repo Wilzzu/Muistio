@@ -11,10 +11,10 @@ const Login = () => {
 		<Modal closeModalFunction={() => false}>
 			<section className="flex flex-col items-center justify-center gap-8">
 				<div className="text-center">
-					<h1 className="font-bold text-3xl">Welcome to Muistio!</h1>
-					<p>Sign in to continue</p>
+					<h1 className="font-bold text-2xl sm:text-3xl">Welcome to Muistio!</h1>
+					<p className="text-sm sm:text-base">Sign in to continue</p>
 				</div>
-				<Button highlight onClick={login} style={{ main: "bg-opacity-80" }}>
+				<Button highlight onClick={login} style={{ main: "bg-opacity-80 text-sm" }}>
 					<FaGoogle /> Sign in with Google
 				</Button>
 				<p className="text-[0.76rem] leading-tight text-white/50">

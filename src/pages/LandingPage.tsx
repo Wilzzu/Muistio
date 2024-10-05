@@ -123,7 +123,7 @@ const LandingPage = () => {
 					</section>
 				</main>
 
-				<Footer />
+				<Footer marginTop={32} />
 			</div>
 		</div>
 	);

@@ -1,7 +1,12 @@
 import { Link } from "react-router-dom";
 import Logo from "../../../assets/Logo_Small.webp";
+import { FC } from "react";
 
-const Footer = () => {
+type FooterProps = {
+	marginTop?: number;
+};
+
+const Footer: FC<FooterProps> = ({ marginTop }) => {
 	return (
 		<>
 			{/* Desktop */}
@@ -15,7 +20,9 @@ const Footer = () => {
 				</Link>
 			</footer>
 			{/* Mobile */}
-			<footer className="sm:hidden flex justify-between items-end w-full py-4 mt-8 px-3 text-xs">
+			<footer
+				style={{ marginTop: `${marginTop}px` }}
+				className="sm:hidden flex justify-between items-end w-full py-4 px-3 text-xs">
 				<div className="flex flex-col">
 					<div className="flex items-center gap-1">
 						<img src={Logo} alt="Muistio Logo" className="h-5 w-auto" />
