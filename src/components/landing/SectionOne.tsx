@@ -23,7 +23,7 @@ const imageAnimation = {
 		y: 0,
 		rotate: 0.001,
 		scale: 1,
-		filter: "blur(0)",
+		filter: "blur(0px)",
 		transition: {
 			duration: 1.4,
 			delay: isMobile ? 2 : 0,
@@ -31,7 +31,7 @@ const imageAnimation = {
 			opacity: { delay: isMobile ? 2 : 0, duration: 1, ease: "easeOut" },
 		},
 	}),
-	exit: (mult = 1) => ({
+	exit: ({ mult = 1 }) => ({
 		opacity: 0,
 		y: -50 * mult,
 		scale: 1.05,

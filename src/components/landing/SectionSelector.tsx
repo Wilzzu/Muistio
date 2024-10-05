@@ -15,7 +15,6 @@ type SelectorButtonProps = {
 	setActiveSection: Dispatch<SetStateAction<number>>;
 	hasInteracted: boolean;
 	setHasInteracted: Dispatch<SetStateAction<boolean>>;
-	animate: boolean;
 	disabled?: boolean;
 };
 
@@ -29,7 +28,7 @@ const selectedAnimation = {
 		transform: `translateX(${reverse ? "100%" : "-100%"})`,
 	}),
 	visible: ({ interacted }: SelectedAnimationProps) => ({
-		transform: "translateX(0)",
+		transform: "translateX(0px)",
 		transition: { duration: interacted ? 0.5 : 10, ease: "linear" },
 	}),
 	exit: ({ reverse, interacted }: SelectedAnimationProps) => ({
@@ -44,7 +43,6 @@ const SelectorButton: FC<SelectorButtonProps> = ({
 	setActiveSection,
 	hasInteracted,
 	setHasInteracted,
-	animate,
 	disabled,
 }) => {
 	const [section, setSection] = useState(activeSection);
@@ -52,7 +50,7 @@ const SelectorButton: FC<SelectorButtonProps> = ({
 	const [ready, setReady] = useState(false);
 	const handleClick = () => {
 		if (activeSection !== index) setActiveSection(index);
-		if (animate) setHasInteracted(true);
+		if (!hasInteracted) setHasInteracted(true);
 	};
 
 	const calculateReverse = () => {
@@ -123,7 +121,6 @@ const SectionSelector: FC<SectionSelectorProps> = ({
 					setActiveSection={setActiveSection}
 					hasInteracted={hasInteracted}
 					setHasInteracted={setHasInteracted}
-					animate={!hasInteracted}
 					disabled={disabled}
 				/>
 			))}

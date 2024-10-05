@@ -25,7 +25,7 @@ const imageAnimation = {
 		y: 0,
 		rotate: 0.001,
 		scale: 1,
-		filter: "blur(0)",
+		filter: "blur(0px)",
 		transition: {
 			duration: 1.4,
 			delay: isMobile ? 1.5 : 0,

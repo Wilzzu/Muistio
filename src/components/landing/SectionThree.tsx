@@ -13,7 +13,7 @@ const textAnimation = {
 		y: 0,
 		rotate: 0.001,
 		scale: 1,
-		filter: "blur(0)",
+		filter: "blur(0px)",
 		transition: {
 			duration: 2.4,
 			ease: [0.38, 0.39, 0.56, 0.98],
@@ -47,7 +47,7 @@ const noteAnimation = {
 		y: 0,
 		rotate: 0.001,
 		scale: 1,
-		filter: "blur(0)",
+		filter: "blur(0px)",
 		transition: {
 			duration: 1.4,
 			delay: isMobile ? 2 : 0,
