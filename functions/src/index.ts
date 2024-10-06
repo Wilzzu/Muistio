@@ -27,16 +27,21 @@ export const modifyfile = onDocumentWritten(
 		const newData = eventData?.after.data();
 		const oldData = eventData?.before.data();
 
+		// Check if user exists
+		const userId = event.params.userId;
+		const userDoc = await userMetadata(userId).get();
+		if (!userDoc.exists) return null;
+
 		// New document
 		if (!oldData && newData) {
-			return userMetadata(event.params.userId).update({
+			return userMetadata(userId).update({
 				totalFileSize: FieldValue.increment(newData.ciphertext.length + 304), // Add 304 bytes to make up for other fields in the document
 			});
 		}
 
 		// Deleted document
 		if (!newData && oldData) {
-			return userMetadata(event.params.userId).update({
+			return userMetadata(userId).update({
 				totalFileSize: FieldValue.increment(-(oldData.ciphertext.length + 304)),
 			});
 		}
@@ -46,7 +51,7 @@ export const modifyfile = onDocumentWritten(
 			const sizeDiff = newData.ciphertext.length - oldData.ciphertext.length;
 			if (sizeDiff === 0) return;
 
-			userMetadata(event.params.userId).update({
+			userMetadata(userId).update({
 				totalFileSize: FieldValue.increment(sizeDiff),
 			});
 		}
