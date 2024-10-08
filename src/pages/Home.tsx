@@ -15,11 +15,11 @@ function Home() {
 	});
 
 	return (
-		<div className="flex justify-center sm:overflow-hidden">
+		<div className="flex justify-center">
 			<main className="flex flex-col-reverse lg:flex-row justify-center gap-1 lg:gap-4 xl:gap-10 px-1 w-full lg:w-[clamp(1100px,80%,1600px)]">
-				<section className="flex flex-col gap-5 w-full lg:w-1/3 xl:w-1/2 sm:px-3 shrink-0 min-h-[360px]">
+				<section className="flex flex-col gap-5 w-full lg:w-1/3 xl:w-1/2 shrink-0 min-h-[360px]">
 					<Search setFilteredList={setFilteredList} />
-					<div className="flex flex-col gap-2">
+					<div className="flex flex-col gap-2 sm:px-3">
 						<TopOptions />
 						<ul className="grid grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-2">
 							<ListFiles filteredList={filteredList} />

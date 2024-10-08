@@ -57,7 +57,7 @@ const Root = () => {
 	if (!/(\/home|\/file|\/settings)/.test(location.pathname)) return <DefaultLayout />;
 
 	// Authentication flow
-	const Authentication = () => {
+	const App = () => {
 		if (!user) return <Login />;
 		if (!encryptionKeyChallenge) return <CreateEncryptionKey />;
 		if (!encryptionKeySet) return <ValidateEncryptionKey />;
@@ -74,11 +74,11 @@ const Root = () => {
 			{/* Container for main height and padding */}
 			<div className="min-h-[calc(100dvh-80px-80px)] sm:min-h-0 sm:h-[calc(100dvh-4rem)] p-2">
 				{/* Page content container with custom scrollbar */}
-				<div className="h-full overflow-y-scroll sm:scrollbar scrollbar-w-[6px] scrollbar-thumb-primaryHighlight scrollbar-thumb-rounded-full outline-none">
+				<div className="relative h-full overflow-y-scroll overflow-x-hidden sm:scrollbar scrollbar-w-[6px] scrollbar-thumb-primaryHighlight scrollbar-thumb-rounded-full outline-none">
 					{userDataLoading || error.isError ? (
 						<LoadingModal content={"Loading user data"} error={error} />
 					) : (
-						<Authentication />
+						<App />
 					)}
 				</div>
 			</div>
