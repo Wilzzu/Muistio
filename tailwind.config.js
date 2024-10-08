@@ -89,6 +89,9 @@ export default {
 				"scroll-full-down-start-middle": "scroll-full-down 6s -3s linear infinite",
 				progress: "progress 10s linear",
 			},
+			screens: {
+				"3xl": "2000px",
+			},
 		},
 	},
 

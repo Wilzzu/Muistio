@@ -65,7 +65,7 @@ const LandingPage = () => {
 				<LandingNavbar logoClickFunction={() => setActiveSection(1)} />
 
 				{/* Desktop */}
-				<main className="hidden sm:grid max-w-[1200px] w-full grid-cols-5 h-full min-h-[700px] pb-20">
+				<main className="hidden sm:grid max-w-[1200px] w-full grid-cols-5 h-full min-h-[736px] lg:pb-10 3xl:pb-32">
 					<section className="flex flex-col justify-center gap-8 px-4 pt-4 col-span-2">
 						{/* Text */}
 						<AnimatePresence mode="wait">
@@ -86,7 +86,7 @@ const LandingPage = () => {
 					<AnimatePresence mode="wait">
 						<section
 							key={`LandingImageSection-${activeSection}`}
-							className="relative min-h-[700px] col-span-3 flex flex-col items-center justify-center select-none overflow-hidden shadow-accent/20 drop-shadow-centered-2xl">
+							className="relative min-h-[736px] col-span-3 flex flex-col items-center justify-center select-none overflow-hidden shadow-accent/20 drop-shadow-centered-2xl">
 							{ActiveImage && <ActiveImage />}
 						</section>
 					</AnimatePresence>

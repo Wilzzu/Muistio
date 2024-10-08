@@ -21,7 +21,7 @@ const ButtonVariants = {
 
 const CTAButton = () => {
 	return (
-		<Link to="/home">
+		<Link to="/home" className="w-fit">
 			<motion.div
 				initial="hidden"
 				whileInView="visible"
