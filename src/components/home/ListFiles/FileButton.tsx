@@ -98,7 +98,6 @@ const FileButton: FC<FileButtonProps> = ({ file, showSkeleton }) => {
 	const deleteFile = () => {
 		deleteFileMutation();
 		setShowWarning(false);
-		console.log("Deleting file:", file.title);
 	};
 
 	// Used to start a download when the data is ready after user clicks download

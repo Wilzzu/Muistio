@@ -11,7 +11,6 @@ const useFetchFileContent = (fileId: string | null, enabled: boolean = true) => 
 	const fetchFileContent = async () => {
 		if (!user?.uid) throw new Error("User not found");
 		if (!fileId) throw new Error("File not found");
-		console.log("Fetching");
 		const data = await getFileContent(user.uid, fileId, await getEncryptionKey());
 		return data;
 	};

@@ -117,7 +117,6 @@ const FilePreview: FC<FilePreviewProps> = ({
 	}
 
 	function onFileUpdated() {
-		console.log("File updated");
 		discardAndExit();
 	}
 

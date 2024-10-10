@@ -3,7 +3,7 @@ import Button from "../common/Button";
 import Modal from "../common/Modal";
 import TextInput from "../common/TextInput";
 import AuthContext from "../../context/AuthContext";
-import usePasswordStrength from "../../hooks/usePasswordStrength";
+import usePasswordStrength, { PasswordStrength } from "../../hooks/usePasswordStrength";
 import PasswordStrengthBar from "./PasswordStrengthBar";
 import useLogOut from "../../hooks/useLogOut";
 import useUpdateMetadata from "../../hooks/useUpdateMetadata";
@@ -67,7 +67,7 @@ const CreateEncryptionKey = () => {
 	const validateFieldsAndStrength = () => {
 		// Check for invalid fields
 		const defaultClone = structuredClone(defaultInvalidFields);
-		if (passwordStrength <= 1)
+		if (passwordStrength <= PasswordStrength.WEAK)
 			return setInvalidFields({ key: true, confirm: false, reason: "Too weak" });
 
 		if (!encryptionKeyConfirm.trim())

@@ -1,8 +1,8 @@
 import Button from "../../common/Button";
-import ProfileButton from "./ProfileButton";
 import { LuPlus } from "react-icons/lu";
 import { BiHomeAlt2 } from "react-icons/bi";
 import { Link, useNavigate } from "react-router-dom";
+import ProfileButton from "./ProfileButton/ProfileButton";
 
 const Navbar = () => {
 	const navigate = useNavigate();

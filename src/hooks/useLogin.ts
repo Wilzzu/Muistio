@@ -8,7 +8,6 @@ const useLogin = () => {
 			.then((result) => {
 				const credential = GoogleAuthProvider.credentialFromResult(result);
 				if (!credential) return;
-				console.log(credential);
 			})
 			.catch((error) => {
 				console.error(error.code, error.message);
