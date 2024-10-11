@@ -10,7 +10,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import NotificationProvider from "./context/NotificationProvider";
 import LandingPage from "./pages/LandingPage";
 import Settings from "./pages/Settings";
-import LandingPageDev from "./pages/LandingPageDev";
 import TermsOfService from "./pages/TermsOfService";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 
@@ -20,7 +19,6 @@ const router = createBrowserRouter([
 		element: <Root />,
 		errorElement: <ErrorPage />,
 		children: [
-			// { path: "/", element: <LandingPageDev /> },
 			{ path: "/", element: <LandingPage /> },
 			{ path: "/home", element: <Home /> },
 			{ path: "/file/:fileId", element: <Home /> },
