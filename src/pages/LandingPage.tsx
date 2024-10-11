@@ -13,6 +13,8 @@ import Footer from "../components/layout/Footer/Footer";
 const LandingPage = () => {
 	const [activeSection, setActiveSection] = useState(1);
 	const [hasInteracted, setHasInteracted] = useState(false);
+	const pageHidden = useRef(false);
+	const sectionShouldChange = useRef(false);
 	const scrollContainerRef = useRef<HTMLDivElement>(null);
 	useDetectScroll(onPageScroll, "muistioLandingEditor");
 
@@ -49,12 +51,33 @@ const LandingPage = () => {
 
 	// Change section automatically after time
 	useEffect(() => {
+		if (hasInteracted) return;
 		const timeout = setTimeout(() => {
-			if (!hasInteracted) setActiveSection((prev) => (prev === 3 ? 1 : prev + 1));
+			if (pageHidden.current) return (sectionShouldChange.current = true); // If the page is hidden when a section should change, set a flag to change it when the page is visible again
+			setActiveSection((prev) => (prev === 3 ? 1 : prev + 1));
 		}, 10150);
 
 		return () => clearTimeout(timeout);
 	}, [activeSection, hasInteracted]);
+
+	// Check if user is on the page, change section only when the page is visible
+	useEffect(() => {
+		const handleVisibilityChange = () => {
+			if (document.visibilityState === "hidden") return (pageHidden.current = true);
+
+			if (sectionShouldChange.current) {
+				setActiveSection((prev) => (prev === 3 ? 1 : prev + 1));
+				sectionShouldChange.current = false;
+			}
+			pageHidden.current = false;
+		};
+
+		document.addEventListener("visibilitychange", handleVisibilityChange);
+
+		return () => {
+			document.removeEventListener("visibilitychange", handleVisibilityChange);
+		};
+	}, []);
 
 	return (
 		<div className="sm:h-dvh sm:px-2 sm:py-1 sm:overflow-hidden">
