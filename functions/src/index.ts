@@ -10,18 +10,24 @@ const userMetadata = (userId: string) => {
 };
 
 // Add metadata for new user
-export const newuser = functions.auth.user().onCreate((user) => {
-	userMetadata(user.uid).set({
-		encryptionKey: {},
-		totalFileSize: 0,
+export const newuser = functions
+	.region("europe-west1")
+	.auth.user()
+	.onCreate((user) => {
+		userMetadata(user.uid).set({
+			encryptionKey: {},
+			totalFileSize: 0,
+		});
 	});
-});
 
 /*
  * Update totalFileSize in user metadata when a file is added, deleted or the content is updated
  */
 export const modifyfile = onDocumentWritten(
-	"users/{userId}/files/{fileId}/encrypted/file",
+	{
+		document: "users/{userId}/files/{fileId}/encrypted/file",
+		region: "europe-north1",
+	},
 	async (event) => {
 		const eventData = event?.data;
 		const newData = eventData?.after.data();

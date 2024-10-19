@@ -58,12 +58,16 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
 	const updateStorageSize = async (clear: boolean = false) => {
 		if (clear) setStorageSize(0);
 		if (!user) return;
-		const metadata = await getMetadata(user?.uid);
 
-		if (metadata.exists()) {
-			const data = metadata.data() as Metadata;
-			setStorageSize(data?.totalFileSize || 0);
-		}
+		setTimeout(async () => {
+			const metadata = await getMetadata(user?.uid);
+
+			if (metadata.exists()) {
+				const data = metadata.data() as Metadata;
+				console.log("setting storage size", data?.totalFileSize);
+				setStorageSize(data?.totalFileSize || 0);
+			}
+		}, 1000);
 	};
 
 	return (
