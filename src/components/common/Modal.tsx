@@ -37,12 +37,7 @@ const Modal: FC<ModalProps> = ({ closeModalFunction, styleOverride, children }) 
 					styleOverride
 				)}>
 				{/* Hidden button so we can bring focus to the modal */}
-				<button
-					ref={focusRef}
-					tabIndex={-1}
-					aria-hidden="true"
-					className="absolute -left-[9999px]"
-				/>
+				<button ref={focusRef} tabIndex={-1} className="absolute -left-[9999px]" />
 				{/* Content */}
 				<div className="flex flex-col p-6 bg-gradient-radial from-secondary from-50% to-primary rounded-xl">
 					{children}

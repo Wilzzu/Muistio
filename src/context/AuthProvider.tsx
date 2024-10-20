@@ -64,7 +64,6 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
 			if (metadata.exists()) {
 				const data = metadata.data() as Metadata;
-				console.log("setting storage size", data?.totalFileSize);
 				setStorageSize(data?.totalFileSize || 0);
 			}
 		}, 1000);
