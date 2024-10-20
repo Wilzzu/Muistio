@@ -90,7 +90,11 @@ const ContentEditorAndPreview: FC<ContentEditorAndPreviewProps> = ({
 				id="muistioFileEditor"
 				disabled={disabled}
 				defaultValue={editedFileCache.current}
-				placeholder={isCreatingNewFile ? "# Add content here..." : ""}
+				placeholder={
+					isCreatingNewFile
+						? "# Add content here...\n\nYou can use Markdown syntax to format your content. Here are some examples:\n# Heading 1\n## Heading 2\n- List item\n**Bold text**\n_Italic text_\n[Link text](url)\n![Image alt text](image_url)"
+						: ""
+				}
 				className={cn(
 					"w-full h-fit bg-transparent resize-none outline-none overflow-hidden disabled:opacity-80 disabled:animate-pulse disabled:pointer-events-none disabled:select-none",
 					{

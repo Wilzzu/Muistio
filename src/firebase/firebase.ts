@@ -1,5 +1,13 @@
 import { initializeApp } from "firebase/app";
-import { connectAuthEmulator, deleteUser, getAuth, User, UserInfo } from "firebase/auth";
+import {
+	connectAuthEmulator,
+	deleteUser,
+	getAuth,
+	GoogleAuthProvider,
+	reauthenticateWithPopup,
+	User,
+	UserInfo,
+} from "firebase/auth";
 import {
 	addDoc,
 	collection,
@@ -234,7 +242,19 @@ export const deleteUserAndFiles = async (user: User) => {
 			await deleteFirestoreData(user.uid);
 
 			// Delete the user from Auth
-			await deleteUser(user);
+			try {
+				await deleteUser(user);
+			} catch (err) {
+				// Reauthenticate and try again
+				try {
+					await reauthenticateWithPopup(user, new GoogleAuthProvider());
+					await deleteUser(user);
+				} catch (error) {
+					if (error instanceof Error) {
+						throw new Error(error.message);
+					}
+				}
+			}
 		} catch (error) {
 			if (error instanceof Error) {
 				throw new Error(error.message);
