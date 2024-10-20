@@ -196,11 +196,11 @@ const FilePreview: FC<FilePreviewProps> = ({
 							ref={scrollRef}
 							onDoubleClick={handleDoubleClick}
 							className={cn(
-								"h-[calc(100dvh-17rem)] sm:h-[calc(100dvh-8.6rem)] overflow-scroll scrollbar scrollbar-w-[3px] sm:scrollbar-w-[6px] scrollbar-h-[6px] scrollbar-thumb-primaryHighlight/50 scrollbar-thumb-rounded-full duration-700",
+								"h-[calc(100svh-17rem)] sm:h-[calc(100dvh-8.6rem)] overflow-scroll scrollbar scrollbar-w-[3px] sm:scrollbar-w-[6px] scrollbar-h-[6px] scrollbar-thumb-primaryHighlight/50 scrollbar-thumb-rounded-full duration-700",
 								{
-									"h-fit min-h-56 max-h-[calc(100dvh-20rem)]": isCreatingNewFile,
+									"h-fit min-h-56 max-h-[calc(100svh-20rem)]": isCreatingNewFile,
 								},
-								{ "h-[calc(100dvh-16rem)] sm:h-[calc(100dvh-7.6rem)]": !isEditing },
+								{ "h-[calc(100svh-16rem)] sm:h-[calc(100dvh-7.6rem)]": !isEditing },
 								{
 									"min-h-0 h-full sm:h-full aspect-[4/5.4] sm:aspect-[4/5]": landing?.enabled,
 								}

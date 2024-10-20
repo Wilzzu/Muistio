@@ -98,7 +98,7 @@ const ContentEditorAndPreview: FC<ContentEditorAndPreviewProps> = ({
 				className={cn(
 					"w-full h-fit bg-transparent resize-none outline-none overflow-hidden disabled:opacity-80 disabled:animate-pulse disabled:pointer-events-none disabled:select-none",
 					{
-						"min-h-44": isCreatingNewFile,
+						"min-h-64": isCreatingNewFile,
 					},
 					{
 						"text-xs sm:text-sm": landing,

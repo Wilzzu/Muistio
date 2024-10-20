@@ -24,10 +24,10 @@ const Footer: FC<FooterProps> = ({ marginTop }) => {
 				style={{ marginTop: `${marginTop}px` }}
 				className="sm:hidden flex justify-between items-end w-full py-4 px-3 text-xs">
 				<div className="flex flex-col">
-					<div className="flex items-center gap-1">
+					<Link to="/" className="flex items-center gap-1">
 						<img src={Logo} alt="Muistio Logo" className="h-5 w-auto" />
 						<p className="font-bold text-base">Muistio</p>
-					</div>
+					</Link>
 					<Link to="https://github.com/Wilzzu" target="_blank" rel="noopener noreferrer">
 						© 2024 Wilzzu. All rights reserved.
 					</Link>
