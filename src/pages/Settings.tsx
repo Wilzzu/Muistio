@@ -32,7 +32,7 @@ const Settings = () => {
 					<p className="mb-2">
 						All your files and account data will be permanently deleted.{" "}
 						<br className="hidden sm:inline-block" />
-						You might be propmted to reauthenticate during the process. <br />{" "}
+						You might be prompted to reauthenticate during the process. <br />{" "}
 						<br className="inline-block sm:hidden" />
 						This action is irreversible.
 					</p>

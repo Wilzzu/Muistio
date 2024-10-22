@@ -6,9 +6,8 @@ const useClickOutside = (
 	childRef?: RefObject<HTMLElement>
 ) => {
 	const handleClickOutside = useCallback(
-		(event: MouseEvent | TouchEvent) => {
+		(event: MouseEvent) => {
 			// Return if main or child ref contains the clicked element
-
 			if (mainRef.current && mainRef.current.contains(event.target as Node)) return;
 			if (childRef && childRef.current && childRef.current.contains(event.target as Node)) return;
 
@@ -20,11 +19,9 @@ const useClickOutside = (
 
 	useEffect(() => {
 		document.addEventListener("mousedown", handleClickOutside);
-		// document.addEventListener("touchstart", handleClickOutside);
 
 		return () => {
 			document.removeEventListener("mousedown", handleClickOutside);
-			// document.removeEventListener("touchstart", handleClickOutside);
 		};
 	}, [handleClickOutside]);
 };
