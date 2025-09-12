@@ -16,7 +16,7 @@ const Footer: FC<FooterProps> = ({ marginTop }) => {
 					target="_blank"
 					rel="noopener noreferrer"
 					className="text-white/50 hover:text-white text-xs duration-300">
-					© 2024 Wilzzu. All rights reserved.
+					© 2024-2025 Wilzzu. All rights reserved.
 				</Link>
 			</footer>
 			{/* Mobile */}
@@ -29,7 +29,7 @@ const Footer: FC<FooterProps> = ({ marginTop }) => {
 						<p className="font-bold text-base">Muistio</p>
 					</Link>
 					<Link to="https://github.com/Wilzzu" target="_blank" rel="noopener noreferrer">
-						© 2024 Wilzzu. All rights reserved.
+						© 2024-2025 Wilzzu. All rights reserved.
 					</Link>
 				</div>
 				<div className="font-semibold flex flex-col gap-1">

@@ -28,9 +28,9 @@ const imageAnimation = {
 		filter: "blur(0px)",
 		transition: {
 			duration: 1.4,
-			delay: isMobile ? 1.5 : 0,
+			delay: isMobile ? 0.5 : 0,
 			ease: [0.17, 0.5, 0.14, 1],
-			opacity: { delay: isMobile ? 1.5 : 0, duration: cloud ? 1 : 0.5, ease: "easeOut" },
+			opacity: { delay: isMobile ? 0.5 : 0, duration: cloud ? 1 : 0.5, ease: "easeOut" },
 		},
 	}),
 	exit: ({ cloud = false, isMobile }: AnimationProps) => ({
@@ -40,9 +40,9 @@ const imageAnimation = {
 		filter: "blur(4px)",
 		transition: {
 			duration: 0.6,
-			delay: isMobile ? 1.5 : 0,
+			delay: isMobile ? 0.5 : 0,
 			ease: [0.55, 0.28, 0.88, 0.76],
-			opacity: { delay: isMobile ? 1.5 : 0, duration: 0.5, ease: "easeIn" },
+			opacity: { delay: isMobile ? 0.5 : 0, duration: 0.5, ease: "easeIn" },
 		},
 	}),
 };

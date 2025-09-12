@@ -17,9 +17,9 @@ const textAnimation = {
 		transition: {
 			duration: 2.4,
 			ease: [0.38, 0.39, 0.56, 0.98],
-			delay: isMobile ? 1.5 : 0,
-			scale: { delay: isMobile ? 1.5 : 0, duration: 2.6, ease: "easeOut" },
-			opacity: { delay: isMobile ? 1.5 : 0, duration: 1.2, ease: "easeInOut" },
+			delay: isMobile ? 0.5 : 0,
+			scale: { delay: isMobile ? 0.5 : 0, duration: 2.6, ease: "easeOut" },
+			opacity: { delay: isMobile ? 0.5 : 0, duration: 1.2, ease: "easeInOut" },
 		},
 	}),
 	exit: {
@@ -50,9 +50,9 @@ const noteAnimation = {
 		filter: "blur(0px)",
 		transition: {
 			duration: 1.4,
-			delay: isMobile ? 2 : 0,
+			delay: isMobile ? 1 : 0,
 			ease: [0.17, 0.5, 0.14, 1],
-			opacity: { delay: isMobile ? 2 : 0, duration: 0.5, ease: "easeOut" },
+			opacity: { delay: isMobile ? 1 : 0, duration: 0.5, ease: "easeOut" },
 		},
 	}),
 	exit: {
